@@ -1,0 +1,12 @@
+C:\front-design\Reactivities\Domain\bin\Debug\net5.0\Domain.deps.json
+C:\front-design\Reactivities\Domain\bin\Debug\net5.0\Domain.dll
+C:\front-design\Reactivities\Domain\bin\Debug\net5.0\ref\Domain.dll
+C:\front-design\Reactivities\Domain\bin\Debug\net5.0\Domain.pdb
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.csproj.AssemblyReference.cache
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.AssemblyInfoInputs.cache
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.AssemblyInfo.cs
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.csproj.CoreCompileInputs.cache
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.dll
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\ref\Domain.dll
+C:\front-design\Reactivities\Domain\obj\Debug\net5.0\Domain.pdb
