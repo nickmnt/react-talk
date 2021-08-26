@@ -65,3 +65,7 @@ C:\front-design\Reactivities\API\obj\Debug\net5.0\API.dll
 C:\front-design\Reactivities\API\obj\Debug\net5.0\ref\API.dll
 C:\front-design\Reactivities\API\obj\Debug\net5.0\API.pdb
 C:\front-design\Reactivities\API\obj\Debug\net5.0\API.genruntimeconfig.cache
+C:\front-design\Reactivities\API\bin\Debug\net5.0\AutoMapper.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\MediatR.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
