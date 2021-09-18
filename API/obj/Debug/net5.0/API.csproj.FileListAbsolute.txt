@@ -22,7 +22,6 @@ C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protoc
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.OpenApi.dll
-C:\front-design\Reactivities\API\bin\Debug\net5.0\Newtonsoft.Json.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -69,3 +68,17 @@ C:\front-design\Reactivities\API\bin\Debug\net5.0\AutoMapper.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\MediatR.dll
 C:\front-design\Reactivities\API\bin\Debug\net5.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\FluentValidation.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\FluentValidation.AspNetCore.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Infrastructure.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Infrastructure.pdb
+C:\front-design\Reactivities\API\bin\Debug\net5.0\CloudinaryDotNet.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Microsoft.Extensions.WebEncoders.dll
+C:\front-design\Reactivities\API\bin\Debug\net5.0\Newtonsoft.Json.dll
