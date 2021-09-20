@@ -48,8 +48,7 @@ namespace API.Extensions
                             {
                                 context.Token = accessToken;
                             }
-                            return Task.CompletedTask;
-                        }
+                            return Task.CompletedTask; }
                     };
                 });
             services.AddAuthorization(options =>
