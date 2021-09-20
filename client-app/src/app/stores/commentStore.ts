@@ -27,7 +27,7 @@ export default class CommentStore {
                 runInAction(() => this.comments = comments)
             });
 
-            this.hubConnection.on('ReceiveComments', (comment: ChatComment) => {
+            this.hubConnection.on('ReceiveComment', (comment: ChatComment) => {
                 runInAction(() => this.comments.push(comment));
             });
         }
@@ -40,5 +40,15 @@ export default class CommentStore {
     clearComments = () => {
         this.comments = [];
         this.stopHubConnection();
+    }
+
+    addComment = async (values: any) => {
+        values.activityId = store.activityStore.selectedActivity?.id;
+
+        try {
+            await this.hubConnection?.invoke('SendComment', values);
+        } catch(error) {
+            console.log(error);
+        }
     }
 }
