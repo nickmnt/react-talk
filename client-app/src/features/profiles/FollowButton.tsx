@@ -35,7 +35,7 @@ export default observer(function FollowButton({ profile }: Props) {
           basic
           fluid
           color={profile.following ? "red" : "green"}
-          content={true ? "Unfollow" : "Follow"}
+          content={profile.following ? "Unfollow" : "Follow"}
           loading={loading}
           onClick={e => handleFollow(e, profile.username)}
         />
