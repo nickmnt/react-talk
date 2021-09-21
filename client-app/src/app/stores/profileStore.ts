@@ -122,9 +122,12 @@ export default class ProfileStore {
             await agent.Profiles.updateFollowing(username);
             store.activityStore.updateAttendeeFollowing(username);
             runInAction(() => {
-                if(this.profile && this.profile.username !== store.userStore.user?.username) {
+                if(this.profile && this.profile.username !== store.userStore.user?.username && this.profile.username === username) {
                     following ? this.profile.followersCount++ : this.profile.followersCount--;
                     this.profile.following = !this.profile.following;
+                }
+                if(this.profile && this.profile.username === store.userStore.user?.username) {
+                    following ? this.profile.followingCount++ : this.profile.followingCount--;
                 }
                 this.followings.forEach(profile => {
                     if (profile.username === username) {
