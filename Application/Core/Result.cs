@@ -1,6 +1,8 @@
-﻿namespace Application.Core
+﻿using MediatR;
+
+namespace Application.Core
 {
-    public class Result<T>
+    public class Result<T> : IRequest<Unit>
     {
         public bool IsSuccess { get; set; }
         public T Value { get; set; }
