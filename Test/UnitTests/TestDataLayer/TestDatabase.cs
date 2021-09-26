@@ -12,7 +12,7 @@ namespace Test.UnitTests.TestDataLayer
 {
     public class TestDatabase
     {
-        private Activity AddTestActivity(DbContext context)
+        private static Activity AddTestActivity(DbContext context)
         {
             var testActivity = new Activity
             {
@@ -28,7 +28,7 @@ namespace Test.UnitTests.TestDataLayer
             return testActivity;
         }
         
-        private Activity AddTestActivityWithAttendee(DbContext context)
+        private static Activity AddTestActivityWithAttendee(DbContext context)
         {
             var testActivity = new Activity
             {
