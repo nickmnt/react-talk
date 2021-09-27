@@ -4,24 +4,28 @@ import * as Yup from 'yup'
 import MyTextArea from '../../app/common/form/MyTextArea';
 import MyTextInput from '../../app/common/form/MyTextInput';
 import { Profile } from '../../app/models/profile';
+import { useStore } from '../../app/stores/store';
 
 interface Props {
     profile: Profile;
+    setEditing: (value: boolean) => void;
 }
 
-export default function AboutForm({profile}: Props) {
+export default function AboutForm({profile,setEditing}: Props) {
     const validationSchema = Yup.object({
         displayName: Yup.string().required('Required'),
         bio: Yup.string().nullable()        
     });
 
-    const initialValues = {
+    const initialValues: Partial<Profile> = {
         displayName: profile.displayName,
         bio: profile.bio
     };
 
-    const onSubmit = () => {
+    const {profileStore: {updateProfile}} = useStore();
 
+    const onSubmit = (values: Partial<Profile>) => {
+        updateProfile(values).then(() => setEditing(false));
     }
     
     return (
@@ -30,7 +34,7 @@ export default function AboutForm({profile}: Props) {
             validationSchema={validationSchema}
             onSubmit={onSubmit}>
             {({handleSubmit, isValid, isSubmitting, dirty}) => (
-                <Form className='ui form' onSubmit={onSubmit} autoComplete='off'>
+                <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <MyTextInput name='displayName' placeholder='Display Name' />
                     <MyTextArea rows={3} placeholder='Bio' name='bio' />    
 

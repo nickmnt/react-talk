@@ -29,7 +29,7 @@ export default observer(function ProfileAbout({ profile }: Props) {
         </Grid.Column>
         <Grid.Column width={16}>
             {editing ? (
-                <AboutForm profile={profile} />
+                <AboutForm profile={profile} setEditing={setEditing} />
             ) : (
                 <>
                     <Header content={profile.displayName} />
