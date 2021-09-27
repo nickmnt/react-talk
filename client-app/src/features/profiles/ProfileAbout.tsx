@@ -49,7 +49,7 @@ export default observer(function ProfileAbout({ profile }: Props) {
             ) : (
                 <>
                     <Header content={profile.displayName} />
-                    <div style={{ whiteSpace: "pre-line" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, consequatur non tempore nulla perferendis expedita laborum incidunt perspiciatisaperiam praesentium voluptatum ad labore. Recusandae optio nesciunt dignissimos sapiente suscipit id.</div>
+                    <div style={{ whiteSpace: "pre-line" }}>{profile.bio}</div>
                 </>
             )}
         </Grid.Column>
