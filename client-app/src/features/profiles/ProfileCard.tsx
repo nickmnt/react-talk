@@ -17,7 +17,7 @@ export default observer(function ProfileCard({profile}: Props) {
                 <Card.Header>
                     {profile.displayName}
                 </Card.Header>
-                <Card.Description>Bio goes here</Card.Description>
+                <Card.Description>{profile.bio ? profile.bio.length > 40 ? profile.bio?.substring(0,37) + "..." :profile.bio : null}</Card.Description>
             </Card.Content>
             <Card.Content extra>
                 <Icon name='user' />
