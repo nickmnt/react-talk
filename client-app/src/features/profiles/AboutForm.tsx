@@ -12,8 +12,7 @@ interface Props {
 export default function AboutForm({profile}: Props) {
     const validationSchema = Yup.object({
         displayName: Yup.string().required('Required'),
-        bio: Yup.string()
-            .required('Required')        
+        bio: Yup.string()        
     });
 
     const initialValues = {
