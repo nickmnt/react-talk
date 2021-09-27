@@ -88,6 +88,9 @@ namespace API.Controllers
                 .Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
+            if (user == null)
+                return NotFound("User is not found");
+            
             return CreateUserObject(user);
         }
 
