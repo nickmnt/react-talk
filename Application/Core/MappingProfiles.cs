@@ -2,6 +2,7 @@
 using Application.Activities;
 using Application.Comments;
 using Application.Profiles;
+using Application.Search;
 using Domain;
 using Profile = AutoMapper.Profile;
 
@@ -43,6 +44,7 @@ namespace Application.Core
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
                 .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.AppUser.UserName));
+            CreateMap<AppUser, SearchResult>();
         }
     }
 }
