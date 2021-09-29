@@ -6,6 +6,7 @@ import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
+import { SearchResult } from '../models/search';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -110,10 +111,15 @@ const Profiles = {
     getActivities: (username: string, predicate: string) => requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
 };
 
+const Search = {
+    search: (term: string) => requests.get<SearchResult[]>(`/search/${term}`)
+};
+
 const agent = {
     Activities,
     Account,
-    Profiles
+    Profiles,
+    Search
 };
 
 export default agent;

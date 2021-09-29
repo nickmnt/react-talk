@@ -2,26 +2,34 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Button, Container, Dropdown, Icon, Image, Menu } from 'semantic-ui-react';
 import { useStore } from '../stores/store';
+import SearchBar from './SearchBar';
 
 export default function NavBar() {
     const {userStore: {user, logout}} = useStore();
 
     return (
 
-        <Menu inverted fixed='top'>
+        <Menu inverted fixed='top' borderless>
             <Container>
-                <Menu.Item as={NavLink} to='/' exact header>
-                    <img src="/assets/logo.png" alt="logo" className="navbar__logo"/>
-                    Reactivities
+                <Menu.Menu position='left'>
+                    <Menu.Item as={NavLink} to='/' exact header>
+                        <img src="/assets/logo.png" alt="logo" className="navbar__logo"/>
+                        Reactivities
+                    </Menu.Item>
+                    <Menu.Item as={NavLink} to='/activities' name="Activities"/>
+                    {/*<Menu.Item as={NavLink} to='/errors' name="Errors"/>*/}
+                    <Menu.Item>
+                        <Button as={NavLink} to='/createActivity' positive content="Create Activity" />
+                    </Menu.Item>
+                </Menu.Menu>
+
+                <Menu.Item position='right' >
+                    <SearchBar />
                 </Menu.Item>
-                <Menu.Item as={NavLink} to='/activities' name="Activities"/>
-                <Menu.Item as={NavLink} to='/errors' name="Errors"/>
-                <Menu.Item>
-                    <Button as={NavLink} to='/createActivity' positive content="Create Activity" />
-                </Menu.Item>
+
                 <Menu.Menu position='right' >
                     <Menu.Item>
-                        <Icon name='paper plane outline' size='large' />
+                        <Icon name='paper plane' size='large' />
                     </Menu.Item>
                     <Menu.Item>
                         <Image src={user?.image || '/assets/user.png'} avatar space='right' style={{marginRight: '.75rem'}}/>
