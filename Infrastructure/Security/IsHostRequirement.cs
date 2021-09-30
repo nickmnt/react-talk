@@ -27,7 +27,7 @@ namespace Infrastructure.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
-            var userId = context.User.FindFirstValue(ClaimTypes.Name);
+            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (userId == null)
             {
