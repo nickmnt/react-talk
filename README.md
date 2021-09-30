@@ -16,3 +16,6 @@ Would rather add a video introduction later on...
 
 -Change from MobX to Redux
 -Change to Material UI or Ant Design
+
+## New Ideas!
+https://gbksoft.com/blog/idea-of-social-media-website/
