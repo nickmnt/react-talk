@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -43,14 +44,16 @@ namespace Application.Comments
 
             public async Task<Result<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.ActivityId);
+                var activity = await _context.Activities
+                    .Include(x => x.Attendees)
+                    .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
                 if (activity == null)
                     return null;
 
                 var user = await _context.Users
                     .Include(p => p.Photos)
-                    .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+                    .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
                 var comment = new Comment
                 {
@@ -60,8 +63,17 @@ namespace Application.Comments
                 };
                 
                 activity.Comments.Add(comment);
+                
+                var host = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser;
+                if (host != null)
+                {
+                    await _context.Entry(host)
+                        .Collection(x => x.CommentNotifications)
+                        .LoadAsync(cancellationToken);
+                    host.CommentNotifications.Add(new CommentNotification { Comment = comment });
+                }
 
-                var success = await _context.SaveChangesAsync() > 0;
+                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (success)
                     return Result<CommentDto>.Success(_mapper.Map<CommentDto>(comment));

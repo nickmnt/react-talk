@@ -41,7 +41,8 @@ namespace Application.Activities
 
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
-                var hostUsername = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser?.UserName;
+                var host = activity.Attendees.FirstOrDefault(x => x.IsHost)?.AppUser;
+                var hostUsername = host?.UserName;
 
                 var attendance = activity.Attendees.
                     FirstOrDefault(x => x.AppUser.UserName == user.UserName);
@@ -51,9 +52,17 @@ namespace Application.Activities
                     activity.IsCancelled = !activity.IsCancelled;
                 }
 
+                if (host != null)
+                    await _context.Entry(host).Collection(x => x.JoinNotifications)
+                        .LoadAsync(cancellationToken);
+
                 if (attendance != null && hostUsername != user.UserName)
                 {
                     activity.Attendees.Remove(attendance);
+
+                    var notification = host?.JoinNotifications
+                        .First(x => x.Activity.Id == activity.Id && x.User.UserName == user.UserName);
+                    host?.JoinNotifications.Remove(notification);
                 }
 
                 if (attendance == null)
@@ -66,9 +75,11 @@ namespace Application.Activities
                     };
                     
                     activity.Attendees.Add(attendance);
+                    
+                    host?.JoinNotifications.Add(new JoinNotification {Activity = activity, User = user});
                 }
 
-                var result = await _context.SaveChangesAsync() > 0;
+                var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
                 return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem updating attendance");
             }

@@ -6,6 +6,6 @@ namespace Domain
     {
         public int Id { get; set; }
         public AppUser Follower { get; set; }
-        public DateTime CreatedAt { get; set; } 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
