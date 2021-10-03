@@ -46,6 +46,7 @@ namespace Application.Comments
             {
                 var activity = await _context.Activities
                     .Include(x => x.Attendees)
+                    .ThenInclude(x => x.AppUser)
                     .FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
                 if (activity == null)
