@@ -30,12 +30,15 @@ export default class NotificationStore {
                     console.log('notificationsDto', notifications);
                     notifications.joinNotifications.forEach(notification => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
+                        notification.type = 'join';
                     });
                     notifications.commentNotifications.forEach(notification => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
+                        notification.type = 'comment';
                     });
                     notifications.followNotifications.forEach(notification => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
+                        notification.type = 'follow';
                     });
 
                     this.joinNotifications = notifications.joinNotifications;
@@ -63,5 +66,11 @@ export default class NotificationStore {
         this.followNotifications = [];
         
         this.stopHubConnection();
+    }
+
+    updateFollowing = (username: string) => {
+        const x = this.followNotifications.find(x => x.username === username);
+        if(x)
+            x.following = !x.following;
     }
 }

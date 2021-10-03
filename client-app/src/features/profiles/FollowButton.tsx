@@ -1,24 +1,33 @@
 import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent } from "react";
 import { Button, Reveal } from "semantic-ui-react";
+import { FollowNotification } from "../../app/models/notification";
 import { Profile } from "../../app/models/profile";
 import { useStore } from "../../app/stores/store";
 
 interface Props {
-  profile: Profile;
+  profile: Profile | FollowNotification;
 }
 
 export default observer(function FollowButton({ profile }: Props) {
   const { profileStore, userStore } = useStore();
-  const { updateFollowing, loading } = profileStore;
+  const { updateFollowing, loading, updateFollowingNotif } = profileStore;
 
   if (userStore.user?.username === profile.username) return null;
 
   const handleFollow = (e: SyntheticEvent, username: string) => {
     e.preventDefault();
-    profile.following
-      ? updateFollowing(username, false)
-      : updateFollowing(username, true);
+    
+    if('displayName' in Profile) {
+      profile.following
+        ? updateFollowing(username, false)
+        : updateFollowing(username, true);
+    } else {
+      profile.following
+        ? updateFollowingNotif(username, false)
+        : updateFollowingNotif(username, true);
+    }
+    
   };
 
   return (
@@ -28,6 +37,7 @@ export default observer(function FollowButton({ profile }: Props) {
           fluid
           color="teal"
           content={profile.following ? "Following" : "Not following"}
+          style={{whiteSpace: 'nowrap', textAlign: 'center'}}
         />
       </Reveal.Content>
       <Reveal.Content hidden style={{ width: "100%" }}>

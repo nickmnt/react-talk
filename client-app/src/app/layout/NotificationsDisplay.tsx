@@ -22,7 +22,7 @@ export default observer(function NotificationsDisplay() {
 
   useEffect(() => {
 
-    if(notifELements.length === 0) {
+    //if(notifELements.length === 0) {
         const notifications: (JoinNotification | FollowNotification | CommentNotification)[] = [...joinNotifications,...commentNotifications, ...followNotifications];
 
         notifications.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
@@ -32,15 +32,16 @@ export default observer(function NotificationsDisplay() {
         let i = 0;
         notifications.forEach(notification => {
 
-            const isJoin = (p: any): p is JoinNotification => !!p.username;
-            const isFollow = (p: any): p is FollowNotification => !!p.followerUsername;
-
-            if(isJoin(notification)) {
-                elements.unshift(<JoinNotifDisplay joinNotification={notification} key={i}/>);
-            } else if(isFollow(notification)) {
-                elements.unshift(<FollowNotifDisplay followNotification={notification} key={i}/>);
-            } else {
-                elements.unshift(<CommentNotifDisplay commentNotification={notification} key={i}/>);
+            switch(notification.type) {
+              case 'join':
+                elements.unshift(<JoinNotifDisplay joinNotification={notification as JoinNotification} key={i}/>);
+                break;  
+              case 'follow':
+                elements.unshift(<FollowNotifDisplay followNotification={notification as FollowNotification} key={i}/>);
+                break;
+              case 'comment':
+                elements.unshift(<CommentNotifDisplay commentNotification={notification as CommentNotification} key={i}/>);
+                break;
             }
 
             ++i;
@@ -48,7 +49,7 @@ export default observer(function NotificationsDisplay() {
 
         setNotifElements(elements);
 
-    }
+    //}
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [commentNotifications, joinNotifications, followNotifications]);

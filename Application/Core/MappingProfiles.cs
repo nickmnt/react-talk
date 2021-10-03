@@ -56,8 +56,10 @@ namespace Application.Core
                 .ForMember(d => d.ActivityId, o => o.MapFrom(s => s.Comment.Activity.Id))
                 .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.Comment.CreatedAt));
             CreateMap<FollowNotification, FollowNotifDto>()
-                .ForMember(d => d.FollowerUsername, o => o.MapFrom(s => s.Follower.UserName))
-                .ForMember(d => d.FollowerImage, o => o.MapFrom(s => s.Follower.Photos.FirstOrDefault(x => x.IsMain).Url));
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.Follower.UserName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Follower.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.Following,
+                    o => o.MapFrom(s => s.Follower.Followers.Any(x => x.Observer.UserName == currentUsername)));
             CreateMap<JoinNotification, JoinNotifDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.User.Photos.FirstOrDefault(x => x.IsMain).Url))

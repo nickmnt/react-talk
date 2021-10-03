@@ -3,12 +3,15 @@ export interface JoinNotification {
     image: string;
     activityId: string;
     createdAt: Date;
+    type: string;
 }
 
 export interface FollowNotification {
-    followerUsername: string;
-    followerImage: string;
+    username: string;
+    image: string;
+    following: boolean;
     createdAt: Date;
+    type: string;
 }
 
 export interface CommentNotification {
@@ -16,6 +19,7 @@ export interface CommentNotification {
     image: string;
     activityId: string;
     createdAt: Date;
+    type: string;
 }
 
 export interface NotificationsDto {
