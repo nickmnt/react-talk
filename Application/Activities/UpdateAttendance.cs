@@ -61,7 +61,7 @@ namespace Application.Activities
                     activity.Attendees.Remove(attendance);
 
                     var notification = host?.JoinNotifications
-                        .First(x => x.Activity.Id == activity.Id && x.User.UserName == user.UserName);
+                        .FirstOrDefault(x => x.Activity.Id == activity.Id && x.User.UserName == user.UserName);
                     host?.JoinNotifications.Remove(notification);
                 }
 
@@ -76,7 +76,8 @@ namespace Application.Activities
                     
                     activity.Attendees.Add(attendance);
                     
-                    host?.JoinNotifications.Add(new JoinNotification {Activity = activity, User = user});
+                    var notification = new JoinNotification { Activity = activity, User = user };
+                    host?.JoinNotifications.Add(notification);
                 }
 
                 var result = await _context.SaveChangesAsync(cancellationToken) > 0;

@@ -48,7 +48,14 @@ namespace API.Extensions
                             {
                                 context.Token = accessToken;
                             }
-                            return Task.CompletedTask; }
+                            
+                            if (!string.IsNullOrEmpty(accessToken)
+                                && path.StartsWithSegments("/notification"))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask; 
+                        }
                     };
                 });
             services.AddAuthorization(options =>

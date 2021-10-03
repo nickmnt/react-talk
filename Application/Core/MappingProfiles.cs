@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Application.Activities;
 using Application.Comments;
+using Application.Notifications;
 using Application.Profiles;
 using Application.Search;
 using Domain;
@@ -45,6 +46,22 @@ namespace Application.Core
                 .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.AppUser.UserName));
             CreateMap<AppUser, SearchResult>();
+            CreateMap<AppUser, NotificationsDto>()
+                .ForMember(d => d.CommentNotifications, o => o.MapFrom(s => s.CommentNotifications))
+                .ForMember(d => d.FollowNotifications, o => o.MapFrom(s => s.FollowNotifications))
+                .ForMember(d => d.JoinNotifications, o => o.MapFrom(s => s.JoinNotifications));
+            CreateMap<CommentNotification, CommentNotifDto>()
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.Comment.Author.UserName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Comment.Author.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.ActivityId, o => o.MapFrom(s => s.Comment.Activity.Id))
+                .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.Comment.CreatedAt));
+            CreateMap<FollowNotification, FollowNotifDto>()
+                .ForMember(d => d.FollowerUsername, o => o.MapFrom(s => s.Follower.UserName))
+                .ForMember(d => d.FollowerImage, o => o.MapFrom(s => s.Follower.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<JoinNotification, JoinNotifDto>()
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.User.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.ActivityId, o => o.MapFrom(s => s.Activity.Id));
         }
     }
 }

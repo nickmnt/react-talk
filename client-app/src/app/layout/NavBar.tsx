@@ -1,15 +1,13 @@
-import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
   Button,
   Container,
   Dropdown,
-  Icon,
   Image,
   Menu,
-  Popup,
 } from "semantic-ui-react";
 import { useStore } from "../stores/store";
+import NotificationsDisplay from "./NotificationsDisplay";
 import SearchBar from "./SearchBar";
 
 export default function NavBar() {
@@ -43,9 +41,7 @@ export default function NavBar() {
 
         <Menu.Menu position="right">
           <Menu.Item>
-            <Popup trigger={<Icon name="bell" size="large" />}>
-                dasdas
-            </Popup>
+            <NotificationsDisplay />
           </Menu.Item>
           <Menu.Item>
             <Image

@@ -50,7 +50,19 @@ namespace Persistence
                     .WithMany(f => f.Followers)
                     .HasForeignKey(o => o.TargetId)
                     .OnDelete(deleteBehavior: DeleteBehavior.Restrict);
+                
+                
             });
+
+            builder.Entity<JoinNotification>()
+                .HasOne(x => x.Owner)
+                .WithMany(x => x.JoinNotifications)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<FollowNotification>()
+                .HasOne(x => x.Owner)
+                .WithMany(x => x.FollowNotifications)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application.Comments;
+using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 

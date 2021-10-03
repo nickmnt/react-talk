@@ -9,8 +9,6 @@ export default function SearchBar() {
     const [value, setValue] = useState<string | undefined>('');
     const [results, setResults] = useState<SearchResult[]>([]);
 
-    console.log('results',results)
-
     useEffect(() => {
         if(value) {
             const fetchData = async (term: string) => {
