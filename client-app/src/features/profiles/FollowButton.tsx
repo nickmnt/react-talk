@@ -11,22 +11,16 @@ interface Props {
 
 export default observer(function FollowButton({ profile }: Props) {
   const { profileStore, userStore } = useStore();
-  const { updateFollowing, loading, updateFollowingNotif } = profileStore;
+  const { updateFollowing, loading } = profileStore;
 
   if (userStore.user?.username === profile.username) return null;
 
   const handleFollow = (e: SyntheticEvent, username: string) => {
     e.preventDefault();
-    
-    if('displayName' in Profile) {
-      profile.following
-        ? updateFollowing(username, false)
-        : updateFollowing(username, true);
-    } else {
-      profile.following
-        ? updateFollowingNotif(username, false)
-        : updateFollowingNotif(username, true);
-    }
+
+    profile.following
+      ? updateFollowing(username, false)
+      : updateFollowing(username, true);
     
   };
 
