@@ -63,7 +63,7 @@ export default observer(function NotificationsDisplay() {
   }, [createHubConnection, clearNotifications]);
 
   return <Popup trigger={<Icon name="bell" size="large" />} hoverable>
-    <Item.Group>
+    <Item.Group divided>
       {notifELements}
     </Item.Group>
   </Popup>;
