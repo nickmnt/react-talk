@@ -1,0 +1,90 @@
+.userMenu {
+
+    background-image: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6));
+    
+    position: absolute;
+    
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+    
+    &__container {
+        background-color: $color-white;
+        width: 80%;
+        height: 100%;
+        box-shadow: 0 0 1rem rgba(0,0,0,0.4);
+    }
+
+    &__top {
+        background-color: $color-blue;
+        width: 100%;
+        height: 15rem;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: relative;
+
+        overflow: hidden;
+    }
+
+    &__nightMode {
+        position: absolute;
+        top: 2.75rem;
+        right: 1.5rem;
+        width: 3rem;
+        height: 3rem;
+        fill: $color-white;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+
+    &__img {
+        position: absolute;
+        left: 1.25rem;
+        bottom: 6rem;
+
+        width: 6.5rem;
+        height: 6.5rem;
+        border-radius: 100%;
+        object-fit: cover;
+
+        //margin-bottom: .5rem;
+        //margin-top: 3.75rem;
+        //margin-top: 3rem;
+        //margin-left: 2rem;
+    
+        //margin-top: 2.5rem;
+        //margin-bottom: .5rem;
+    }
+
+    &__accounts {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: 2.5rem;
+        margin-top: .7rem;
+        margin-bottom: 1rem;
+    }
+
+    &__name {
+        font-size: 1.5rem;
+        color: $color-white;
+    }
+
+    &__email {
+        font-size: 1.2rem;
+        color: lightblue;
+        font-weight: 400;
+    }
+
+    &__caret {
+        fill: $color-white;
+        width: 3rem;
+        height: 3rem;
+        margin-right: 2.5rem;
+    }
+}

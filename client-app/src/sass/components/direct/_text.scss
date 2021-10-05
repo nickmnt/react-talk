@@ -1,0 +1,99 @@
+.text {
+
+    &--me, &--other {
+        display: inline-block;
+        flex: 1 0 0;
+        min-width: 0;
+        height: 100%;
+        margin: 0 1rem;
+        border-radius: 1.5rem;
+
+        box-shadow: 0 0 1px rgba(0,0,0,0.1);
+        
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    &__container {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__name {
+        font-size: 1.2rem;
+        color: $color-blue;
+        font-weight: 600;
+    }
+
+    &__content {
+        font-size: 1.1rem;
+        flex: 1 0 0;
+        min-width: 0;
+        white-space: pre-wrap;      /* Webkit */    
+        white-space: -moz-pre-wrap; /* Firefox */     
+        white-space: -pre-wrap;     /* Opera <7 */    
+        white-space: -o-pre-wrap;   /* Opera 7 */     
+        word-wrap: break-word;      /* IE */ 
+    }
+
+    &__info {
+        display: flex;
+        margin-left: auto;
+        margin-top: .5rem;
+        //margin-right: .5rem;
+        //margin-bottom: .5rem;
+        fill: $color-green-dark;
+    }
+
+    &__date {
+        &--me,&--other {
+            flex: 0 0 auto;
+            margin-right: .5rem;
+        }
+
+        &--me {
+            color: $color-green-dark;
+        }
+
+        &--other {
+            color: $color-grey-dark-1;
+        }
+        //align-items: flex-start;
+    }
+
+    &--other {
+        background-color: $color-white;
+        margin-left: 1.5rem;
+        border-bottom-left-radius: 0;
+    }
+
+    &--me {
+        background-color: $color-green;
+        margin-right: 1.5rem;
+        border-bottom-right-radius: 0;
+    }
+
+    &--other::after, &--me::after {
+        content: '';
+        position: absolute;
+        bottom: -.04rem;
+        width: 1rem;
+        height: 1rem;
+    }
+
+    &--other::after {
+        background-color: $color-white;
+        left: -.95rem;
+        clip-path: polygon(0% 100%, 20% 96%, 37% 91%, 50% 85%, 62% 77%, 72% 65%, 81% 50%, 89% 32%, 96% 15%, 100% 0%, 100% 100%);        
+    }
+
+    &--me::after {
+        background-color: $color-green;
+        right: -.95rem;
+        clip-path: polygon(100% 100%, 80% 96%, 63% 91%, 50% 85%, 38% 77%, 28% 65%, 19% 50%, 11% 32%, 4% 15%, 0% 0%, 0 100%);
+    }
+
+
+}

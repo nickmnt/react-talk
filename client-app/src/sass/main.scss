@@ -9,3 +9,23 @@
 @import './base/baseSettings';
 
 @import './pages/homePage';
+
+//Direct
+
+
+@import "./pages/home";
+
+@import "./components/direct/loader";
+@import "./components/direct/chat";
+@import "./components/direct/home-sidebar";
+@import "./components/direct/actions";
+@import "./components/direct/chatHeader";
+@import "./components/direct/chat-view";
+@import "./components/direct/messages";
+@import "./components/direct/chat-input";
+@import "./components/direct/message";
+@import "./components/direct/text";
+@import "./components/direct/tick";
+@import "./components/direct/double-tick";
+@import "./components/direct/user-menu/user-menu";
+@import "./components/direct/user-menu/main-menu";

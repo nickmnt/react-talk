@@ -1,0 +1,36 @@
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    &__logo {
+        width: 10em;
+        height: 10em;
+        fill: $color-blue;
+    }
+
+    &__spinner {
+        top: 0;
+        left: 0;
+        width: 12em;
+        height: 12em;
+        position: absolute;
+        transform: translate(-1em, -1em);
+    }
+}

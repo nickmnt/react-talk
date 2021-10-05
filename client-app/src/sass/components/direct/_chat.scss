@@ -1,0 +1,91 @@
+.chat {
+
+    font-size: 1.2rem;
+    font-weight: 400;
+
+    &__container {
+        height: 7rem;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            background-color: $color-grey-light;
+            
+            & *:not(.chat__badge, .chat__date) { 
+                color: $color-black 
+            };
+        }
+
+        &--active:hover *:not(.chat__badge) {
+            color: $color-black;
+        }
+
+        &:active, &--active {
+            background-color: $color-blue;
+            
+            & * {
+                color: white;
+            }
+        }
+    }
+
+    &__img {
+        //margin-left: 1rem;
+        //object-fit: cover;
+        width: 5rem;
+        height: 5rem;
+        overflow: hidden;
+        border-radius: 100%;
+    }
+
+    &__left {
+        width: 7rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__right {
+        display: flex;
+        flex-direction: column;
+        margin-right: 1rem;
+        flex: 1;
+    }
+
+    &__rightTop {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: .5rem;
+    }
+
+    &__rightBottom {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__badge {
+        color: white;
+        padding: .3rem;
+        background-color: $color-blue;
+        border-radius: 3rem;
+        text-align: center;
+    }
+
+    &__name {
+        font-size: 1.4rem;
+        font-weight: 600;
+
+        &:active, &--active {
+            color: $color-white;
+        }
+    }
+
+    &__date {
+
+        color: $color-grey-dark-1;
+
+        &:active, &--active {
+            color: $color-white;
+        }
+    }
+}

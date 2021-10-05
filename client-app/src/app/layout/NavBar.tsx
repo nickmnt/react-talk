@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Dropdown,
+  Icon,
   Image,
   Menu,
 } from "semantic-ui-react";
@@ -16,7 +17,7 @@ export default function NavBar() {
   } = useStore();
 
   return (
-    <Menu inverted fixed="top" borderless>
+    <Menu inverted fixed="top" borderless icon>
       <Container>
         <Menu.Menu position="left">
           <Menu.Item as={NavLink} to="/" exact header>
@@ -40,6 +41,9 @@ export default function NavBar() {
         </Menu.Item>
 
         <Menu.Menu position="right">
+          <Menu.Item  as={NavLink} to={'/direct/inbox'}>
+            <Icon name='paper plane' size="large"/>
+          </Menu.Item>
           <Menu.Item>
             <NotificationsDisplay />
           </Menu.Item>
