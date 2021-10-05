@@ -7,8 +7,8 @@
     align-items: center;
 
     &__container {
-        width: 80rem;
-        height: 60rem;
+        //width: 80rem;
+        height: 85vh;
         // background-color: red;
         display: flex;
         border: 1px solid $color-grey-light;
@@ -23,7 +23,7 @@
     }
 
     &__sidebar {
-        width: 40%;
+        width: 30%;
         border-right: 1px solid $color-grey-light;
         // background-color: royalblue;
         position: relative;
@@ -33,7 +33,7 @@
         object-fit: cover;
         background-image: url('../../images/background.jpg');
         position: relative;
-        width: 60%;
+        width: 70%;
         // background-color: green;
     }
 
