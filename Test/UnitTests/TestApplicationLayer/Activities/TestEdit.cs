@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Application.Activities;
 using Application.Core;
 using AutoMapper;
@@ -94,6 +95,31 @@ namespace Test.UnitTests.TestApplicationLayer.Activities
                 //Assert
                 result.ShouldNotBeNull();
                 result.IsSuccess.ShouldBeTrue();
+            }
+        }
+        
+        [Fact]
+        public async Task EditNullActivity()
+        {
+            //Arrange
+            var options = SqliteInMemory.CreateOptions<DataContext>();
+            using (var context = new DataContext(options))
+            {
+                await context.Database.EnsureCreatedAsync();
+                var users = new List<AppUser>();
+                await Seed.SeedData(context, MockUserManager.Create(users).Object);
+
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile(new MappingProfiles());
+                });
+                var mapper = config.CreateMapper();
+
+                var request = new Edit.Command { Activity = null }; 
+                var handler = new Edit.Handler(context, mapper);
+                
+                //Act, Assert
+                await Assert.ThrowsAsync<NullReferenceException>(() => handler.Handle(request, new System.Threading.CancellationToken()));
             }
         }
     }
