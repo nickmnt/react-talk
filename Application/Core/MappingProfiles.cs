@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using Application.Activities;
+using Application.Chats;
 using Application.Comments;
 using Application.Notifications;
 using Application.Profiles;
 using Application.Search;
 using Domain;
+using Domain.Direct;
 using Profile = AutoMapper.Profile;
 
 namespace Application.Core
@@ -64,6 +66,11 @@ namespace Application.Core
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.User.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(d => d.ActivityId, o => o.MapFrom(s => s.Activity.Id));
+            CreateMap<UserChat, ChatDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Chat.Id))
+                .ForMember(d => d.Type, o => o.MapFrom(s => s.Chat.Type))
+                .ForMember(d => d.PrivateChatId, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.PrivateChat.Id : -1))
+                .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.AppUser.UserName));
         }
     }
 }

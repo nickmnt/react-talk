@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Direct;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace Persistence
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserFollowing> UserFollowings { get; set; }
+        public DbSet<UserChat> UserChats { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -63,6 +65,18 @@ namespace Persistence
                 .HasOne(x => x.Owner)
                 .WithMany(x => x.FollowNotifications)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<UserChat>(x => x.HasKey(aa => new {aa.AppUserId, aa.ChatId}));
+
+            builder.Entity<UserChat>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Chats)
+                .HasForeignKey(aa => aa.AppUserId);
+            
+            builder.Entity<UserChat>()
+                .HasOne(u => u.Chat)
+                .WithMany(a => a.Users)
+                .HasForeignKey(aa => aa.ChatId);
         }
     }
 }
