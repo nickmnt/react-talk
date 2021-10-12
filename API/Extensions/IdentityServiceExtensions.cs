@@ -54,6 +54,12 @@ namespace API.Extensions
                             {
                                 context.Token = accessToken;
                             }
+                            
+                            if (!string.IsNullOrEmpty(accessToken)
+                                && path.StartsWithSegments("/direct"))
+                            {
+                                context.Token = accessToken;
+                            }
                             return Task.CompletedTask; 
                         }
                     };

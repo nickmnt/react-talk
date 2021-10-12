@@ -71,6 +71,7 @@ namespace API
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapHub<NotificationHub>("/notification");
+                endpoints.MapHub<DirectHub>("/direct");
             });
         }
     }
