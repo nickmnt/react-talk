@@ -74,7 +74,8 @@ namespace Application.Core
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Chat.Id))
                 .ForMember(d => d.Type, o => o.MapFrom(s => s.Chat.Type))
                 .ForMember(d => d.PrivateChatId, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.PrivateChat.Id : -1))
-                .ForMember(d => d.PrivateChatId, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName): null))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.DisplayName: null))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.Photos.FirstOrDefault(x => x.IsMain).Url : null))
                 .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.AppUser.UserName));
         }
     }
