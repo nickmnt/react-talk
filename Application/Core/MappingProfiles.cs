@@ -5,6 +5,7 @@ using Application.Comments;
 using Application.Notifications;
 using Application.Profiles;
 using Application.Search;
+using Application.SearchChats;
 using Domain;
 using Domain.Direct;
 using Profile = AutoMapper.Profile;
@@ -48,6 +49,8 @@ namespace Application.Core
                 .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.AppUser.UserName));
             CreateMap<AppUser, SearchResult>()
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<AppUser, SearchChatDto>()
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url));
             CreateMap<AppUser, NotificationsDto>()
                 .ForMember(d => d.CommentNotifications, o => o.MapFrom(s => s.CommentNotifications))
