@@ -5,3 +5,9 @@ export interface ChatDto {
     displayName: string;
     image: string;
 }
+
+export interface SearchChatDto {
+    username: string;
+    displayName: string;
+    image: string;
+}

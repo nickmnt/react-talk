@@ -1,10 +1,11 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
-import { ChatDto } from "../models/chat";
+import { ChatDto, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
 export default class DirectStore {
     chats: ChatDto[] = [];
+    searchResults: SearchChatDto[] = [];
     hubConnection: HubConnection | null = null;
 
     constructor() {
@@ -28,6 +29,12 @@ export default class DirectStore {
                     this.chats = chats;
                 })
             });
+
+            this.hubConnection.on('ReceiveSearchResults', (results: SearchChatDto[]) => {
+                runInAction(() => {
+                    this.searchResults = results;
+                });
+            });
         }
     }
 
@@ -38,6 +45,15 @@ export default class DirectStore {
     clearChats = () => {
         this.chats = [];       
         this.stopHubConnection();
+    }
+
+    searchChats = async (term: string) => {
+
+        try {
+            await this.hubConnection?.invoke('SearchChats', {term});
+        } catch(error) {
+            console.log(error);
+        }
     }
 
 }

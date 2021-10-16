@@ -22,5 +22,13 @@ namespace API.SignalR
             var result = await _mediator.Send(new List.Query());
             await Clients.Caller.SendAsync("LoadChats", result.Value);
         }
+        
+        public async Task SearchChats(Application.SearchChats.List.Query query)
+        {
+            var comment = await _mediator.Send(query);
+
+            await Clients.Caller
+                .SendAsync("ReceiveSearchResults", comment.Value);
+        }
     }
 }

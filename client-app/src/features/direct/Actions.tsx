@@ -44,6 +44,8 @@ export default observer(function Actions({setSearchVal, searchVal}: Props) {
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Search"
                     inputProps={{ 'aria-label': 'search google maps' }}
+                    value={searchVal}
+                    onChange={e => setSearchVal(e.target.value)}
                 />
                 <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
                     <SearchIcon />
