@@ -1,4 +1,3 @@
-import LastMsg from "./LastMsg";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useRef } from "react";
 
@@ -27,7 +26,9 @@ export default function Chat({activeChat,setActiveChat}: Props) {
                         <div className={`chat__date ${activeChat===dummyId.current && "chat__date--active"}`}>10:20 PM</div>
                     </div>
                     <div className="chat__rightBottom">
-                        <LastMsg />
+                    <div className="last-msg">
+                        {"Random last message / status change of group channel and so on .................................".substring(0,15)}
+                    </div>
                         {activeChat !== dummyId.current && <div className="chat__badge">1696</div>}
                     </div>
                 </div>
