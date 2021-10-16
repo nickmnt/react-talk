@@ -192,11 +192,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Direct.Chat", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("PrivateChatId")
                         .HasColumnType("int");
@@ -206,11 +204,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
-
                     b.HasIndex("PrivateChatId");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chat");
                 });
 
             modelBuilder.Entity("Domain.Direct.Message", b =>
@@ -248,6 +244,21 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PrivateChat");
+                });
+
+            modelBuilder.Entity("Domain.Direct.UserChat", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AppUserId", "ChatId");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("UserChats");
                 });
 
             modelBuilder.Entity("Domain.FollowNotification", b =>
@@ -522,10 +533,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Direct.Chat", b =>
                 {
-                    b.HasOne("Domain.AppUser", null)
-                        .WithMany("Chats")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("Domain.Direct.PrivateChat", "PrivateChat")
                         .WithMany()
                         .HasForeignKey("PrivateChatId");
@@ -544,6 +551,25 @@ namespace Persistence.Migrations
                         .HasForeignKey("SenderId");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("Domain.Direct.UserChat", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("Chats")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Direct.Chat", "Chat")
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Chat");
                 });
 
             modelBuilder.Entity("Domain.FollowNotification", b =>
@@ -685,6 +711,11 @@ namespace Persistence.Migrations
                     b.Navigation("JoinNotifications");
 
                     b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("Domain.Direct.Chat", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Direct.PrivateChat", b =>
