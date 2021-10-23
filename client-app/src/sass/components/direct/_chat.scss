@@ -16,15 +16,22 @@
             };
         }
 
+        
+        &:active, &--active {
+            background-color: $color-blue;
+            
+            * {
+                color: white;
+            }
+        }
+
         &--active:hover *:not(.chat__badge) {
             color: $color-black;
         }
 
-        &:active, &--active {
-            background-color: $color-blue;
-            
-            & * {
-                color: white;
+        &--active:active {
+            * {
+                color: white !important;
             }
         }
     }

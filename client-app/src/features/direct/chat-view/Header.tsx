@@ -1,9 +1,15 @@
-export default function Header() {
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../../app/stores/store";
+
+export default observer(function Header() {
+
+    const {directStore: {currentChat}} = useStore();
+    
     return (
         <div className="chatHeader">
             <div className="chatHeader__left">
                 <div className="chatHeader__name">
-                    Name
+                    {currentChat?.displayName}
                 </div>
                 <div className="chatHeader__status">
                     online
@@ -15,4 +21,4 @@ export default function Header() {
             </div>
         </div>
     );
-}
+});

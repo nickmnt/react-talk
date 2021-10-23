@@ -1,13 +1,24 @@
 import Header from "./Header";
 import ChatInput from "./ChatInput";
 import Messages from "./messages/Index";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../../app/stores/store";
 
-export default function ChatView() {
+export default observer(function ChatView() {
+    const {directStore: {currentChat}} = useStore();
+    
     return (
         <div className="chatView">
-            <Header />
-            <Messages />
-            <ChatInput />
+            {currentChat ? 
+            <>
+                <Header />
+                <Messages />
+                <ChatInput />
+            </>
+            :
+            <>
+                Select a chat to start messaging
+            </>}
         </div>
     );
-}
+});

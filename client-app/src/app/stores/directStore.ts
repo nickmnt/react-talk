@@ -1,12 +1,13 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
-import { ChatDto, SearchChatDto } from "../models/chat";
+import { ChatDto, createLocalChat, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
 export default class DirectStore {
     chats: ChatDto[] = [];
     searchResults: SearchChatDto[] = [];
     hubConnection: HubConnection | null = null;
+    currentChat: ChatDto | null = null;
 
     constructor() {
         makeAutoObservable(this);        
@@ -56,4 +57,7 @@ export default class DirectStore {
         }
     }
 
+    setLocalChat = (displayName: string, image: string) => {
+        this.currentChat = createLocalChat(displayName, image);
+    }
 }

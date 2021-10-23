@@ -1,15 +1,17 @@
-import { v4 as uuidv4 } from 'uuid';
-import { useEffect, useRef } from "react";
+import { observer } from 'mobx-react-lite';
 import { SearchChatDto } from '../../app/models/chat';
+import { useStore } from '../../app/stores/store';
 
 interface Props {
     searchResult: SearchChatDto;
 }
 
-export default function Chat({searchResult}: Props) {
+export default observer(function Chat({searchResult}: Props) {
+
+    const {directStore: {setLocalChat}} = useStore();
 
     return (
-        <div className="chat">
+        <div className="chat" onClick={() => setLocalChat(searchResult.displayName, searchResult.image)}>
             <div className={`chat__container`}>
                 <div className="chat__left">
                     <img src={searchResult.image || "/assets/user.png"} alt="User" className="chat__img" />
@@ -27,4 +29,4 @@ export default function Chat({searchResult}: Props) {
             </div>
         </div>
     );
-}
+});

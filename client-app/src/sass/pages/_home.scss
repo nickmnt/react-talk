@@ -1,13 +1,13 @@
 .home {
     width: 100%;
     height: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
 
     &__container {
         //width: 80rem;
+        width: 100%;
         height: 85vh;
         // background-color: red;
         display: flex;
