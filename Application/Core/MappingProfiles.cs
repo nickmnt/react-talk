@@ -2,6 +2,7 @@
 using Application.Activities;
 using Application.Chats;
 using Application.Comments;
+using Application.Messages;
 using Application.Notifications;
 using Application.Profiles;
 using Application.Search;
@@ -77,6 +78,10 @@ namespace Application.Core
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.DisplayName: null))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Chat.Type == Chat.PrivateType ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.Photos.FirstOrDefault(x => x.IsMain).Url : null))
                 .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.AppUser.UserName));
+            CreateMap<Message, MessageDto>()
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.Sender.UserName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url));
         }
     }
 }
