@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
+import agent from "../api/agent";
 import { ChatDto, createLocalChat, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
@@ -57,7 +58,50 @@ export default class DirectStore {
         }
     }
 
-    setLocalChat = (displayName: string, image: string) => {
-        this.currentChat = createLocalChat(displayName, image);
+    private setChat = (chat: ChatDto) => {
+        this.chats.push(chat);
+    }
+
+    setLocalChat = (username: string, displayName: string, image: string) => {
+        this.currentChat = createLocalChat(username, displayName, image);
+    }
+
+    setCurrentChat = (chat: ChatDto) => {
+        this.currentChat = chat;
+    }
+
+    getPrivateChatDetails = async (chat: ChatDto) => {
+        const response = await agent.Chats.getPrivateChatDetails(chat.id);
+
+        runInAction(() => {
+            chat.privateChat = response;
+            this.currentChat = chat;
+        })
+    }
+
+    createMessage = async (body: string) => {
+        if(!this.currentChat)
+            return;
+        const response = await agent.Chats.createMessage(body, this.currentChat.id);
+        runInAction(() => {
+            if(this.currentChat)
+                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response];
+        })
+    }
+
+    createPrivateChat = async (username: string, body: string) => {
+        try {
+            if(!this.currentChat)
+                return;
+
+            const response = await agent.Chats.createPrivateChat(username, body);
+            this.setChat({...this.currentChat, id: response.chatId});
+            runInAction(() => {
+                if(this.currentChat)
+                    this.currentChat.privateChat = {messages: [response.message]};
+            });
+        } catch(error) {
+            console.log(error);
+        }
     }
 }

@@ -7,6 +7,7 @@ import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
 import { SearchResult } from '../models/search';
+import { Message, PrivateChat, PrivateChatResultDto } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -115,11 +116,18 @@ const Search = {
     search: (term: string) => requests.get<SearchResult[]>(`/search/${term}`)
 };
 
+const Chats = {
+    createPrivateChat: (username: string, body: string) => requests.post<PrivateChatResultDto>(`/direct/`, {username, body}),
+    getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
+    createMessage: (body: string, chatId: string) => requests.post<Message>('/direct/messages', {body,chatId})
+}
+
 const agent = {
     Activities,
     Account,
     Profiles,
-    Search
+    Search,
+    Chats
 };
 
 export default agent;

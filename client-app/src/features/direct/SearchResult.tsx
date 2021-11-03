@@ -11,7 +11,7 @@ export default observer(function Chat({searchResult}: Props) {
     const {directStore: {setLocalChat}} = useStore();
 
     return (
-        <div className="chat" onClick={() => setLocalChat(searchResult.displayName, searchResult.image)}>
+        <div className="chat" onClick={() => setLocalChat(searchResult.username,searchResult.displayName, searchResult.image)}>
             <div className={`chat__container`}>
                 <div className="chat__left">
                     <img src={searchResult.image || "/assets/user.png"} alt="User" className="chat__img" />

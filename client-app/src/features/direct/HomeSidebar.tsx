@@ -8,8 +8,7 @@ import SearchResult from "./SearchResult";
 
 export default observer(function HomeSidebar() {
 
-    const {directStore: {searchChats, searchResults}} = useStore();
-    const [activeChat,setActiveChat] = useState("");
+    const {directStore: {searchChats, searchResults, chats}} = useStore();
     const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
@@ -21,7 +20,8 @@ export default observer(function HomeSidebar() {
             <Actions searchVal={searchVal} setSearchVal={setSearchVal} />
             <div className="homeSidebar__chats"> 
                 {!searchVal ? 
-                <><Chat activeChat={activeChat} setActiveChat={setActiveChat} />
+                <>
+                {/*<Chat activeChat={activeChat} setActiveChat={setActiveChat} />
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
@@ -36,7 +36,12 @@ export default observer(function HomeSidebar() {
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
                 <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
+                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />*/}
+                {
+                    chats.map((chat) => 
+                    <Chat chat={chat} key={chat.id}/>
+                    )
+                }
                 </>
                 :
                 <>

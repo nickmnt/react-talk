@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Application.Activities;
 using Application.Chats;
+using Application.Chats.PrivateChats;
 using Application.Comments;
 using Application.Messages;
 using Application.Notifications;
@@ -82,6 +83,7 @@ namespace Application.Core
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Sender.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<PrivateChat, PrivateChatDto>();
         }
     }
 }
