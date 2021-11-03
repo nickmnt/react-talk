@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using Application.Search;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -23,16 +24,20 @@ namespace Application.SearchChats
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
             
             public async Task<Result<List<SearchChatDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Users.Where(x => x.UserName.Contains(request.Term)).ProjectTo<SearchChatDto>(_mapper.ConfigurationProvider);
+                var query = _context.Users
+                    .Where(x => x.UserName.Contains(request.Term) && x.UserName != _userAccessor.GetUsername())
+                    .ProjectTo<SearchChatDto>(_mapper.ConfigurationProvider);
                 return Result<List<SearchChatDto>>.Success(await query.ToListAsync(cancellationToken));
             }
         }
