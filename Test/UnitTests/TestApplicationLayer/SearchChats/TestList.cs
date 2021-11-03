@@ -38,7 +38,8 @@ namespace Test.UnitTests.TestApplicationLayer.SearchChats
                 var mapper = config.CreateMapper();
 
                 var request = new List.Query {Term = "t"}; 
-                var handler = new List.Handler(context, mapper);
+                var userAccessor = MockUserAccessor.Create().Object;
+                var handler = new List.Handler(context, mapper,userAccessor);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());
@@ -70,7 +71,8 @@ namespace Test.UnitTests.TestApplicationLayer.SearchChats
                 var mapper = config.CreateMapper();
 
                 var request = new List.Query {Term = "t"}; 
-                var handler = new List.Handler(context, mapper);
+                var userAccessor = MockUserAccessor.Create().Object;
+                var handler = new List.Handler(context, mapper,userAccessor);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());
@@ -102,7 +104,8 @@ namespace Test.UnitTests.TestApplicationLayer.SearchChats
                 var mapper = config.CreateMapper();
 
                 var request = new List.Query {Term = "m"}; 
-                var handler = new List.Handler(context, mapper);
+                var userAccessor = MockUserAccessor.Create().Object;
+                var handler = new List.Handler(context, mapper,userAccessor);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());

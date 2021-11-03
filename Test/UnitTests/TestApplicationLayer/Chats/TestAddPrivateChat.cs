@@ -53,8 +53,8 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 result.ShouldNotBeNull();
                 tomChat.ShouldNotBeNull();
                 bobChat.ShouldNotBeNull();
-                Assert.Equal(result.Value.Id,bobChat.Chat.Id.ToString());
-                Assert.Equal(result.Value.Id,tomChat.Chat.Id.ToString());
+                Assert.Equal(result.Value.Id.ToString(),bobChat.Chat.Id.ToString());
+                Assert.Equal(result.Value.Id.ToString(),tomChat.Chat.Id.ToString());
             }
         }
         
