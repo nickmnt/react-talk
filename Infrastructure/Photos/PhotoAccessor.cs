@@ -52,6 +52,34 @@ namespace Infrastructure.Photos
 
             return null;
         }
+        
+        public async Task<PhotoUploadResult> AddVideo(IFormFile file)
+        {
+            if (file.Length > 0)
+            {
+                await using var stream = file.OpenReadStream();
+                var uploadParams = new VideoUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream)
+                };
+                
+                var uploadResult = await _cloudinary.UploadLargeAsync(uploadParams);
+
+                if (uploadResult.Error != null)
+                {
+                    Console.WriteLine(uploadResult.Error.Message);
+                    throw new Exception(uploadResult.Error.Message);
+                }
+
+                return new PhotoUploadResult
+                {
+                    PublicId = uploadResult.PublicId,
+                    Url = uploadResult.SecureUrl.ToString()
+                };
+            }
+
+            return null;
+        }
 
         public async Task<string> DeletePhoto(string publicId)
         {
