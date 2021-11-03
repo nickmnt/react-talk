@@ -225,8 +225,17 @@ namespace Persistence.Migrations
                     b.Property<int?>("PrivateChatId")
                         .HasColumnType("int");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SenderId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
