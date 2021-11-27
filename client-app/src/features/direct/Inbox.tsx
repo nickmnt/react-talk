@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react'
 import { Grid } from 'semantic-ui-react';
+import NavBar from '../../app/layout/NavBar';
 import { useStore } from '../../app/stores/store';
 import ChatView from './chat-view/Index'
 import HomeSidebar from './HomeSidebar'
@@ -25,8 +26,6 @@ export default observer(function Inbox() {
       }, [createHubConnection, clearChats]);
 
     return (
-        <Grid>
-            <Grid.Column width={16}>
         <div className="home">
             <div className={`home__container ${expanded && "home__container--expanded"}`}>
                 <div className="home__sidebar">
@@ -40,7 +39,5 @@ export default observer(function Inbox() {
                 </div>
             </div>
         </div>
-        </Grid.Column>
-        </Grid>
     )
 });

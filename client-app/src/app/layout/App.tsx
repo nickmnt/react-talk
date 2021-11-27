@@ -43,20 +43,26 @@ function App() {
         path='/(.+)'
         render={() =>
           <>
-            <NavBar />
-            <Container className="activitiesContainer">
-              <Switch>
-                <Route path='/activities' component={ActivityDashboard} exact />
-                <Route path='/activities/:id' component={ActivityDetails} />
-                <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
-                <Route path='/profiles/:username' component={ProfilePage} />
-                <Route path='/errors' component={TestErrors} />
-                <Route path='/server-error' component={ServerError} />
-                <Route path='/login' component={LoginForm} />
-                <Route path='/direct/inbox' component={Inbox} /> 
-                <Route component={NotFound} />
+            
+              <Switch> 
+                <Route path='/direct/inbox' exact component={Inbox} /> 
+                <>
+                  <Container className="activitiesContainer">
+                    <NavBar />
+                    <Switch>
+                      <Route path='/activities' component={ActivityDashboard} exact />
+                      <Route path='/activities/:id' component={ActivityDetails} />
+                      <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+                      <Route path='/profiles/:username' component={ProfilePage} />
+                      <Route path='/errors' component={TestErrors} />
+                      <Route path='/server-error' component={ServerError} />
+                      <Route path='/login' component={LoginForm} />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </Container>
+                </>
               </Switch>
-            </Container>
+              
           </>
         }
       />
