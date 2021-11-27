@@ -10,6 +10,7 @@ import React from 'react'
 import deepPurple from '@mui/material/colors/deepPurple';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 
 interface Props {
     drawerOpen: boolean;
@@ -32,6 +33,12 @@ export default observer(function DirectDrawer({drawerOpen, toggleDrawer}: Props)
                 disableBackdropTransition={!iOS} 
                 disableDiscovery={iOS}
             >
+                <svg width={0} height={0}>
+                            <linearGradient id="linearColors" x1={1} y1={0} x2={1} y2={1}>
+                                <stop offset={0} stopColor="#20bf55" />
+                                <stop offset={1} stopColor="#01baef" />
+                            </linearGradient>
+                </svg>
                 <Box
                     sx={{width: 250}}
                     role='presentation'
@@ -51,27 +58,35 @@ export default observer(function DirectDrawer({drawerOpen, toggleDrawer}: Props)
                     </CardContent>
                     </Card>
                     <List>
+                        
+
                         <ListItem button>
                             <ListItemIcon>
-                                <GroupOutlinedIcon fontSize='large' />
+                                <GroupOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>
                             <ListItemText primary='New Group' primaryTypographyProps={{fontSize: menuFontSize}}/>
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <PersonOutlinedIcon fontSize='large' />
+                                <CampaignOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
+                            </ListItemIcon>
+                            <ListItemText primary='New Channel' primaryTypographyProps={{fontSize: menuFontSize}}/>
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <PersonOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>
                             <ListItemText primary='Contacts' primaryTypographyProps={{fontSize: menuFontSize}} />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <BookmarkBorderOutlinedIcon fontSize='large' />
+                                <BookmarkBorderOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>
                             <ListItemText primary='Saved Messages' primaryTypographyProps={{fontSize: menuFontSize}} />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <SettingsOutlinedIcon fontSize='large' />
+                                <SettingsOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>
                             <ListItemText primary='Settings' primaryTypographyProps={{fontSize: menuFontSize}}/>
                         </ListItem>
