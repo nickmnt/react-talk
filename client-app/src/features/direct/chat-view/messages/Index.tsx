@@ -41,47 +41,8 @@ export default observer(function Messages() {
                 
                 currentChat.privateChat?.messages.map((message, i) => 
                 <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={user.username === message.username} showImg={false} imgSrc={'/assets/user.png'} text={message.body} key={i} />
+                    <Message onRightClick={onRightClick} message={message} key={i} />
                 </div>)}
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={true} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={true} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={true} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={true} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={true} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={true} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={true} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={false} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
-                <div className="messages__message">
-                    <Message onRightClick={onRightClick} name="Name" isMe={true} showImg={false} imgSrc={'/assets/user.png'} text="abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg...abcdefg..." />
-                </div>
             </div>
             <Menu
                 id="basic-menu"

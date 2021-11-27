@@ -1,3 +1,4 @@
+import ReactPlayer from 'react-player';
 import DoubleTick from './DoubleTick';
 import Tick from './Tick';
 
@@ -7,11 +8,15 @@ interface Props {
     text: string;
     isDoubleTick: boolean;
     showImg: boolean;
+    attachedImg: string;
+    attachedVideo: string;
 }
 
-export default function Text({isMe,name,text,isDoubleTick,showImg}: Props) {
+export default function Text({isMe,name,text,isDoubleTick,showImg,attachedImg, attachedVideo}: Props) {
     return (
         <div className={`text${isMe ? "--me" : "--other"}`}>
+            {attachedImg&& <img src={attachedImg} alt='Attachment' className='text__attachedImg' />}
+            {attachedVideo && <ReactPlayer url={attachedVideo} />}
             <div className="text__container">
                 {(!isMe && showImg) && <div className="text__name">
                     {name}

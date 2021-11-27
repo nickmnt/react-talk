@@ -1,28 +1,31 @@
 
-import { useState } from "react";
+import { observer } from "mobx-react-lite";
+import { Message } from "../../../../../app/models/chat";
+import { useStore } from "../../../../../app/stores/store";
 import Text from "./text/Index";
 
 interface Props {
-    isMe: boolean;
-    imgSrc: string;
-    text: string;
-    name: string;
-    showImg: boolean;
+    message: Message;
     onRightClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export default function Message({isMe, imgSrc, text, name, showImg, onRightClick}: Props) {
+export default observer(function Message({message, onRightClick}: Props) {
 
-    
-    
+    const {userStore: {user}} = useStore(); 
+    if(!user)
+        return null;
+
+    const isMe = user.username === message.username;
+    const showImg = false;
+    const imgSrc='/assets/user.png';
 
     return (
         <>
-        <div className="message" onContextMenu={onRightClick} >
-            {(!isMe && showImg) && <img src={imgSrc} alt="user" className="message__img" />}
-            <Text name={name} isMe={isMe} text={text} isDoubleTick={true} showImg={showImg}/>
-        </div>
-        
+            <div className="message" onContextMenu={onRightClick} >
+                {(!isMe && showImg) && <img src={imgSrc} alt="user" className="message__img" />}
+                <Text name={message.displayName} isMe={isMe} text={message.body} isDoubleTick={true} showImg={showImg} attachedImg={message.type === 1? message.url : ''}
+                    attachedVideo={message.type === 2? message.url: ''}/>
+            </div>   
         </>
     );
-}
+});

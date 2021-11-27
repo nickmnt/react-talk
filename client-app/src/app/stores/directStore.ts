@@ -89,6 +89,26 @@ export default class DirectStore {
         })
     }
 
+    createPhoto = async (file: Blob, body: string) => {
+        if(!this.currentChat)
+            return;
+        const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id);
+        runInAction(() => {
+            if(this.currentChat)
+                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response.data];
+        })
+    }
+
+    createVideo = async (file: Blob, body: string) => {
+        if(!this.currentChat)
+            return;
+        const response = await agent.Chats.createVideo(file ,body, this.currentChat.id);
+        runInAction(() => {
+            if(this.currentChat)
+                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response.data];
+        })
+    }
+
     createPrivateChat = async (username: string, body: string) => {
         try {
             if(!this.currentChat)

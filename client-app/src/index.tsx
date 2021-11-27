@@ -11,6 +11,7 @@ import { store, StoreContext } from './app/stores/store';
 import { Router } from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import ScrollToTop from './app/layout/ScrollToTop';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const history = createBrowserHistory();
 

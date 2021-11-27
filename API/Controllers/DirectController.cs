@@ -48,5 +48,17 @@ namespace API.Controllers
 
             return HandleResult(result);
         }
+        
+        [HttpPost("photos")]
+        public async Task<IActionResult> CreatePhoto([FromForm] Application.Messages.Images.Create.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+        
+        [HttpPost("videos")]
+        public async Task<IActionResult> CreateVideo([FromForm] Application.Messages.Videos.Create.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

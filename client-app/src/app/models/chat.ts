@@ -19,10 +19,13 @@ export interface PrivateChat {
 }
 
 export interface Message {
+    type: number;
     username: string;
     displayName: string;
     image: string;
     body: string;
+    publicId: string;
+    url: string;
     createdAt: Date;
 }
 
