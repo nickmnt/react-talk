@@ -12,14 +12,25 @@ import { Router } from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import ScrollToTop from './app/layout/ScrollToTop';
 import 'react-toastify/dist/ReactToastify.css';
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
 
 export const history = createBrowserHistory();
+
+const theme = createTheme({
+  typography: {
+    // In Japanese the characters are usually larger.
+    fontSize: 16,
+  },
+});
 
 ReactDOM.render(
   <StoreContext.Provider value={store}>
     <Router history={history}> 
       <ScrollToTop />
+      <ThemeProvider theme={theme}>
       <App />
+      </ThemeProvider>
     </Router>
   </StoreContext.Provider>,
   document.getElementById('root')
