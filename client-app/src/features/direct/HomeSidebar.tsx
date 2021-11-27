@@ -21,22 +21,6 @@ export default observer(function HomeSidebar() {
             <div className="homeSidebar__chats"> 
                 {!searchVal ? 
                 <>
-                {/*<Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />
-                <Chat activeChat={activeChat} setActiveChat={setActiveChat} />*/}
                 {
                     chats.map((chat) => 
                     <Chat chat={chat} key={chat.id}/>
