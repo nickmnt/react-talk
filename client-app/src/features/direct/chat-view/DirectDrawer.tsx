@@ -22,7 +22,15 @@ const iOS =
   typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 export default observer(function DirectDrawer({drawerOpen, toggleDrawer}: Props) {
-    const {userStore: {user}} = useStore(); 
+    const {userStore: {user}, groupStore: {startCreateChannel, startCreateGroup}} = useStore(); 
+
+    const onCreateGroup = () => {
+        startCreateGroup();
+    }
+
+    const onCreateChannel = () => {
+        startCreateChannel();
+    }
 
     return (
         <SwipeableDrawer
@@ -60,13 +68,13 @@ export default observer(function DirectDrawer({drawerOpen, toggleDrawer}: Props)
                     <List>
                         
 
-                        <ListItem button>
+                        <ListItem button onClick={onCreateGroup}>
                             <ListItemIcon>
                                 <GroupOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>
                             <ListItemText primary='New Group' primaryTypographyProps={{fontSize: menuFontSize}}/>
                         </ListItem>
-                        <ListItem button>
+                        <ListItem button onClick={onCreateChannel}>
                             <ListItemIcon>
                                 <CampaignOutlinedIcon fontSize='large' sx={{ fill: "url(#linearColors)" }}/>
                             </ListItemIcon>

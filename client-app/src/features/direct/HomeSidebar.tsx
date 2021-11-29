@@ -4,16 +4,20 @@ import Chat from "./chat/Index";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import SearchResult from "./SearchResult";
+import ChooseMembers from "./home-sidebar/ChooseMembers";
 
 
 export default observer(function HomeSidebar() {
 
-    const {directStore: {searchChats, searchResults, chats}} = useStore();
+    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing}} = useStore();
     const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
         searchChats(searchVal);
     }, [searchVal, searchChats]);
+
+    if(editing)
+        return <ChooseMembers />;
 
     return (
         <div className="homeSidebar">
