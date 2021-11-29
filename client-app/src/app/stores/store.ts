@@ -3,6 +3,7 @@ import ActivityStore from "./activityStore";
 import CommentStore from "./commentStore";
 import CommonStore from "./commonStore";
 import DirectStore from "./directStore";
+import GroupStore from "./groupStore";
 import ModalStore from "./modalStore";
 import NotificationStore from "./notificationStore";
 import ProfileStore from "./profileStore";
@@ -17,6 +18,7 @@ interface Store {
     commentStore: CommentStore;
     notificationStore: NotificationStore;
     directStore: DirectStore;
+    groupStore: GroupStore;
 }
 
 export const store: Store = {
@@ -27,7 +29,8 @@ export const store: Store = {
     profileStore: new ProfileStore(),
     commentStore: new CommentStore(),
     notificationStore: new NotificationStore(),
-    directStore: new DirectStore()
+    directStore: new DirectStore(),
+    groupStore: new GroupStore()
 }
 
 export const StoreContext = createContext(store);
