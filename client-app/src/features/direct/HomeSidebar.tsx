@@ -9,15 +9,22 @@ import ChooseMembers from "./home-sidebar/ChooseMembers";
 
 export default observer(function HomeSidebar() {
 
-    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing}} = useStore();
+    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing, phase}} = useStore();
     const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
         searchChats(searchVal);
     }, [searchVal, searchChats]);
 
-    if(editing)
-        return <ChooseMembers />;
+    if(editing) {
+        switch(phase) {
+            case 0:
+                return <ChooseMembers />;
+            case 1:
+                return null;
+        }
+
+    }
 
     return (
         <div className="homeSidebar">

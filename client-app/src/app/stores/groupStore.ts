@@ -61,4 +61,8 @@ export default class GroupStore {
             this.members = [...this.members, profile];
         }
     }
+
+    nextPhase = () => {
+        this.phase++;
+    }
 }

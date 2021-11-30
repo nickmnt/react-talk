@@ -1,5 +1,5 @@
 import { ArrowBack } from '@mui/icons-material'
-import { Avatar, IconButton, Input, ListItemAvatar } from '@mui/material'
+import { Avatar, IconButton, Input, ListItemAvatar, SpeedDial } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,10 +15,11 @@ import { useStore } from '../../../app/stores/store';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../../app/models/profile';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 export default observer(function ChooseMembers() {
-    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members}} = useStore();
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase}} = useStore();
     
     useEffect(() => {
       loadFollowings();
@@ -89,6 +90,12 @@ export default observer(function ChooseMembers() {
         :
           <LoadingComponent />
         }
+        {members.length > 0 && <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+        icon={<ArrowForwardIcon />}
+        onClick={nextPhase}
+        />}
         </div>
     )
 })
