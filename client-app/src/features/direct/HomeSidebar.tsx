@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import SearchResult from "./SearchResult";
 import ChooseMembers from "./home-sidebar/ChooseMembers";
+import GroupFinalization from "./home-sidebar/GroupFinalization";
 
 
 export default observer(function HomeSidebar() {
@@ -21,7 +22,7 @@ export default observer(function HomeSidebar() {
             case 0:
                 return <ChooseMembers />;
             case 1:
-                return null;
+                return <GroupFinalization />;
         }
 
     }
