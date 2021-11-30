@@ -1,7 +1,12 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
+import agent from "../api/agent";
+import { Profile } from "../models/profile";
+import { store } from "./store";
 
 export default class GroupStore {
-    members = [];
+    members: Profile[] = [];
+    followings: Profile[] = [];
+    loadingFollowings = true;
     type = '';
     editing = false;
     phase = 0;
@@ -28,5 +33,32 @@ export default class GroupStore {
     startCreateChannel = () => {
         this.startEditing();
         this.type = 'channel';
+    }
+
+    loadFollowings = async () => {
+        const user = store.userStore.user;
+
+        if(!user)
+            return;
+
+        this.loadingFollowings = true;
+        try {
+            const followings = await agent.Profiles.listFollowings(user.username, 'following');
+            runInAction(() => {
+                this.followings = followings;
+                this.loadingFollowings = false;
+            });
+        } catch(error) {
+            console.log(error);
+            runInAction(() => this.loadingFollowings = false);
+        }
+    }
+
+    toggleMember = (profile: Profile) => {
+        if(this.members.find(x => x.username === profile.username)) {
+            this.members = this.members.filter(x => x.username !== profile.username);
+        } else {
+            this.members = [...this.members, profile];
+        }
     }
 }

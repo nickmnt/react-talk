@@ -10,24 +10,22 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useStore } from '../../../app/stores/store';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { observer } from 'mobx-react-lite';
+import { Profile } from '../../../app/models/profile';
 
 
-export default function ChooseMembers() {
+export default observer(function ChooseMembers() {
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members}} = useStore();
+    
+    useEffect(() => {
+      loadFollowings();
+    }, [loadFollowings]);
 
-    const [checked, setChecked] = useState([0]);
-
-    const handleToggle = (value: number) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-        newChecked.push(value);
-        } else {
-        newChecked.splice(currentIndex, 1);
-        }
-
-        setChecked(newChecked);
+    const handleToggle = (profile: Profile) => () => {
+      toggleMember(profile);
     };
 
   
@@ -54,21 +52,21 @@ export default function ChooseMembers() {
             <Box sx={{width:'100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <Input placeholder="Add people..." sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small"/>
             </Box>
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      {[0, 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-label-${value}`;
+            {!loadingFollowings ? <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      {followings.map((profile) => {
+        const labelId = `checkbox-list-label-${profile.username}`;
 
         return (
           <ListItem
-            key={value}
+            key={profile.username}
             sx={{width:'100%', padding: '0 2rem'}}
             disablePadding
           >
-            <ListItemButton role={undefined} onClick={handleToggle(value)} sx={{padding: '1.3rem'}} dense>
+            <ListItemButton role={undefined} onClick={handleToggle(profile)} sx={{padding: '1.3rem'}} dense>
               <ListItemIcon>
                 <Checkbox
                   edge="start"
-                  checked={checked.indexOf(value) !== -1}
+                  checked={members.findIndex(x => x.username === profile.username) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
@@ -77,18 +75,20 @@ export default function ChooseMembers() {
               </ListItemIcon>
               <ListItemAvatar>
                 <Avatar
-                  alt={`Avatar n°${value + 1}`}
-                  src={`/static/images/avatar/${value + 1}.jpg`}
+                  alt={`${profile.displayName}`}
+                  src={profile.image}
                   sx={{ width: 48, height: 48 }}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primaryTypographyProps={{fontSize: '1.6rem'}}  primary={`Line item ${value + 1}`} />
+              <ListItemText id={labelId} primaryTypographyProps={{fontSize: '1.6rem'}}  primary={profile.displayName} />
             </ListItemButton>
           </ListItem>
         );
       })}
     </List>
-
+        :
+          <LoadingComponent />
+        }
         </div>
     )
-}
+})
