@@ -19,11 +19,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 export default observer(function ChooseMembers() {
-    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase}} = useStore();
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing}} = useStore();
     
     useEffect(() => {
       loadFollowings();
-    }, [loadFollowings]);
+    }, [loadFollowings, followings]);
 
     const handleToggle = (profile: Profile) => () => {
       toggleMember(profile);
@@ -41,6 +41,7 @@ export default observer(function ChooseMembers() {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={stopEditing}
                     >
                         <ArrowBack fontSize="large" />
                     </IconButton>

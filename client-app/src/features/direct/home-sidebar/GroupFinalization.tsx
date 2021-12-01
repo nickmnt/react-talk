@@ -14,7 +14,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DoneIcon from '@mui/icons-material/Done';
 
 export default function GroupFinalization() {
-    const {groupStore: {members}} = useStore();
+    const {groupStore: {members, previousPhase}} = useStore();
     const [groupName, setGroupName] = useState('');
 
     return (
@@ -28,6 +28,7 @@ export default function GroupFinalization() {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={previousPhase}
                     >
                         <ArrowBack fontSize="large" />
                     </IconButton>

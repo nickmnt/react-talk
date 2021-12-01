@@ -65,4 +65,8 @@ export default class GroupStore {
     nextPhase = () => {
         this.phase++;
     }
+
+    previousPhase = () => {
+        this.phase--;
+    }
 }
