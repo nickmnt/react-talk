@@ -23,7 +23,7 @@ export default observer(function ChooseMembers() {
     
     useEffect(() => {
       loadFollowings();
-    }, [loadFollowings, followings]);
+    }, [loadFollowings]);
 
     const handleToggle = (profile: Profile) => () => {
       toggleMember(profile);
