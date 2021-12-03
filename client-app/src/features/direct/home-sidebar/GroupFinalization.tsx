@@ -8,14 +8,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { useState } from 'react';
 import { useStore } from '../../../app/stores/store';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DoneIcon from '@mui/icons-material/Done';
+import { observer } from 'mobx-react-lite';
 
-export default function GroupFinalization() {
-    const {groupStore: {members, previousPhase}} = useStore();
-    const [groupName, setGroupName] = useState('');
+export default observer(function GroupFinalization() {
+    const {groupStore: {members, previousPhase, name, setName}} = useStore();
 
     return (
         <div style={{backgroundColor: 'white', height: '100%'}}>
@@ -42,7 +41,7 @@ export default function GroupFinalization() {
                 <Avatar sx={{ bgcolor: '#0080FF', width: 60, height: 60 }}>
                     <AddAPhotoIcon fontSize="large"/>
                 </Avatar>
-                <Input value={groupName} onChange={target => setGroupName(target.currentTarget.value)} placeholder="Enter group name" sx={{ fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small"/>
+                <Input value={name} onChange={target => setName(target.currentTarget.value)} placeholder="Enter group name" sx={{ fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small"/>
             </Stack>
             <Stack direction="row" spacing={2} sx={{width: '100%', marginTop: '3rem'}} alignItems="center" justifyContent="center">
                 <Typography variant="h5" sx={{color: '#0080FF', fontWeight: '500'}}>
@@ -73,11 +72,11 @@ export default function GroupFinalization() {
         );
       })}
     </List>
-        {groupName.length > 0 && <SpeedDial
+        {name.length > 0 && <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         icon={<DoneIcon />}
         />}
         </div>
     )
-}
+});
