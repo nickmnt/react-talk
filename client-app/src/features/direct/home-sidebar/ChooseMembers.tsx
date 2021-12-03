@@ -1,4 +1,4 @@
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, Done } from '@mui/icons-material'
 import { Avatar, IconButton, Input, ListItemAvatar, SpeedDial } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,7 +19,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 export default observer(function ChooseMembers() {
-    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing}} = useStore();
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type, previousPhase}} = useStore();
     
     useEffect(() => {
       loadFollowings();
@@ -41,7 +41,7 @@ export default observer(function ChooseMembers() {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        onClick={stopEditing}
+                        onClick={type==="group" ? stopEditing : previousPhase}
                     >
                         <ArrowBack fontSize="large" />
                     </IconButton>
@@ -94,7 +94,7 @@ export default observer(function ChooseMembers() {
         {members.length > 0 && <SpeedDial
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<ArrowForwardIcon />}
+        icon={type === 'group' ? <ArrowForwardIcon /> : <Done />}
         onClick={nextPhase}
         />}
         </div>

@@ -10,6 +10,8 @@ export default class GroupStore {
     type = '';
     editing = false;
     phase = 0;
+    name = '';
+    description = '';
 
     constructor() {
         makeAutoObservable(this);
@@ -27,12 +29,23 @@ export default class GroupStore {
 
     startCreateGroup = () => {
         this.startEditing();
+        this.name = '';
         this.type = 'group';
     }
 
     startCreateChannel = () => {
         this.startEditing();
+        this.name = '';
+        this.description = '';
         this.type = 'channel';
+    }
+
+    setName = (val: string) => {
+        this.name = val;
+    }
+
+    setDescription = (val: string) => {
+        this.description = val;
     }
 
     loadFollowings = async () => {

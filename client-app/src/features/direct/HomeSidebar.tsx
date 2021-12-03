@@ -6,11 +6,12 @@ import { useStore } from "../../app/stores/store";
 import SearchResult from "./SearchResult";
 import ChooseMembers from "./home-sidebar/ChooseMembers";
 import GroupFinalization from "./home-sidebar/GroupFinalization";
+import Channelnitial from "./home-sidebar/Channelnitial";
 
 
 export default observer(function HomeSidebar() {
 
-    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing, phase}} = useStore();
+    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing, phase,type}} = useStore();
     const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
@@ -18,13 +19,21 @@ export default observer(function HomeSidebar() {
     }, [searchVal, searchChats]);
 
     if(editing) {
-        switch(phase) {
-            case 0:
-                return <ChooseMembers />;
-            case 1:
-                return <GroupFinalization />;
+        if(type === "group") {
+            switch(phase) {
+                case 0:
+                    return <ChooseMembers />;
+                case 1:
+                    return <GroupFinalization />;
+            }
+        } else if(type === "channel") {
+            switch(phase) {
+                case 0:
+                    return <Channelnitial />;
+                case 1:
+                    return <ChooseMembers />;
+            }
         }
-
     }
 
     return (
