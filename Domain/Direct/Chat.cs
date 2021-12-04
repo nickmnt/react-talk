@@ -8,6 +8,8 @@ namespace Domain.Direct
         public Guid Id { get; set; }
         public ChatType Type { get; set; }
         public PrivateChat PrivateChat { get; set; }
+        public GroupChat GroupChat { get; set; }
+        public ChannelChat ChannelChat { get; set; }
         public ICollection<UserChat> Users { get; set; }
     }
 }

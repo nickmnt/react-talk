@@ -77,6 +77,30 @@ namespace Persistence
                 .HasOne(u => u.Chat)
                 .WithMany(a => a.Users)
                 .HasForeignKey(aa => aa.ChatId);
+            
+            builder.Entity<ChannelMembership>(x => x.HasKey(aa => new {aa.AppUserId, aa.ChannelId}));
+
+            builder.Entity<ChannelMembership>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Channels)
+                .HasForeignKey(aa => aa.AppUserId);
+            
+            builder.Entity<ChannelMembership>()
+                .HasOne(u => u.Channel)
+                .WithMany(a => a.Members)
+                .HasForeignKey(aa => aa.ChannelId);
+            
+            builder.Entity<GroupMembership>(x => x.HasKey(aa => new {aa.AppUserId, aa.GroupId}));
+
+            builder.Entity<GroupMembership>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Groups)
+                .HasForeignKey(aa => aa.AppUserId);
+            
+            builder.Entity<GroupMembership>()
+                .HasOne(u => u.Group)
+                .WithMany(a => a.Members)
+                .HasForeignKey(aa => aa.GroupId);
         }
     }
 }
