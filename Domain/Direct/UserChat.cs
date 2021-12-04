@@ -7,6 +7,7 @@ namespace Domain.Direct
         public Chat Chat { get; set; }
         public Guid ChatId { get; set; }
         public AppUser AppUser { get; set; }
+        public MemberType MembershipType { get; set; }
         public string AppUserId { get; set; }
     }
 }

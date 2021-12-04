@@ -16,7 +16,5 @@ namespace Domain
         public ICollection<FollowNotification> FollowNotifications { get; set; } = new List<FollowNotification>();
         public ICollection<JoinNotification> JoinNotifications { get; set; } = new List<JoinNotification>();
         public ICollection<UserChat> Chats { get; set; } = new List<UserChat>();
-        public ICollection<ChannelMembership> Channels { get; set; } = new List<ChannelMembership>();
-        public ICollection<GroupMembership> Groups { get; set; } = new List<GroupMembership>();
     }
 }
