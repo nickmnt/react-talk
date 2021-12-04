@@ -48,8 +48,6 @@ namespace Application.Chats.ChannelChats
                 var chat = await _context.UserChats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.ChannelChat)
-                    .ThenInclude(x => x.Members)
-                    .ThenInclude(x => x.AppUser)
                     .FirstOrDefaultAsync(x => x.Chat.Id == request.Id, cancellationToken);
 
                 if (chat == null)
@@ -59,17 +57,21 @@ namespace Application.Chats.ChannelChats
                     return Result<bool>.Failure("Chat is not a channel.");
                 }
 
+                var curMembers = await _context.UserChats
+                    .Include(x => x.AppUser)
+                    .Where(x => x.ChatId == chat.ChatId)
+                    .Select(x => x.AppUser.UserName)
+                    .ToListAsync(cancellationToken);
+                
                 var members = request.Members.Distinct();
 
                 var targets = await _context.Users.Where(x => members.Contains(x.UserName)
-                    )
+                    && !curMembers.Contains(x.UserName))
                     .ToListAsync(cancellationToken);
 
                 foreach (var target in targets)
                 {
-                    chat.Chat.ChannelChat.Members
-                        .Add(new ChannelMembership {AppUser = target, Channel = chat.Chat.ChannelChat, MemberType = MemberType.Normal});
-                    var userChat = new UserChat { Chat = chat.Chat, AppUser = target };
+                    var userChat = new UserChat { Chat = chat.Chat, AppUser = target, MembershipType = MemberType.Normal};
                     _context.Add(userChat);
                 }
 
