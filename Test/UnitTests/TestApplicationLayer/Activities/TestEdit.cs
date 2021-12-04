@@ -93,7 +93,7 @@ namespace Test.UnitTests.TestApplicationLayer.Activities
                 var result = handler.Handle(request, new System.Threading.CancellationToken()).Result;
                 
                 //Assert
-                result.ShouldNotBeNull();
+                result.Value.ShouldNotBeNull();
                 result.IsSuccess.ShouldBeTrue();
             }
         }
