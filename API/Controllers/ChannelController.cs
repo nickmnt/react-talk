@@ -12,5 +12,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+        
+        [HttpPost("channels/addMember")]
+        public async Task<IActionResult> AddChannelMembers(Create.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }
