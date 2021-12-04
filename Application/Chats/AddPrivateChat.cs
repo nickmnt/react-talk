@@ -33,7 +33,7 @@ namespace Application.Chats
             public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var privateChat = new PrivateChat();
-                var chat = new Chat { Type = Chat.PrivateType, PrivateChat = privateChat };
+                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = privateChat };
 
                 _context.Add(chat);
 
