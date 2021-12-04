@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class DirectController : BaseApiController
+    public partial class DirectController : BaseApiController
     {
         [HttpPost()]
         public async Task<IActionResult> CreateActivity(PrivateChatStartDto command)
