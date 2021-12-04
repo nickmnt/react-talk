@@ -1,6 +1,6 @@
 export interface ChatDto {
     id: string;
-    type: string;
+    type: number;
     privateChatId: string;
     displayName: string;
     username: string;
@@ -36,5 +36,5 @@ export interface PrivateChatResultDto {
 
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     const privateChat = {messages: []};
-    return { id: '', type: 'localPrivate', privateChatId: '', displayName, image, privateChat, username} as ChatDto;
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, username} as ChatDto;
 }
