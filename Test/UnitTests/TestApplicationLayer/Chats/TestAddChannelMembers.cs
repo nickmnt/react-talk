@@ -33,8 +33,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
                 var channel = new ChannelChat { Members = new List<ChannelMembership>() };
                 channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
-
-                var dbChannel = context.Add(channel);
+                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
+                
+                var dbChat = context.Add(chat);
                 
                 var request = new AddMembers.Command { Id = new Guid(),Members = new List<string>() {"tom"} };
                 var userAccessor = MockUserAccessor.Create().Object;
@@ -75,10 +76,12 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
                 var channel = new ChannelChat { Members = new List<ChannelMembership>() };
                 channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
-
-                var dbChannel = context.Add(channel);
+                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
                 
-                var request = new AddMembers.Command { Members = new List<string>() {"tom"} };
+                var dbChat = context.Add(chat);
+                
+                
+                var request = new AddMembers.Command { Id=dbChat.Entity.Id, Members = new List<string>() {"tom"} };
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddMembers.Handler(context, mapper, userAccessor);
 
