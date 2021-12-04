@@ -59,10 +59,15 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var users = new List<AppUser>();
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
-                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = null };
+                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = new PrivateChat() };
+                
                 var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == "bob");
-
-                var userChat = context.UserChats.Add(new UserChat { Chat = chat, AppUser = user });
+                var tom = await context.Users.FirstOrDefaultAsync(x => x.UserName == "tom");
+                
+                var userChat = new UserChat { Chat = chat, AppUser = user };
+                var userChat1 = new UserChat { Chat = chat, AppUser = tom };
+                context.UserChats.Add(userChat);
+                context.UserChats.Add(userChat1);
                 await context.SaveChangesAsync();
                 
                 var config = new MapperConfiguration(cfg =>
