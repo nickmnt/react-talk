@@ -49,17 +49,19 @@ namespace Application.Chats.GroupChats
                 var chat = new Chat { Type = ChatType.Group, GroupChat = groupChat };
 
                 var members = request.Members.Distinct();
-
-                _context.Add(chat);
                 
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
 
-                var targets = _context.Users
-                    .Where(x => members.Contains(x.UserName)).ToList();
+                var targets = await _context.Users
+                    .Where(x => members.Contains(x.UserName)).ToListAsync(cancellationToken);
+
+                if (targets.Count == 0)
+                    return Result<ChatDto>.Failure("There are 0 valid members");
       
                 var userChat = new UserChat { Chat = chat, AppUser = user };
                 _context.UserChats.Add(userChat);
+                
                 
                 foreach(var target in targets)
                 {
