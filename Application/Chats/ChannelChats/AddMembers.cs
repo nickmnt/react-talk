@@ -19,11 +19,11 @@ namespace Application.Chats.ChannelChats
             public List<string> Members { get; set; }
         }
         
-        public class CommandValidator : AbstractValidator<Create.Command>
+        public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Id).NotEmpty();
             }
         }
 
