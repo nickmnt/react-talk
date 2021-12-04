@@ -34,8 +34,10 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var channel = new ChannelChat { Members = new List<ChannelMembership>() };
                 channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
                 var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
-                
-                var dbChat = context.Add(chat);
+                var userChat = new UserChat { AppUser = bob, Chat = chat };
+                var dbChat = context.Add(userChat);
+
+                await context.SaveChangesAsync();
                 
                 var request = new AddMembers.Command { Id = new Guid(),Members = new List<string>() {"tom"} };
                 var userAccessor = MockUserAccessor.Create().Object;
@@ -53,10 +55,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                     .FirstOrDefaultAsync(x => x.AppUser.UserName == userAccessor.GetUsername());
 
                 //Assert
-                result.ShouldBeNull();
                 tomChat.ShouldBeNull();
-                bobChat.ShouldNotBeNull();
-                Assert.NotEqual(tomChat.Chat.Id.ToString(), bobChat.Chat.Id.ToString());
             }
         }
         
@@ -87,26 +86,25 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 var id = realEntry.Entity.Chat.Id;                
                 
-                var request = new AddMembers.Command { Id = id,Members = new List<string>() {"tom"} };
+                var request = new AddMembers.Command { Id = id,Members = new List<string>() {"jane"} };
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddMembers.Handler(context, mapper, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
 
-                var tomChat = await context.UserChats
+                var janeChat = await context.UserChats
                     .Include(x => x.Chat)
-                    .AsNoTracking().FirstOrDefaultAsync(x => x.AppUser.UserName == "tom");
+                    .AsNoTracking().FirstOrDefaultAsync(x => x.AppUser.UserName == "jane");
                 var bobChat = await context.UserChats
                     .Include(x => x.Chat)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.AppUser.UserName == userAccessor.GetUsername());
 
                 //Assert
-                result.ShouldBeNull();
-                tomChat.ShouldBeNull();
-                bobChat.ShouldNotBeNull();
-                Assert.NotEqual(tomChat.Chat.Id.ToString(), bobChat.Chat.Id.ToString());
+                janeChat.ShouldBeNull();
+                result.ShouldNotBeNull();
+                result.IsSuccess.ShouldBeFalse();
             }
         }
         
@@ -127,11 +125,12 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var channel = new ChannelChat { Members = new List<ChannelMembership>() };
                 channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
                 var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
-                
-                var dbChat = context.Add(chat);
-                
-                
-                var request = new AddMembers.Command { Id=dbChat.Entity.Id, Members = new List<string>() {"tom"} };
+                var userChat = new UserChat { AppUser = bob, Chat = chat };
+                var dbChat = context.Add(userChat);
+
+                await context.SaveChangesAsync();
+
+                var request = new AddMembers.Command { Id=dbChat.Entity.ChatId, Members = new List<string>() {"tom"} };
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddMembers.Handler(context, mapper, userAccessor);
 
@@ -148,6 +147,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 //Assert
                 result.ShouldNotBeNull();
+                result.IsSuccess.ShouldBeTrue();
                 tomChat.ShouldNotBeNull();
                 bobChat.ShouldNotBeNull();
                 Assert.Equal(tomChat.Chat.Id.ToString(), bobChat.Chat.Id.ToString());
