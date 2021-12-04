@@ -6,7 +6,7 @@ namespace Application.Chats
     public class ChatDto
     {
         public Guid Id { get; set; }
-        public string Type { get; set; }
+        public int Type { get; set; }
         //Private Chat
         public int PrivateChatId { get; set; }
         public string DisplayName { get; set; }
