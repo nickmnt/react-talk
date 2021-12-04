@@ -31,10 +31,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var mapper = config.CreateMapper();
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat { Members = new List<ChannelMembership>() };
-                channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
+                var channel = new ChannelChat();
                 var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
-                var userChat = new UserChat { AppUser = bob, Chat = chat };
+                var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 
                 await context.SaveChangesAsync();
@@ -122,10 +121,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var mapper = config.CreateMapper();
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat { Members = new List<ChannelMembership>() };
-                channel.Members.Add(new ChannelMembership {AppUser = bob, Channel = channel, MemberType = MemberType.Owner});
+                var channel = new ChannelChat {  };
                 var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
-                var userChat = new UserChat { AppUser = bob, Chat = chat };
+                var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 
                 await context.SaveChangesAsync();
