@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Direct;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Chats.ChannelChats
@@ -41,7 +45,45 @@ namespace Application.Chats.ChannelChats
             }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                
+                var chat = await _context.UserChats
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.ChannelChat)
+                    .ThenInclude(x => x.Members)
+                    .ThenInclude(x => x.AppUser)
+                    .FirstOrDefaultAsync(x => x.Chat.Id == request.Id, cancellationToken);
+
+                if (chat == null)
+                    return null;
+                if (chat.Chat.Type != ChatType.Channel)
+                {
+                    return Result<bool>.Failure("Chat is not a channel.");
+                }
+
+                var members = request.Members.Distinct();
+
+                var targets = await _context.Users.Where(x => members.Contains(x.UserName)
+                    )
+                    .ToListAsync(cancellationToken);
+
+                foreach (var target in targets)
+                {
+                    chat.Chat.ChannelChat.Members
+                        .Add(new ChannelMembership {AppUser = target, Channel = chat.Chat.ChannelChat, MemberType = MemberType.Normal});
+                    var userChat = new UserChat { Chat = chat.Chat, AppUser = target };
+                    _context.Add(userChat);
+                }
+
+                var result = await _context.SaveChangesAsync(cancellationToken);
+
+                if (result > 0)
+                {
+                    return Result<bool>.Success(true);
+                }
+                else
+                {
+                    return Result<bool>.Failure("Couldn't add members to the database");
+                }
+
             }
         }
     }
