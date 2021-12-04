@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -7,6 +8,7 @@ using AutoMapper;
 using Domain.Direct;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Chats.GroupChats
@@ -41,10 +43,35 @@ namespace Application.Chats.GroupChats
                 _accessor = accessor;
             }
             
-            public Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var groupChat = new GroupChat();
-                var chat = new Chat {Type = }
+                var chat = new Chat { Type = ChatType.Group, GroupChat = groupChat };
+
+                var members = request.Members.Distinct();
+
+                _context.Add(chat);
+                
+                var user = await _context.Users
+                    .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
+
+                var targets = _context.Users
+                    .Where(x => members.Contains(x.UserName)).ToList();
+      
+                var userChat = new UserChat { Chat = chat, AppUser = user };
+                _context.UserChats.Add(userChat);
+                
+                foreach(var target in targets)
+                {
+                    var targetChat = new UserChat { Chat = chat, AppUser = target };
+                    _context.UserChats.Add(targetChat);
+                }
+                
+                var result = await _context.SaveChangesAsync(cancellationToken);
+                if (result > 0)
+                    return Result<ChatDto>.Success(_mapper.Map<UserChat,ChatDto>(userChat));
+                
+                return Result<ChatDto>.Failure("Failed to create the new group chat.");
             }
         }
     }
