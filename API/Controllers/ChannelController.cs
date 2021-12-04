@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public partial class DirectController
+    public class ChannelController : BaseApiController
     {
         [HttpPost("channels")]
         public async Task<IActionResult> CreateChannel(Create.Command command)

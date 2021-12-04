@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public partial class DirectController
+    public partial class GroupController : BaseApiController
     {
-        [HttpPost("groups")]
+        [HttpPost()]
         public async Task<IActionResult> CreateGroup(Create.Command command)
         {
             return HandleResult(await Mediator.Send(command));;
