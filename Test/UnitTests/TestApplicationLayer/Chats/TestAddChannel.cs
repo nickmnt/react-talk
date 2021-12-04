@@ -35,9 +35,6 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
 
-                var tomChat = await context.UserChats
-                    .Include(x => x.Chat)
-                    .AsNoTracking().FirstOrDefaultAsync(x => x.AppUser.UserName == "tom");
                 var bobChat = await context.UserChats
                     .Include(x => x.Chat)
                     .AsNoTracking()
@@ -45,10 +42,8 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 //Assert
                 result.Value.ShouldNotBeNull();
-                tomChat.ShouldNotBeNull();
                 bobChat.ShouldNotBeNull();
                 Assert.Equal(result.Value.Id.ToString(), bobChat.Chat.Id.ToString());
-                Assert.Equal(result.Value.Id.ToString(), tomChat.Chat.Id.ToString());
             }
         }
     }
