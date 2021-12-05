@@ -53,8 +53,19 @@ namespace Application.Chats.ChannelChats
                 _context.UserChats.Add(userChat);
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);
+
+                var chatDto = new ChatDto
+                {
+                    Id = userChat.ChatId,
+                    Image = "",
+                    DisplayName = request.Name,
+                    Type = (int)ChatType.Channel,
+                    ParticipantUsername = "",
+                    PrivateChatId = -1
+                };
+                
                 if (result > 0)
-                    return Result<ChatDto>.Success(_mapper.Map<UserChat,ChatDto>(userChat));
+                    return Result<ChatDto>.Success(chatDto);
                 
                 return Result<ChatDto>.Failure("Failed to create the new channel.");
             }
