@@ -8,13 +8,13 @@ namespace API.Controllers
 {
     public class ChannelController : BaseApiController
     {
-        [HttpPost("channels")]
+        [HttpPost()]
         public async Task<IActionResult> CreateChannel(Create.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }
         
-        [HttpPost("channels/addMember")]
+        [HttpPost("addMember")]
         public async Task<IActionResult> AddChannelMembers(AddMembers.Command command)
         {
             return HandleResult(await Mediator.Send(command));
