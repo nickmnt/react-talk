@@ -31,13 +31,11 @@ namespace Application.Chats.ChannelChats
         public class Handler : IRequestHandler<Command, Result<ChatDto>>
         {
             private readonly DataContext _context;
-            private readonly IMapper _mapper;
             private readonly IUserAccessor _accessor;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor accessor)
+            public Handler(DataContext context, IUserAccessor accessor)
             {
                 _context = context;
-                _mapper = mapper;
                 _accessor = accessor;
             }
             

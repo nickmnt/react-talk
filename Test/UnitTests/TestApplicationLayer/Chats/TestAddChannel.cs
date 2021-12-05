@@ -25,12 +25,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var users = new List<AppUser>();
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
-                var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
-                var mapper = config.CreateMapper();
-
                 var request = new Create.Command { Name = "channel", Description = "optional" };
                 var userAccessor = MockUserAccessor.Create().Object;
-                var handler = new Create.Handler(context, mapper, userAccessor);
+                var handler = new Create.Handler(context, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
