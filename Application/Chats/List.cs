@@ -26,7 +26,7 @@ namespace Application.Chats
             private readonly IMapper _mapper;
             private readonly IUserAccessor _accessor;
             
-            public Handler(DataContext context, IMapper mapper,IUserAccessor accessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor accessor)
             {
                 _context = context;
                 _mapper = mapper;
@@ -40,12 +40,43 @@ namespace Application.Chats
                 if (user == null)
                     return null;
 
+                var result = new List<ChatDto>();
+                
                 var chats = await _context.UserChats
-                    .ProjectTo<ChatDto>(_mapper.ConfigurationProvider)
-                    .Where(x => x.ParticipantUsername == user.UserName)
+                    .Include(x => x.AppUser)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.ChannelChat)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.Users)
+                    .ThenInclude(x => x.AppUser)
+                    .Where(x => x.AppUser.UserName == user.UserName)
                     .ToListAsync(cancellationToken);
 
-                return Result<List<ChatDto>>.Success(chats);
+                foreach (var userChat in chats)
+                {
+                    var chat = userChat.Chat;
+
+                    switch (chat.Type)
+                    {
+                        case ChatType.Channel:
+                            var channelDto = new ChatDto
+                            {
+                                Id = userChat.ChatId,
+                                Image = "",
+                                DisplayName = chat.ChannelChat.Name,
+                                Type = (int)ChatType.Channel,
+                                ParticipantUsername = "",
+                                PrivateChatId = -1
+                            };
+                            result.Add(channelDto);
+                            break;
+                        case ChatType.PrivateChat:
+                            result.Add(_mapper.Map<ChatDto>(userChat));
+                            break;
+                    }
+                }
+
+                return Result<List<ChatDto>>.Success(result);
             }
         }
     }
