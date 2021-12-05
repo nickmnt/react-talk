@@ -7,7 +7,7 @@ import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
 import { SearchResult } from '../models/search';
-import { Message, PrivateChat, PrivateChatResultDto } from '../models/chat';
+import { ChatDto, Message, PrivateChat, PrivateChatResultDto } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -138,7 +138,9 @@ const Chats = {
         return axios.post<Message>('/direct/videos', formData, {
             headers: {'Content-type': 'multipart/form-data'}
         });
-    }
+    },
+    createChannel: (name: string, description: string) => 
+        requests.post<ChatDto>('/group/', {name, description})
 }
 
 const agent = {
