@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChatDto, createLocalChat, SearchChatDto } from "../models/chat";
+import { ChannelDetailsDto, ChatDto, createLocalChat, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
 export default class DirectStore {
@@ -9,6 +9,7 @@ export default class DirectStore {
     searchResults: SearchChatDto[] = [];
     hubConnection: HubConnection | null = null;
     currentChat: ChatDto | null = null;
+    channelInfos = new Map<string, ChannelDetailsDto>();
 
     constructor() {
         makeAutoObservable(this);        
@@ -79,6 +80,26 @@ export default class DirectStore {
         })
     }
 
+    getChannelChatDetails = async (chat: ChatDto) => {
+        const response = await agent.Chats.getChannelDetails(chat.id);
+        
+        runInAction(() => {
+            this.channelInfos.set(chat.id, response);
+            this.currentChat = chat;
+        })
+    }
+
+    getChatDetails = async (chat: ChatDto) => {
+        switch(chat.type) {
+            case 0:
+                await this.getPrivateChatDetails(chat);
+                break;
+            case 2:
+                await this.getChannelChatDetails(chat);
+                break;
+        }
+    }
+
     createMessage = async (body: string) => {
         if(!this.currentChat)
             return;
@@ -132,6 +153,16 @@ export default class DirectStore {
             if(this.currentChat)
             this.setChat(response);
             runInAction(() => this.currentChat = response);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    getChannelDetails = async (id: string) => {
+        try {
+            const response = await agent.Chats.getChannelDetails(id);
+
+            runInAction(() => this.channelInfos.set(id, response));
         } catch(error) {
             console.log(error);
         }

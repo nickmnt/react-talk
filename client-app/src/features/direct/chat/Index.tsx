@@ -8,11 +8,11 @@ interface Props {
 
 export default observer(function Chat({chat}: Props) {
 
-    const {directStore: {currentChat, getPrivateChatDetails}} = useStore(); 
+    const {directStore: {currentChat, getChatDetails}} = useStore(); 
 
     return (
         <div className="chat">
-            <div className={`chat__container ${currentChat && currentChat.id===chat.id && "chat__container--active"}`} onClick={() => getPrivateChatDetails(chat)}>
+            <div className={`chat__container ${currentChat && currentChat.id===chat.id && "chat__container--active"}`} onClick={() => getChatDetails(chat)}>
                 <div className="chat__left">
                     <img src="/assets/user.png" alt="User" className="chat__img" />
                 </div>

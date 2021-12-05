@@ -7,7 +7,7 @@ import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
 import { SearchResult } from '../models/search';
-import { ChatDto, Message, PrivateChat, PrivateChatResultDto } from '../models/chat';
+import { ChannelDetailsDto, ChatDto, Message, PrivateChat, PrivateChatResultDto } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -140,7 +140,9 @@ const Chats = {
         });
     },
     createChannel: (name: string, description: string) => 
-        requests.post<ChatDto>('/group/', {name, description})
+        requests.post<ChatDto>('/channel/', {name, description}),
+    getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
+    addMembers: (id: string, members: string[]) => requests.post<boolean>('channel/addMember', {id, members})
 }
 
 const agent = {

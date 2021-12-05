@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite';
 
 
 export default observer(function Channelnitial() {
-    const { groupStore: {stopEditing, nextPhase, name, description,setName, setDescription} } = useStore();
+    const { directStore: {createChannel},groupStore: {stopEditing, nextPhase, name, description,setName, setDescription} } = useStore();
 
     return (
         <div style={{backgroundColor: 'white', height: '100%'}}>
@@ -52,7 +52,10 @@ export default observer(function Channelnitial() {
                 ariaLabel="SpeedDial basic example"
                 sx={{ position: 'absolute', bottom: 16, right: 16 }}
                 icon={<ArrowForwardIcon />}
-                onClick={nextPhase}
+                onClick={() => {
+                    createChannel(name, description);
+                    nextPhase();
+                }}
             />}
         </div>
     )

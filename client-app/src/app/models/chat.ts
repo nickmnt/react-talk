@@ -29,6 +29,11 @@ export interface Message {
     createdAt: Date;
 }
 
+export interface ChannelDetailsDto {
+    description: string;
+    memberCount: number;
+}
+
 export interface PrivateChatResultDto {
     chatId: string;
     message: Message;

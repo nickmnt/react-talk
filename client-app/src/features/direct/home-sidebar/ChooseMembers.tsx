@@ -19,7 +19,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 export default observer(function ChooseMembers() {
-    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type, previousPhase}} = useStore();
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type}} = useStore();
     
     useEffect(() => {
       loadFollowings();
@@ -41,7 +41,7 @@ export default observer(function ChooseMembers() {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        onClick={type==="group" ? stopEditing : previousPhase}
+                        onClick={stopEditing}
                     >
                         <ArrowBack fontSize="large" />
                     </IconButton>
