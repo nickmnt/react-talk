@@ -15,7 +15,7 @@ namespace API.Controllers
         }
         
         [HttpPost("channels/addMember")]
-        public async Task<IActionResult> AddChannelMembers(Create.Command command)
+        public async Task<IActionResult> AddChannelMembers(AddMembers.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }
