@@ -47,6 +47,9 @@ namespace Application.Chats.ChannelChats
                     return null;
                 }
 
+                var memberCount = await _context.UserChats
+                    .CountAsync(x => x.ChatId == request.ChatId, cancellationToken);
+
                 if (userChat.Chat.Type != ChatType.Channel)
                 {
                     return Result<ChannelDetailsDto>.Failure("Requested chat is not a channel");
@@ -54,7 +57,8 @@ namespace Application.Chats.ChannelChats
 
                 var result = new ChannelDetailsDto
                 {
-                    Description = userChat.Chat.ChannelChat.Description
+                    Description = userChat.Chat.ChannelChat.Description,
+                    MemberCount = memberCount
                 };
 
                 return Result<ChannelDetailsDto>.Success(result);
