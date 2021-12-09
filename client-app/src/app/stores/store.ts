@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
+import ChatStore from "./chatStore";
 import CommentStore from "./commentStore";
 import CommonStore from "./commonStore";
 import DirectStore from "./directStore";
@@ -19,6 +20,7 @@ interface Store {
     notificationStore: NotificationStore;
     directStore: DirectStore;
     groupStore: GroupStore;
+    chatStore: ChatStore;
 }
 
 export const store: Store = {
@@ -30,7 +32,8 @@ export const store: Store = {
     commentStore: new CommentStore(),
     notificationStore: new NotificationStore(),
     directStore: new DirectStore(),
-    groupStore: new GroupStore()
+    groupStore: new GroupStore(),
+    chatStore: new ChatStore()
 }
 
 export const StoreContext = createContext(store);

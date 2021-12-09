@@ -1,3 +1,5 @@
+import { Profile } from "./profile";
+
 export interface ChatDto {
     id: string;
     type: number;
@@ -37,6 +39,12 @@ export interface ChannelDetailsDto {
 export interface PrivateChatResultDto {
     chatId: string;
     message: Message;
+}
+
+export interface ChatPage {
+    type: number;
+    accountData: Profile;
+    index: number;
 }
 
 export const createLocalChat = (username: string, displayName: string, image: string) => {
