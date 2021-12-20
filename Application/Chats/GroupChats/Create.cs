@@ -45,7 +45,7 @@ namespace Application.Chats.GroupChats
             
             public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var groupChat = new GroupChat();
+                var groupChat = new GroupChat {Name = request.Name, Description = null };
                 var chat = new Chat { Type = ChatType.Group, GroupChat = groupChat };
 
                 var members = request.Members.Distinct();
@@ -71,7 +71,7 @@ namespace Application.Chats.GroupChats
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);
                 if (result > 0)
-                    return Result<ChatDto>.Success(_mapper.Map<UserChat,ChatDto>(userChat));
+                    return Result<ChatDto>.Success(ChatMapping.MapGroup(userChat));
                 
                 return Result<ChatDto>.Failure("Failed to create the new group chat.");
             }
