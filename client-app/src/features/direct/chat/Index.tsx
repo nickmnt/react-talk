@@ -9,7 +9,6 @@ interface Props {
 export default observer(function Chat({chat}: Props) {
 
     const {directStore: {currentChat, getChatDetails}} = useStore(); 
-
     return (
         <div className="chat">
             <div className={`chat__container ${currentChat && currentChat.id===chat.id && "chat__container--active"}`} onClick={() => getChatDetails(chat)}>

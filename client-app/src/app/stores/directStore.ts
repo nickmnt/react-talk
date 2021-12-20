@@ -167,4 +167,15 @@ export default class DirectStore {
             console.log(error);
         }
     }
+
+    createGroup = async (name: string, members: string[]) => {
+        try {
+            const response = await agent.Chats.createGroup(name, members);
+
+            this.setChat(response);
+            runInAction(() => this.currentChat = response);
+        } catch(error) {
+            console.log(error);
+        }
+    }
 }

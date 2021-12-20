@@ -142,7 +142,8 @@ const Chats = {
     createChannel: (name: string, description: string) => 
         requests.post<ChatDto>('/channel/', {name, description}),
     getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
-    addMembers: (id: string, members: string[]) => requests.post<boolean>('channel/addMember', {id, members})
+    addMembers: (id: string, members: string[]) => requests.post<boolean>('channel/addMember', {id, members}),
+    createGroup: (name: string, members: string[]) => requests.post<ChatDto>('/group/', {name, members})
 }
 
 const agent = {

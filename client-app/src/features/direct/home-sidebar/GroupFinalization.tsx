@@ -14,7 +14,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import { observer } from 'mobx-react-lite';
 
 export default observer(function GroupFinalization() {
-    const {groupStore: {members, previousPhase, name, setName}} = useStore();
+    const {groupStore: {members, previousPhase, name, setName, stopEditing}, directStore: {createGroup}} = useStore();
 
     return (
         <div style={{backgroundColor: 'white', height: '100%'}}>
@@ -76,6 +76,10 @@ export default observer(function GroupFinalization() {
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         icon={<DoneIcon />}
+        onClick={() => {
+          createGroup(name, members.map(x => x.username));
+          stopEditing();
+        }}
         />}
         </div>
     )
