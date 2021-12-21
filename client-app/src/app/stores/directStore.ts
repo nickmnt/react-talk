@@ -83,7 +83,10 @@ export default class DirectStore {
 
         runInAction(() => {
             chat.privateChat = response;
-            chat.privateChat.messages.forEach(x => x.local = false);
+            chat.privateChat.messages.forEach(x => {
+                x.local = false
+                x.createdAt = new Date(x.createdAt + 'Z');
+            });
             this.currentChat = chat;
         })
     }
@@ -132,6 +135,7 @@ export default class DirectStore {
 
     addNewMessage = (response: Message) => {
         if(this.currentChat && this.currentChat.privateChat) {
+            response.createdAt = new Date(response.createdAt);
             this.currentChat.privateChat.messages = [...this.currentChat.privateChat.messages, response];
         }
     }
@@ -143,7 +147,7 @@ export default class DirectStore {
                 return
             }
             msg.local = false;
-            msg.createdAt = response.createdAt;
+            msg.createdAt = new Date(response.createdAt);
             msg.image = response.image;
             msg.publicId = response.publicId;
             msg.url = response.url

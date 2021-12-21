@@ -7,6 +7,7 @@ interface Props {
     isMe: boolean;
     name: string;
     text: string;
+    date: Date;
     isDoubleTick: boolean;
     showImg: boolean;
     attachedImg: string;
@@ -14,7 +15,7 @@ interface Props {
     isLocal: boolean;
 }
 
-export default function Text({isMe,name,text,isDoubleTick,showImg,attachedImg, attachedVideo, isLocal}: Props) {
+export default function Text({isMe,name,text,date,isDoubleTick,showImg,attachedImg, attachedVideo, isLocal}: Props) {
     return (
         <div className={`text${isMe ? "--me" : "--other"}`}>
             {attachedImg&& <img src={attachedImg} alt='Attachment' className='text__attachedImg' />}
@@ -27,7 +28,7 @@ export default function Text({isMe,name,text,isDoubleTick,showImg,attachedImg, a
                     {text}
                 </p>
                 <div className="text__info">
-                    <div className={`text__date${isMe ? "--me" : "--other"}`}>6:14 PM</div>
+                    <div className={`text__date${isMe ? "--me" : "--other"}`}>{date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                     {isMe && (isLocal ? <AccessTimeIcon sx={{color: '#57b84c'}} /> : (isDoubleTick ? <DoubleTick /> : <Tick />))}
                 </div>
             </div>
