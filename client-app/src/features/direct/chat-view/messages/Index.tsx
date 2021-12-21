@@ -40,7 +40,7 @@ export default observer(function Messages() {
                 {console.log('type', currentChat?.type)}
                 {(currentChat?.type === 0 || currentChat?.type === -10) && user && 
                 currentChat.privateChat?.messages.map((message, i) => 
-                <div className="messages__message" key={i}>
+                <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i}>
                     <Message onRightClick={onRightClick} message={message} />
                 </div>)}
             </div>

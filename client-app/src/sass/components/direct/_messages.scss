@@ -9,7 +9,13 @@
     overflow-y: auto;
 
     &__message {
-        margin-top: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+      display: flex;
+
+      &--me {
+        flex-direction: row-reverse;
+      }
     }
 
     & > *:last-child {
