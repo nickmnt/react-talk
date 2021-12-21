@@ -23,8 +23,8 @@ export default observer(function Message({message, onRightClick}: Props) {
         <>
             <div className="message" onContextMenu={onRightClick} >
                 {(!isMe && showImg) && <img src={imgSrc} alt="user" className="message__img" />}
-                <Text name={message.displayName} isMe={isMe} text={message.body} isDoubleTick={true} showImg={showImg} attachedImg={message.type === 1? message.url : ''}
-                    attachedVideo={message.type === 2? message.url: ''}/>
+                <Text name={message.displayName} isMe={isMe} text={message.body} isDoubleTick={false} showImg={showImg} attachedImg={message.type === 1? message.url : ''}
+                    attachedVideo={message.type === 2? message.url: ''} isLocal={message.local}/>
             </div>   
         </>
     );

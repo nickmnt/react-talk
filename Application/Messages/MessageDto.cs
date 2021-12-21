@@ -5,6 +5,7 @@ namespace Application.Messages
 {
     public class MessageDto
     {
+        public int Id { get; set; }
         public MessageType Type { get; set; }
         public string Username { get; set; }
         public string DisplayName { get; set; }

@@ -1,8 +1,10 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChannelDetailsDto, ChatDto, createLocalChat, SearchChatDto } from "../models/chat";
+import { ChannelDetailsDto, ChatDto, createLocalChat, Message, SearchChatDto } from "../models/chat";
 import { store } from "./store";
+
+let id = -10
 
 export default class DirectStore {
     chats: ChatDto[] = [];
@@ -76,6 +78,7 @@ export default class DirectStore {
 
         runInAction(() => {
             chat.privateChat = response;
+            chat.privateChat.messages.forEach(x => x.local = false);
             this.currentChat = chat;
         })
     }
@@ -99,15 +102,50 @@ export default class DirectStore {
                 break;
         }
     }
+    
+    createLocalMessage = (body: string) => {
+        if(!this.currentChat)
+            return -1
+
+        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, 
+            {
+                body,
+                createdAt: new Date(),
+                displayName: store.userStore.user!.displayName,
+                username: store.userStore.user!.username,
+                local: true,
+                id: id,
+                type: 0,
+                image: "",
+                publicId: "",
+                url: ""
+            }];
+        
+        id--;
+        return id + 1;
+    }
+
+    addMessage = (response: Message, id: number) => {
+        if(this.currentChat) {
+            const msg = this.currentChat.privateChat!.messages.find(x => x.id === id)
+            if(!msg) {
+                return
+            }
+            msg.local = false;
+            msg.createdAt = response.createdAt;
+            msg.image = response.image;
+            msg.publicId = response.publicId;
+            msg.url = response.url
+            msg.id = response.id;
+        }
+    } 
 
     createMessage = async (body: string) => {
         if(!this.currentChat)
             return;
+        const id = this.createLocalMessage(body);
         const response = await agent.Chats.createMessage(body, this.currentChat.id);
-        runInAction(() => {
-            if(this.currentChat)
-                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response];
-        })
+        this.addMessage(response, id);
     }
 
     createPhoto = async (file: Blob, body: string) => {

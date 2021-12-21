@@ -21,6 +21,7 @@ export interface PrivateChat {
 }
 
 export interface Message {
+    id: number;
     type: number;
     username: string;
     displayName: string;
@@ -29,6 +30,7 @@ export interface Message {
     publicId: string;
     url: string;
     createdAt: Date;
+    local: boolean;
 }
 
 export interface ChannelDetailsDto {
