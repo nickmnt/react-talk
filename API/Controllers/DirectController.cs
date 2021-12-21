@@ -1,18 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
 using API.DTOs;
+using API.SignalR;
 using Application.Chats;
 using Application.Chats.PrivateChats;
+using Application.Chats.UserChats;
 using Application.Messages;
 using Domain.Direct;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+
 
 namespace API.Controllers
 {
     public class DirectController : BaseApiController
     {
+        private readonly IHubContext<DirectHub> _hubContext;
+
+        public DirectController(IHubContext<DirectHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         [HttpPost()]
-        public async Task<IActionResult> CreateActivity(PrivateChatStartDto command)
+        public async Task<IActionResult> CreatePrivateChat(PrivateChatStartDto command)
         {
             var result = await Mediator.Send(new AddPrivateChat.Command
                 { TargetUsername = command.Username });
@@ -45,7 +56,16 @@ namespace API.Controllers
         public async Task<IActionResult> CreateMessage(CreateMessageDto command)
         {
             var result = await Mediator.Send(new Create.Command { Body = command.Body, ChatId = command.ChatId });
-
+            var users = await Mediator
+                .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+            
+            if (result.IsSuccess)
+            {
+                foreach (var u in users.Value)
+                {
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", result.Value);
+                }
+            }
             return HandleResult(result);
         }
         

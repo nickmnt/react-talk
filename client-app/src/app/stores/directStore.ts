@@ -40,6 +40,11 @@ export default class DirectStore {
                     this.searchResults = results;
                 });
             });
+
+            this.hubConnection.on('ReceiveNewMessage', (result: Message) => {
+                console.log('hey')
+                this.addNewMessage(result);
+            });
         }
     }
 
@@ -123,6 +128,12 @@ export default class DirectStore {
         
         id--;
         return id + 1;
+    }
+
+    addNewMessage = (response: Message) => {
+        if(this.currentChat && this.currentChat.privateChat) {
+            this.currentChat.privateChat.messages = [...this.currentChat.privateChat.messages, response];
+        }
     }
 
     addMessage = (response: Message, id: number) => {
