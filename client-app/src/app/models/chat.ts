@@ -31,6 +31,8 @@ export interface Message {
     url: string;
     createdAt: Date;
     local: boolean;
+    localBlob?: Blob;
+    localProgress?: number;
 }
 
 export interface ChannelDetailsDto {

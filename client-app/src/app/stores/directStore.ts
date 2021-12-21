@@ -133,6 +133,53 @@ export default class DirectStore {
         return id + 1;
     }
 
+    createLocalImage = (file: Blob, body: string) => {
+        if(!this.currentChat)
+            return {id:-1, msg:undefined}
+
+        const msg = {
+            body,
+            createdAt: new Date(),
+            displayName: store.userStore.user!.displayName,
+            username: store.userStore.user!.username,
+            local: true,
+            id: id,
+            type: 1,
+            image: "",
+            publicId: "",
+            url: "",
+            localBlob: file
+        } as Message;
+        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
+        
+        id--;
+        return {id: id+1, msg};
+    }
+
+    createLocalVideo = (file: Blob, body: string) => {
+        if(!this.currentChat)
+            return {id:-1, msg:undefined};
+
+        const msg = {
+            body,
+            createdAt: new Date(),
+            displayName: store.userStore.user!.displayName,
+            username: store.userStore.user!.username,
+            local: true,
+            id: id,
+            type: 2,
+            image: "",
+            publicId: "",
+            url: "",
+            localBlob: file
+        } as Message;
+
+        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
+        
+        id--;
+        return {id:id + 1, msg};
+    }
+
     addNewMessage = (response: Message) => {
         if(this.currentChat && this.currentChat.privateChat) {
             response.createdAt = new Date(response.createdAt);
@@ -140,7 +187,7 @@ export default class DirectStore {
         }
     }
 
-    addMessage = (response: Message, id: number) => {
+    updateLocalMessage = (response: Message, id: number) => {
         if(this.currentChat) {
             const msg = this.currentChat.privateChat!.messages.find(x => x.id === id)
             if(!msg) {
@@ -152,6 +199,7 @@ export default class DirectStore {
             msg.publicId = response.publicId;
             msg.url = response.url
             msg.id = response.id;
+            msg.localBlob = undefined;
         }
     } 
 
@@ -159,28 +207,48 @@ export default class DirectStore {
         if(!this.currentChat)
             return;
         const id = this.createLocalMessage(body);
+        if(id === -1) 
+            return
         const response = await agent.Chats.createMessage(body, this.currentChat.id);
-        this.addMessage(response, id);
+        this.updateLocalMessage(response, id);
     }
 
     createPhoto = async (file: Blob, body: string) => {
         if(!this.currentChat)
             return;
-        const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id);
-        runInAction(() => {
-            if(this.currentChat)
-                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response.data];
-        })
+        const {id} = this.createLocalImage(file, body);
+        if(id === -1)
+            return
+        // let config = {
+        //   onDownloadProgress: (progressEvent: any) => {
+            // let percentCompleted = Math.floor(
+            //   (progressEvent.loaded * 100) / progressEvent.total
+            // );
+            // console.log(percentCompleted);
+        //   },
+        // };
+        let config = {};
+        const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id, config);
+        this.updateLocalMessage(response.data, id);
     }
 
     createVideo = async (file: Blob, body: string) => {
         if(!this.currentChat)
             return;
-        const response = await agent.Chats.createVideo(file ,body, this.currentChat.id);
-        runInAction(() => {
-            if(this.currentChat)
-                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response.data];
-        })
+        const {id} = this.createLocalVideo(file, body);
+        if(id === -1)
+            return;
+        // let config = {
+        //   onUploadProgress: (progressEvent: any) => {
+            // let percentCompleted = Math.floor(
+            //   (progressEvent.loaded * 100) / progressEvent.total
+            // );
+            // msg!.localProgress = percentCompleted;
+        //   },
+        // };
+        let config = {}
+        const response = await agent.Chats.createVideo(file ,body, this.currentChat.id, config);
+        this.updateLocalMessage(response.data, id);
     }
 
     createPrivateChat = async (username: string, body: string) => {

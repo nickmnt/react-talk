@@ -2,6 +2,7 @@ import ReactPlayer from 'react-player';
 import DoubleTick from './DoubleTick';
 import Tick from './Tick';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { Message } from '../../../../../../app/models/chat';
 
 interface Props {
     isMe: boolean;
@@ -10,21 +11,25 @@ interface Props {
     date: Date;
     isDoubleTick: boolean;
     showImg: boolean;
+    type: number;
     attachedImg: string;
     attachedVideo: string;
     isLocal: boolean;
+    localBlob: Blob | undefined;
+    message: Message;
 }
 
-export default function Text({isMe,name,text,date,isDoubleTick,showImg,attachedImg, attachedVideo, isLocal}: Props) {
+export default function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message}: Props) {
     return (
         <div className={`text${isMe ? "--me" : "--other"}`}>
-            {attachedImg&& <img src={attachedImg} alt='Attachment' className='text__attachedImg' />}
-            {attachedVideo && <ReactPlayer url={attachedVideo} />}
+            {type === 1 && <img src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
+            {type === 2 && <ReactPlayer url={isLocal ?  URL.createObjectURL(localBlob!) : attachedVideo} />}
             <div className="text__container">
                 {(!isMe && showImg) && <div className="text__name">
                     {name}
                 </div>}
                 <p className="text__content">
+                    {message.localProgress?.toString()}
                     {text}
                 </p>
                 <div className="text__info">

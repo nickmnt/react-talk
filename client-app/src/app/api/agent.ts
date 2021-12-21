@@ -120,23 +120,25 @@ const Chats = {
     createPrivateChat: (username: string, body: string) => requests.post<PrivateChatResultDto>(`/direct/`, {username, body}),
     getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
     createMessage: (body: string, chatId: string) => requests.post<Message>('/direct/messages', {body,chatId}),
-    createPhoto: (file: Blob, body: string, chatId: string) => {
+    createPhoto: (file: Blob, body: string, chatId: string, config: any) => {
         let formData = new FormData();
         formData.append('File', file);
         formData.append('File', file);
         formData.append('Body', body);
         formData.append('ChatId', chatId);
         return axios.post<Message>('/direct/photos', formData, {
-            headers: {'Content-type': 'multipart/form-data'}
+            headers: {'Content-type': 'multipart/form-data'},
+            ...config
         });
     },
-    createVideo: (file: Blob, body: string, chatId: string) => {
+    createVideo: (file: Blob, body: string, chatId: string, config: any) => {
         let formData = new FormData();
         formData.append('File', file);
         formData.append('Body', body);
         formData.append('ChatId', chatId);
         return axios.post<Message>('/direct/videos', formData, {
-            headers: {'Content-type': 'multipart/form-data'}
+            headers: {'Content-type': 'multipart/form-data'},
+            ...config
         });
     },
     createChannel: (name: string, description: string) => 
