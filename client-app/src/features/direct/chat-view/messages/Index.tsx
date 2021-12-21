@@ -8,6 +8,7 @@ import ForwardIcon from '@mui/icons-material/Forward';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import ScrollableFeed from 'react-scrollable-feed'
 
 export default observer(function Messages() {
 
@@ -36,14 +37,14 @@ export default observer(function Messages() {
 
     return (
         <>
-            <div className="messages">
+            <ScrollableFeed className="messages">
                 {console.log('type', currentChat?.type)}
                 {(currentChat?.type === 0 || currentChat?.type === -10) && user && 
                 currentChat.privateChat?.messages.map((message, i) => 
                 <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i}>
                     <Message onRightClick={onRightClick} message={message} />
                 </div>)}
-            </div>
+            </ScrollableFeed>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
