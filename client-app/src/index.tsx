@@ -13,7 +13,7 @@ import {createBrowserHistory} from 'history';
 import ScrollToTop from './app/layout/ScrollToTop';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
+import SimpleReactLightbox from 'simple-react-lightbox'
 
 export const history = createBrowserHistory();
 
@@ -46,7 +46,9 @@ ReactDOM.render(
     <Router history={history}> 
       <ScrollToTop />
       <ThemeProvider theme={theme}>
-      <App />
+        <SimpleReactLightbox>
+          <App />
+        </SimpleReactLightbox>
       </ThemeProvider>
     </Router>
   </StoreContext.Provider>,

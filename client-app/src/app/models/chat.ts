@@ -51,6 +51,12 @@ export interface ChatPage {
     index: number;
 }
 
+export interface ImageElem{
+    id: number
+    src: string,
+    caption: string
+}
+
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     const privateChat = {messages: []};
     return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, username} as ChatDto;

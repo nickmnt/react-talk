@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChannelDetailsDto, ChatDto, createLocalChat, Message, SearchChatDto } from "../models/chat";
+import { ChannelDetailsDto, ChatDto, createLocalChat, ImageElem, Message, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
 let id = -10
@@ -12,6 +12,8 @@ export default class DirectStore {
     hubConnection: HubConnection | null = null;
     currentChat: ChatDto | null = null;
     channelInfos = new Map<string, ChannelDetailsDto>();
+    images: ImageElem[] = []
+    videos: string[] = []
 
     constructor() {
         makeAutoObservable(this);        
@@ -88,6 +90,7 @@ export default class DirectStore {
                 x.createdAt = new Date(x.createdAt + 'Z');
             });
             this.currentChat = chat;
+            this.updateMessages();
         })
     }
 
@@ -184,6 +187,7 @@ export default class DirectStore {
         if(this.currentChat && this.currentChat.privateChat) {
             response.createdAt = new Date(response.createdAt);
             this.currentChat.privateChat.messages = [...this.currentChat.privateChat.messages, response];
+            this.updateMessages();
         }
     }
 
@@ -298,5 +302,25 @@ export default class DirectStore {
         } catch(error) {
             console.log(error);
         }
+    }
+
+    updateMessages = () => {
+        this.currentChat?.privateChat?.messages.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+        this.images = []
+        this.videos = []
+        this.currentChat?.privateChat?.messages.forEach(x => {
+            switch(x.type) {
+                case 1:
+                    this.images.push({src: x.url, caption: x.body ? x.body : "No comment", id: x.id});
+                    break;
+                case 2:
+                    this.videos.push(x.url);
+            }
+        })
+    }
+
+    getImageIndex = (id: number) => {
+        return this.images.findIndex(x => x.id === id);
     }
 }

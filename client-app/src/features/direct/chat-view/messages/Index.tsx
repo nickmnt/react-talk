@@ -9,6 +9,7 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import ScrollableFeed from 'react-scrollable-feed'
+import { SRLWrapper } from "simple-react-lightbox";
 
 export default observer(function Messages() {
 
@@ -22,7 +23,7 @@ export default observer(function Messages() {
         handleClick(e);
     }
 
-    const {directStore: {currentChat}, userStore: {user}} = useStore();
+    const {directStore: {currentChat, images}, userStore: {user}} = useStore();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -87,6 +88,7 @@ export default observer(function Messages() {
                 <ListItemText>Delete</ListItemText>
                 </MenuItem>
             </Menu>
+            <SRLWrapper elements={images} />
         </>
     );
 });
