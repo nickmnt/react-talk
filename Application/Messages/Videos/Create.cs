@@ -50,6 +50,8 @@ namespace Application.Messages.Videos
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .Include(x => x.Chat.PrivateChat)
+                    .Include(x => x.Chat.GroupChat)
+                    .Include(x => x.Chat.ChannelChat)
                     .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
 
@@ -67,7 +69,18 @@ namespace Application.Messages.Videos
                     PublicId = videoUploadResult.PublicId
                 };
                 
-                userChat.Chat.PrivateChat.Messages.Add(message);
+                switch (userChat.Chat.Type)
+                {
+                    case ChatType.PrivateChat:
+                        userChat.Chat.PrivateChat.Messages.Add(message);
+                        break;
+                    case ChatType.Group:
+                        userChat.Chat.GroupChat.Messages.Add(message);
+                        break;
+                    case ChatType.Channel:
+                        userChat.Chat.ChannelChat.Messages.Add(message);
+                        break;
+                }
 
                 var result = await _context.SaveChangesAsync() > 0;
 
