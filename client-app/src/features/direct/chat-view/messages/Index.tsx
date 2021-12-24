@@ -45,6 +45,16 @@ export default observer(function Messages() {
                 <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i}>
                     <Message onRightClick={onRightClick} message={message} />
                 </div>)}
+                {(currentChat?.type === 1) && user && 
+                currentChat.groupChat?.messages.map((message, i) => 
+                <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i}>
+                    <Message onRightClick={onRightClick} message={message} />
+                </div>)}
+                {(currentChat?.type === 2) && user && 
+                currentChat.channelChat?.messages.map((message, i) => 
+                <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i}>
+                    <Message onRightClick={onRightClick} message={message} />
+                </div>)}
             </ScrollableFeed>
             <Menu
                 id="basic-menu"

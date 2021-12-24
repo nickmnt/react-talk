@@ -8,7 +8,7 @@ import { useStore } from "../../../app/stores/store";
 
 export default observer(function Header() {
 
-    const {directStore: {currentChat, channelInfos}, chatStore: {addDetailsToStack}} = useStore();    
+    const {directStore: {currentChat}, chatStore: {addDetailsToStack}} = useStore();    
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,14 +39,16 @@ export default observer(function Header() {
                     <ListItemText>Search</ListItemText>
                 </MenuItem>
             </Menu>
-            {currentChat.type !== 2 || channelInfos.get(currentChat.id) ? (
+            {currentChat.privateChat || currentChat.groupChat || currentChat.channelChat ? (
             <>
             <div className="chatHeader__left" onClick={async () => await addDetailsToStack(currentChat)}>
                 <div className="chatHeader__name">
                     {currentChat?.displayName}
                 </div>
                 <div className="chatHeader__status">
-                    {currentChat.type === 2 ? `${channelInfos.get(currentChat.id)?.memberCount} ${channelInfos.get(currentChat.id)?.memberCount === 1 ? 'subscriber' : 'subscribers'}`  : "online"}
+                    {currentChat.type === 1 && `${currentChat.groupChat?.memberCount} ${currentChat.groupChat?.memberCount === 1 ? 'member' : 'members'}`}
+                    {currentChat.type === 2 && `${currentChat.channelChat?.memberCount} ${currentChat.channelChat?.memberCount === 1 ? 'subscriber' : 'subscribers'}`}
+                    {currentChat.type === 0 && 'online'}
                 </div>
             </div>
             <div className="chatHeader__right">

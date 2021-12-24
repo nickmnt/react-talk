@@ -7,7 +7,9 @@ export interface ChatDto {
     displayName: string;
     username: string;
     image: string;
-    privateChat: PrivateChat | null;
+    privateChat?: PrivateChat | null;
+    groupChat?: GroupDetailsDto | null;
+    channelChat?: ChannelDetailsDto | null;
 }
 
 export interface SearchChatDto {
@@ -38,6 +40,13 @@ export interface Message {
 export interface ChannelDetailsDto {
     description: string;
     memberCount: number;
+    messages: Message[];
+}
+
+export interface GroupDetailsDto {
+    description: string;
+    memberCount: number;
+    messages: Message[];
 }
 
 export interface PrivateChatResultDto {

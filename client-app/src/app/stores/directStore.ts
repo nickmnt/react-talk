@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChannelDetailsDto, ChatDto, createLocalChat, ImageElem, Message, SearchChatDto } from "../models/chat";
+import { ChannelDetailsDto, ChatDto, createLocalChat, GroupDetailsDto, ImageElem, Message, SearchChatDto } from "../models/chat";
 import { store } from "./store";
 
 let id = -10
@@ -11,7 +11,6 @@ export default class DirectStore {
     searchResults: SearchChatDto[] = [];
     hubConnection: HubConnection | null = null;
     currentChat: ChatDto | null = null;
-    channelInfos = new Map<string, ChannelDetailsDto>();
     images: ImageElem[] = []
     videos: string[] = []
 
@@ -94,12 +93,31 @@ export default class DirectStore {
         })
     }
 
+    getGroupChatDetails = async (chat: ChatDto) => {
+        const response = await agent.Chats.getGroupDetails(chat.id);
+
+        runInAction(() => {
+            chat.groupChat = response;
+            chat.groupChat!.messages.forEach(x => {
+                x.local = false
+                x.createdAt = new Date(x.createdAt + 'Z');
+            });
+            this.currentChat = chat;
+            this.updateMessages();
+        })
+    }
+
     getChannelChatDetails = async (chat: ChatDto) => {
         const response = await agent.Chats.getChannelDetails(chat.id);
         
         runInAction(() => {
-            this.channelInfos.set(chat.id, response);
+            chat.channelChat = response;
+            chat.channelChat!.messages.forEach(x => {
+                x.local = false
+                x.createdAt = new Date(x.createdAt + 'Z');
+            });
             this.currentChat = chat;
+            this.updateMessages();
         })
     }
 
@@ -107,6 +125,9 @@ export default class DirectStore {
         switch(chat.type) {
             case 0:
                 await this.getPrivateChatDetails(chat);
+                break;
+            case 1:
+                await this.getGroupChatDetails(chat);
                 break;
             case 2:
                 await this.getChannelChatDetails(chat);
@@ -118,8 +139,7 @@ export default class DirectStore {
         if(!this.currentChat)
             return -1
 
-        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, 
-            {
+        this.getCurrentMessages()!.push({
                 body,
                 createdAt: new Date(),
                 displayName: store.userStore.user!.displayName,
@@ -130,7 +150,7 @@ export default class DirectStore {
                 image: "",
                 publicId: "",
                 url: ""
-            }];
+            });
         
         id--;
         return id + 1;
@@ -153,7 +173,18 @@ export default class DirectStore {
             url: "",
             localBlob: file
         } as Message;
-        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
+
+        switch(this.currentChat.type) {
+            case 0:
+                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
+                break;
+            case 1:
+                this.currentChat.groupChat!.messages = [...this.currentChat.groupChat!.messages, msg];
+                break;
+            case 2:
+                this.currentChat.channelChat!.messages = [...this.currentChat.channelChat!.messages, msg];
+                break;
+        }
         
         id--;
         return {id: id+1, msg};
@@ -177,8 +208,18 @@ export default class DirectStore {
             localBlob: file
         } as Message;
 
-        this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
-        
+        switch(this.currentChat.type) {
+            case 0:
+                this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, msg];
+                break;
+            case 1:
+                this.currentChat.groupChat!.messages = [...this.currentChat.groupChat!.messages, msg];
+                break;
+            case 2:
+                this.currentChat.channelChat!.messages = [...this.currentChat.channelChat!.messages, msg];
+                break;
+        }
+                
         id--;
         return {id:id + 1, msg};
     }
@@ -186,14 +227,26 @@ export default class DirectStore {
     addNewMessage = (response: Message) => {
         if(this.currentChat && this.currentChat.privateChat) {
             response.createdAt = new Date(response.createdAt);
-            this.currentChat.privateChat.messages = [...this.currentChat.privateChat.messages, response];
+
+            switch(this.currentChat.type) {
+                case 0:
+                    this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response];
+                    break;
+                case 1:
+                    this.currentChat.groupChat!.messages = [...this.currentChat.groupChat!.messages, response];
+                    break;
+                case 2:
+                    this.currentChat.channelChat!.messages = [...this.currentChat.channelChat!.messages, response];
+                    break;
+            }
+
             this.updateMessages();
         }
     }
 
     updateLocalMessage = (response: Message, id: number) => {
         if(this.currentChat) {
-            const msg = this.currentChat.privateChat!.messages.find(x => x.id === id)
+            let msg = this.getCurrentMessages()?.find(x => x.id === id);
             if(!msg) {
                 return
             }
@@ -305,11 +358,14 @@ export default class DirectStore {
     }
 
     updateMessages = () => {
-        this.currentChat?.privateChat?.messages.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        if(!this.currentChat)
+            return;
+
+        this.getCurrentMessages()?.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
 
         this.images = []
         this.videos = []
-        this.currentChat?.privateChat?.messages.forEach(x => {
+        this.getCurrentMessages()?.forEach(x => {
             switch(x.type) {
                 case 1:
                     this.images.push({src: x.url, caption: x.body ? x.body : "No comment", id: x.id});
@@ -318,6 +374,20 @@ export default class DirectStore {
                     this.videos.push(x.url);
             }
         })
+    }
+
+    getCurrentMessages = () => {
+        if(!this.currentChat)
+            return;
+
+        switch(this.currentChat.type) {
+            case 0:
+                return this.currentChat.privateChat!.messages;
+            case 1:
+                return this.currentChat.groupChat!.messages;
+            case 2:
+                return this.currentChat.channelChat!.messages;
+        }
     }
 
     getImageIndex = (id: number) => {
