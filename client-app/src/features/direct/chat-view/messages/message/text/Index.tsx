@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message}: Props) {
-    const { openLightbox, closeLightbox } = useLightbox()
+    const { openLightbox } = useLightbox()
 
     const {directStore: {getImageIndex}} = useStore()
 
