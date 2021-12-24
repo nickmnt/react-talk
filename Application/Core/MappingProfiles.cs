@@ -84,6 +84,8 @@ namespace Application.Core
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url));
             CreateMap<PrivateChat, PrivateChatDto>();
+            CreateMap<ChannelChat, ChannelDetailsDto>();
+            CreateMap<GroupChat, GroupDetailsDto>();
         }
     }
 }
