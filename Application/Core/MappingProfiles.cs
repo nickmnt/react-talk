@@ -86,6 +86,20 @@ namespace Application.Core
             CreateMap<PrivateChat, PrivateChatDto>();
             CreateMap<ChannelChat, ChannelDetailsDto>();
             CreateMap<GroupChat, GroupDetailsDto>();
+            CreateMap<UserChat, GroupMember>()
+                .ForMember(d => d.MemberType, o => o.MapFrom(s => s.Chat))
+                .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.ChatId, o => o.MapFrom(s => s.ChatId));
+            CreateMap<UserChat, ChannelMember>()
+                .ForMember(d => d.MemberType, o => o.MapFrom(s => s.Chat))
+                .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.ChatId, o => o.MapFrom(s => s.ChatId));
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Direct
 {
-    public class GroupMembership
+    public class GroupMember
     {
-        public int MemberType { get; set; }
+        public MemberType MemberType { get; set; }
         public string DisplayName { get; set; }
         public string Username { get; set; }
         public string Image { get; set; }
