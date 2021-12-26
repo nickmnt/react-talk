@@ -26,7 +26,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreatePrivateChat(PrivateChatStartDto command)
         {
             var result = await Mediator.Send(new AddPrivateChat.Command
-                { TargetUsername = command.Username });
+                { TargetUserId = command.TargetUserId });
             if (result.IsSuccess && result.Value != null)
             {
                 var finalResult = await Mediator.Send(new Create.Command
@@ -77,6 +77,12 @@ namespace API.Controllers
         
         [HttpPost("videos")]
         public async Task<IActionResult> CreateVideo([FromForm] Application.Messages.Videos.Create.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+        
+        [HttpPost("updateSeen")]
+        public async Task<IActionResult> UpdateSeen(UpdateSeen.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

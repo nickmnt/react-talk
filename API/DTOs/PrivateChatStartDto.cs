@@ -2,7 +2,7 @@
 {
     public class PrivateChatStartDto
     {
-        public string Username { get; set; }
+        public string TargetUserId { get; set; }
         public string Body { get; set; }
     }
 }

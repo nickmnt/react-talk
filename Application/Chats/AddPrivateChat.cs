@@ -14,7 +14,7 @@ namespace Application.Chats
     {
         public class Command : IRequest<Result<ChatDto>>
         {
-            public string TargetUsername { get; set; }
+            public string TargetUserId { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<ChatDto>>
@@ -40,7 +40,7 @@ namespace Application.Chats
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
                 var target = await _context.Users
-                    .SingleOrDefaultAsync(x => x.UserName == request.TargetUsername, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.Id == request.TargetUserId, cancellationToken);
 
                 if (user == null || target == null)
                     return null;
