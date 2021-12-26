@@ -1,5 +1,4 @@
 import { ArrowBack, MoreVert } from '@mui/icons-material'
-import { Avatar, Button, IconButton, ListItem, ListItemButton, ListItemIcon, Paper, Stack, Tabs } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,6 +11,15 @@ import { useState } from 'react';
 import { ChatPage } from '../../../app/models/chat';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Stack from '@mui/material/Stack/Stack';
+import Avatar from '@mui/material/Avatar/Avatar';
+import Button from '@mui/material/Button/Button';
+import Paper from '@mui/material/Paper/Paper';
+import ListItem from '@mui/material/ListItem/ListItem';
+import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
+import Tabs from '@mui/material/Tabs/Tabs';
 
 export interface Props {
     chatPage: ChatPage;

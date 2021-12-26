@@ -1,5 +1,4 @@
 import { ArrowBack } from '@mui/icons-material'
-import { Avatar, IconButton, Input, ListItemAvatar, SpeedDial, Stack } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,6 +11,12 @@ import { useStore } from '../../../app/stores/store';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DoneIcon from '@mui/icons-material/Done';
 import { observer } from 'mobx-react-lite';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Input from '@mui/material/Input/Input';
+import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
+import Avatar from '@mui/material/Avatar/Avatar';
+import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
+import Stack from '@mui/material/Stack/Stack';
 
 export default observer(function GroupFinalization() {
     const {groupStore: {members, previousPhase, name, setName, stopEditing}, directStore: {createGroup}} = useStore();

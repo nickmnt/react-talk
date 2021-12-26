@@ -1,9 +1,11 @@
-import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import DirectDrawer from './chat-view/DirectDrawer';
+import Paper from '@mui/material/Paper/Paper';
+import InputBase from '@mui/material/InputBase/InputBase';
+import IconButton from '@mui/material/IconButton/IconButton';
+
 
 
 interface Props {

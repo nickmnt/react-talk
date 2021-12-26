@@ -1,4 +1,3 @@
-import { Avatar, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, CardContent, Card, Typography, Divider } from '@mui/material';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
@@ -11,6 +10,15 @@ import deepPurple from '@mui/material/colors/deepPurple';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer/SwipeableDrawer';
+import Card from '@mui/material/Card/Card';
+import CardContent from '@mui/material/CardContent/CardContent';
+import Avatar from '@mui/material/Avatar/Avatar';
+import Typography from '@mui/material/Typography/Typography';
+import ListItem from '@mui/material/ListItem/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
+import Divider from '@mui/material/Divider/Divider';
 
 interface Props {
     drawerOpen: boolean;

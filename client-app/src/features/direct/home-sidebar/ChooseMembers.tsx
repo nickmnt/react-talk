@@ -1,5 +1,4 @@
 import { ArrowBack, Done } from '@mui/icons-material'
-import { Avatar, IconButton, Input, ListItemAvatar, SpeedDial } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,6 +15,11 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
 import { Profile } from '../../../app/models/profile';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Input from '@mui/material/Input/Input';
+import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
+import Avatar from '@mui/material/Avatar/Avatar';
+import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 
 
 export default observer(function ChooseMembers() {

@@ -7,9 +7,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ForwardIcon from '@mui/icons-material/Forward';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import ScrollableFeed from 'react-scrollable-feed'
 import { SRLWrapper } from "simple-react-lightbox";
+import Menu from "@mui/material/Menu/Menu";
+import MenuItem from "@mui/material/MenuItem/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText/ListItemText";
 
 export default observer(function Messages() {
 

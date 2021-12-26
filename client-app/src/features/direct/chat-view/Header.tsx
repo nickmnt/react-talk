@@ -1,6 +1,10 @@
 import { MoreVert } from "@mui/icons-material";
 import Search from "@mui/icons-material/Search";
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import IconButton from "@mui/material/IconButton/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText/ListItemText";
+import Menu from "@mui/material/Menu/Menu";
+import MenuItem from "@mui/material/MenuItem/MenuItem";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";

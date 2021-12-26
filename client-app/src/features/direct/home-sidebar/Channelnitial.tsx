@@ -1,5 +1,4 @@
 import { ArrowBack } from '@mui/icons-material'
-import { Avatar, IconButton, SpeedDial, Stack, TextField } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,6 +7,11 @@ import { useStore } from '../../../app/stores/store';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { observer } from 'mobx-react-lite';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Stack from '@mui/material/Stack/Stack';
+import Avatar from '@mui/material/Avatar/Avatar';
+import TextField from '@mui/material/TextField/TextField';
+import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 
 
 export default observer(function Channelnitial() {
