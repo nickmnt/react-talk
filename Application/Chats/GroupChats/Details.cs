@@ -63,11 +63,12 @@ namespace Application.Chats.GroupChats
                 }
                 
                 var members = await _context.UserChats
-                                    .ProjectTo<ChannelMember>(_mapper.ConfigurationProvider)
+                                    .ProjectTo<GroupMember>(_mapper.ConfigurationProvider)
                                     .Where(x => x.ChatId == request.ChatId)
                                     .ToListAsync(cancellationToken);
 
                 var result = _mapper.Map<GroupDetailsDto>(userChat.Chat.GroupChat);
+                result.Members = members;
 
                 return Result<GroupDetailsDto>.Success(result);
             }
