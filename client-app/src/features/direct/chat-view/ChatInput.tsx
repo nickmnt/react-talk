@@ -61,7 +61,8 @@ export default observer(function ChatInput() {
             <Formik
                 onSubmit={(values, { resetForm }) =>{
                     if(!currentChat.id) {
-                        createPrivateChat(currentChat.username,values.body).then(() => resetForm());
+                        if(currentChat.type === 0)
+                            createPrivateChat(currentChat.privateChat!.otherUserId,values.body).then(() => resetForm());
                     } else {
                         if(!file) {
                             createMessage(values.body).then(() => resetForm());

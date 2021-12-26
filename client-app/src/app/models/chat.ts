@@ -5,7 +5,6 @@ export interface ChatDto {
     type: number;
     privateChatId: string;
     displayName: string;
-    username: string;
     image: string;
     privateChat?: PrivateChat | null;
     groupChat?: GroupDetailsDto | null;
@@ -15,11 +14,14 @@ export interface ChatDto {
 export interface SearchChatDto {
     username: string;
     displayName: string;
-    image: string
+    image: string;
 }
 
 export interface PrivateChat {
     messages: Message[];
+    myLastSeen: Date;
+    otherLastSeen: Date;
+    otherUserId: string;
 }
 
 export interface Message {
@@ -39,14 +41,34 @@ export interface Message {
 
 export interface ChannelDetailsDto {
     description: string;
-    memberCount: number;
+    members: ChannelMember[];
+    memberCount?: number;
     messages: Message[];
+    me?: GroupMember;
 }
 
 export interface GroupDetailsDto {
     description: string;
-    memberCount: number;
+    members: GroupMember[];
+    memberCount?: number;
     messages: Message[];
+    me?: GroupMember;
+}
+
+export interface GroupMember {
+    memberType: number;
+    displayName: string;
+    username: string;
+    image: string;
+    lastSeen: Date;
+}
+
+export interface ChannelMember {
+    memberType: number;
+    displayName: string;
+    username: string;
+    image: string;
+    lastSeen: Date;
 }
 
 export interface PrivateChatResultDto {
@@ -67,6 +89,8 @@ export interface ImageElem{
 }
 
 export const createLocalChat = (username: string, displayName: string, image: string) => {
-    const privateChat = {messages: []};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, username} as ChatDto;
+    var date = new Date();
+    date.setDate(date.getDate() - 1);
+    const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: ''};
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat} as ChatDto;
 }

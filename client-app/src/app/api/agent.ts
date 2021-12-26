@@ -117,7 +117,7 @@ const Search = {
 };
 
 const Chats = {
-    createPrivateChat: (username: string, body: string) => requests.post<PrivateChatResultDto>(`/direct/`, {username, body}),
+    createPrivateChat: (targetUserId: string, body: string) => requests.post<PrivateChatResultDto>(`/direct/`, {targetUserId, body}),
     getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
     createMessage: (body: string, chatId: string) => requests.post<Message>('/direct/messages', {body,chatId}),
     createPhoto: (file: Blob, body: string, chatId: string, config: any) => {
@@ -146,7 +146,8 @@ const Chats = {
     getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
     addMembers: (id: string, members: string[]) => requests.post<boolean>('channel/addMember', {id, members}),
     createGroup: (name: string, members: string[]) => requests.post<ChatDto>('/group/', {name, members}),
-    getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`)
+    getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
+    updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, {chatId, newLastSeen})
 }
 
 const agent = {

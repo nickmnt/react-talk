@@ -88,6 +88,8 @@ export default class DirectStore {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
             });
+            chat.privateChat.myLastSeen = new Date(chat.privateChat.myLastSeen + 'Z');
+            chat.privateChat.otherLastSeen = new Date(chat.privateChat.otherLastSeen + 'Z');
             this.currentChat = chat;
             this.updateMessages();
         })
@@ -102,6 +104,11 @@ export default class DirectStore {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
             });
+            chat.groupChat!.members.forEach(x => {
+                x.lastSeen = new Date(x.lastSeen + 'Z');
+            });
+            chat.groupChat!.memberCount = chat.groupChat.members.length; 
+            chat.groupChat!.me = chat.groupChat.members.find(x => x.username === store.userStore.user?.username);
             this.currentChat = chat;
             this.updateMessages();
         })
@@ -116,6 +123,11 @@ export default class DirectStore {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
             });
+            chat.channelChat!.members.forEach(x => {
+                x.lastSeen = new Date(x.lastSeen + 'Z');
+            });
+            chat.channelChat!.memberCount = chat.channelChat.members.length; 
+            chat.channelChat!.me = chat.channelChat.members.find(x => x.username === store.userStore.user?.username);
             this.currentChat = chat;
             this.updateMessages();
         })
@@ -308,16 +320,16 @@ export default class DirectStore {
         this.updateLocalMessage(response.data, id);
     }
 
-    createPrivateChat = async (username: string, body: string) => {
+    createPrivateChat = async (userId: string, body: string) => {
         try {
             if(!this.currentChat)
                 return;
 
-            const response = await agent.Chats.createPrivateChat(username, body);
+            const response = await agent.Chats.createPrivateChat(userId, body);
             this.setChat({...this.currentChat, id: response.chatId});
             runInAction(() => {
                 if(this.currentChat)
-                    this.currentChat.privateChat = {messages: [response.message]};
+                    this.currentChat.privateChat!.messages = [response.message];
             });
         } catch(error) {
             console.log(error);
@@ -382,5 +394,27 @@ export default class DirectStore {
 
     getImageIndex = (id: number) => {
         return this.images.findIndex(x => x.id === id);
+    }
+
+    updateLastSeen = async (newLastSeen: Date) => {
+        if(!this.currentChat)
+            return;
+
+        switch(this.currentChat.type) {
+            case 0:
+                this.currentChat.privateChat!.myLastSeen = newLastSeen;
+                break;
+            case 1:
+                this.currentChat.groupChat!.me!.lastSeen = newLastSeen;
+                break;
+            case 2:
+                this.currentChat.channelChat!.me!.lastSeen = newLastSeen;
+                break;
+        }
+        try {
+            await agent.Chats.updateSeen(this.currentChat.id, newLastSeen);
+        } catch(error) {
+            console.log(error);
+        }
     }
 }
