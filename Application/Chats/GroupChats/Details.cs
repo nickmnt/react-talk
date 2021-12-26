@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Direct;
 using FluentValidation;
 using MediatR;
@@ -60,11 +62,12 @@ namespace Application.Chats.GroupChats
                     return Result<GroupDetailsDto>.Failure("Requested chat is not a group");
                 }
                 
-                var memberCount = await _context.UserChats
-                    .CountAsync(x => x.ChatId == request.ChatId, cancellationToken);
+                var members = await _context.UserChats
+                                    .ProjectTo<ChannelMember>(_mapper.ConfigurationProvider)
+                                    .Where(x => x.ChatId == request.ChatId)
+                                    .ToListAsync(cancellationToken);
 
                 var result = _mapper.Map<GroupDetailsDto>(userChat.Chat.GroupChat);
-                result.MemberCount = memberCount;
 
                 return Result<GroupDetailsDto>.Success(result);
             }
