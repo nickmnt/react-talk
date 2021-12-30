@@ -22,6 +22,7 @@ export interface PrivateChat {
     myLastSeen: Date;
     otherLastSeen: Date;
     otherUserId: string;
+    otherUsername: string;
 }
 
 export interface Message {
@@ -78,7 +79,9 @@ export interface PrivateChatResultDto {
 
 export interface ChatPage {
     type: number;
-    accountData: Profile;
+    accountData?: Profile;
+    groupData?: ChatDto;
+    channelData?: ChatDto;
     index: number;
 }
 
@@ -91,6 +94,6 @@ export interface ImageElem{
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);
-    const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: ''};
+    const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
     return { id: '', type: -10, privateChatId: '', displayName, image, privateChat} as ChatDto;
 }

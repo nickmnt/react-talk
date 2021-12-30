@@ -72,6 +72,7 @@ namespace Application.Chats.PrivateChats
                 result.MyLastSeen = mine.LastSeen;
                 result.OtherLastSeen = other.LastSeen;
                 result.OtherUserId = other.AppUserId;
+                result.OtherUsername = other.AppUser.UserName;
 
                 return Result<PrivateChatDto>.Success(result);
             }

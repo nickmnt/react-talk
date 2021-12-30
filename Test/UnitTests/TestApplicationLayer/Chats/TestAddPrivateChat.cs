@@ -34,7 +34,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new AddPrivateChat.Command { TargetUsername = "tom" };
+                var request = new AddPrivateChat.Command { TargetUserId = "tom" };
 
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddPrivateChat.Handler(context, mapper, userAccessor);
@@ -74,7 +74,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new AddPrivateChat.Command { TargetUsername = "tamtam" };
+                var request = new AddPrivateChat.Command { TargetUserId = "tamtam" };
 
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddPrivateChat.Handler(context, mapper, userAccessor);
@@ -107,7 +107,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new AddPrivateChat.Command { TargetUsername = null };
+                var request = new AddPrivateChat.Command { TargetUserId = null };
 
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddPrivateChat.Handler(context, mapper, userAccessor);

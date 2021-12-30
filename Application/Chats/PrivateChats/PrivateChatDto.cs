@@ -11,5 +11,6 @@ namespace Application.Chats.PrivateChats
         public DateTime MyLastSeen { get; set; }
         public DateTime OtherLastSeen { get; set; }
         public string OtherUserId { get; set; }
+        public string OtherUsername { get; set; }
     }
 }

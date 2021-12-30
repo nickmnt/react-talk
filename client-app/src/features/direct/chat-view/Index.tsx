@@ -18,6 +18,8 @@ export default observer(function ChatView() {
             </>
             {stack.map((elem, i) => <div key={i}>
                 {elem.type === 0 && <ChatDetails chatPage={elem}/>}
+                {elem.type === 1 && <ChatDetails chatPage={elem}/>}
+                {elem.type === 2 && <ChatDetails chatPage={elem}/>}
                 </div>
             )}
             </>:

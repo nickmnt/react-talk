@@ -20,6 +20,8 @@ import ListItem from '@mui/material/ListItem/ListItem';
 import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import Tabs from '@mui/material/Tabs/Tabs';
+import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
 
 export interface Props {
     chatPage: ChatPage;
@@ -27,8 +29,8 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack} } = useStore();
-    const {accountData} = chatPage;
+    const { chatStore: {removeFromStack, addProfileDetailsToStack} } = useStore();
+    const {accountData, groupData, channelData} = chatPage;
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -58,7 +60,9 @@ export default observer(function ChatDetails({chatPage}: Props) {
                     <Stack direction="row" spacing={2} sx={{width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative'}} alignItems="center" justifyContent="center">
                         <Avatar sx={{ width: 100, height: 100 }} alt="Okay" src="/broken-image.jpg"/>
                         <Typography variant="h3" sx={{color: '#333', fontWeight: '500'}}>
-                            {accountData.displayName}
+                            {accountData && accountData.displayName}
+                            {groupData && groupData.displayName}
+                            {channelData && channelData.displayName}
                         </Typography>
                         <Button variant="contained" sx={{borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40}}>
                             <ChatIcon sx={{height: 40, width: 40}}></ChatIcon>
@@ -72,7 +76,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                         <Typography variant="h5" sx={{color: '#0080FF', fontWeight: '500', marginTop: '1.5rem', marginLeft: '2rem'}}>
                             Info
                         </Typography>
-                        {accountData.bio &&
+                        {(accountData?.bio || groupData?.groupChat?.description || channelData?.channelChat?.description) &&
                         <ListItem>
                             <ListItemButton component="a" href="#simple-list">
                                 <ListItemIcon>
@@ -80,7 +84,9 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                 </ListItemIcon>
                                 <Stack direction="column" spacing={.25}>
                                     <Typography variant="h5" sx={{color: '#333', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
-                                        {accountData.bio}
+                                        {accountData?.bio && accountData?.bio}
+                                        {groupData?.groupChat?.description && groupData?.groupChat?.description}
+                                        {channelData?.channelChat?.description && channelData?.channelChat?.description}
                                     </Typography>
                                     <Typography variant="h5" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
                                         Bio
@@ -89,14 +95,14 @@ export default observer(function ChatDetails({chatPage}: Props) {
                             </ListItemButton>
                         </ListItem>
                         }
-                        <ListItem>
+                        {accountData?.username && <ListItem>
                             <ListItemButton component="a" href="#simple-list">
                                 <ListItemIcon>
                                     <AlternateEmailIcon sx={{width: 35, height: 35}}/>
                                 </ListItemIcon>
                                 <Stack direction="column" spacing={.25}>
                                     <Typography variant="h5" sx={{color: '#333', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
-                                        {accountData.username}
+                                        {accountData?.username}
                                     </Typography>
                                     <Typography variant="h5" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
                                         Username
@@ -104,16 +110,67 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                 </Stack>
                             </ListItemButton>
                         </ListItem>
+                        }
                         </Stack>
                     </Stack>
                     <Stack direction="row" spacing={2} sx={{width: '100%'}} alignItems="center" justifyContent="center">
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '60%' }}>
                         <Tabs centered value={value} onChange={handleChange} aria-label="basic tabs example">
+                            {groupData?.groupChat?.members && 
+                            <Tab label="Members" sx={{fontSize: '1.4rem'}} />
+                            }
+                            {channelData?.channelChat?.members && 
+                            <Tab label="Members" sx={{fontSize: '1.4rem'}} />
+                            }
                             <Tab label="Media" sx={{fontSize: '1.4rem'}} />
                             <Tab label="Links" sx={{fontSize: '1.4rem'}} />
                             <Tab label="Voice" sx={{fontSize: '1.4rem'}} />
                             <Tab label="Groups" sx={{fontSize: '1.4rem'}} />
                         </Tabs>
+                        {
+                                value === 0 && (
+                                    <>
+                                        {groupData?.groupChat?.members.map(x => (
+                                            <ListItem
+                                            key={x.username}
+                                            sx={{width:'100%', padding: '0 2rem'}}
+                                            disablePadding
+                                            onClick={() => addProfileDetailsToStack(x.username)}
+                                            >
+                                            <ListItemButton role={undefined}  sx={{padding: '1.3rem'}} dense>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                alt={`${x.displayName}`}
+                                                src={x.image}
+                                                sx={{ width: 48, height: 48 }}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText primaryTypographyProps={{fontSize: '1.6rem'}}  primary={x.displayName} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                        ))}
+                                        {channelData?.channelChat?.members.map(x => (
+                                            <ListItem
+                                            key={x.username}
+                                            sx={{width:'100%', padding: '0 2rem'}}
+                                            disablePadding
+                                            onClick={() => addProfileDetailsToStack(x.username)}
+                                            >
+                                            <ListItemButton role={undefined}  sx={{padding: '1.3rem'}} dense>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                alt={`${x.displayName}`}
+                                                src={x.image}
+                                                sx={{ width: 48, height: 48 }}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText primaryTypographyProps={{fontSize: '1.6rem'}}  primary={x.displayName} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                        ))}
+                                    </>
+                                )
+                            }
                         </Box>
                     </Stack>
                 </Paper>
