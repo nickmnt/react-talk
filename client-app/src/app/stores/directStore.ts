@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChatDto, createLocalChat, ImageElem, Message, SearchChatDto } from "../models/chat";
+import { ChatDto, createLocalChat, ImageElem, Message, SearchChatDto, UpdatedSeenDto } from "../models/chat";
 import { store } from "./store";
 
 let id = -10
@@ -43,8 +43,13 @@ export default class DirectStore {
             });
 
             this.hubConnection.on('ReceiveNewMessage', (result: Message) => {
-                console.log('hey')
-                this.addNewMessage(result);
+                runInAction(() => {
+                    this.addNewMessage(result);
+                })
+            });
+
+            this.hubConnection.on('ReceiveNewSeen', (result: UpdatedSeenDto) => {
+                this.updateSeen(result);
             });
         }
     }
@@ -56,6 +61,30 @@ export default class DirectStore {
     clearChats = () => {
         this.chats = [];       
         this.stopHubConnection();
+    }
+
+    updateSeen = (result: UpdatedSeenDto) => {
+        if(!this.currentChat || this.currentChat.id !== result.chatId) {
+            return;
+        }
+        if(this.currentChat) {
+            switch(this.currentChat.type) {
+                case 0:
+                    const privateChat = {...this.currentChat.privateChat!, otherLastSeen: new Date(result.lastSeen)}; 
+                    this.currentChat = {...this.currentChat, privateChat};
+                    break;
+                case 1:
+                    const groupChat = this.currentChat!.groupChat!;
+                    groupChat!.members!.find(x => x.username === result.username)!.lastSeen = new Date(result.lastSeen); 
+                    this.currentChat! = {...this.currentChat, groupChat};
+                    break;
+                case 2:
+                    const channelChat = this.currentChat!.channelChat!;
+                    channelChat!.members!.find(x => x.username === result.username)!.lastSeen = new Date(result.lastSeen); 
+                    this.currentChat! = {...this.currentChat, channelChat};
+                    break;
+            }
+        }
     }
 
     searchChats = async (term: string) => {

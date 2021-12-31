@@ -91,6 +91,12 @@ export interface ImageElem{
     caption: string
 }
 
+export interface UpdatedSeenDto {
+    chatId: string;
+    username: string;
+    lastSeen: Date;
+}
+
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);

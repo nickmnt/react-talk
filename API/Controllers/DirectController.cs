@@ -5,6 +5,7 @@ using API.SignalR;
 using Application.Chats;
 using Application.Chats.PrivateChats;
 using Application.Chats.UserChats;
+using Application.Interfaces;
 using Application.Messages;
 using Domain.Direct;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,12 @@ namespace API.Controllers
     public class DirectController : BaseApiController
     {
         private readonly IHubContext<DirectHub> _hubContext;
+        private readonly IUserAccessor _accessor;
 
-        public DirectController(IHubContext<DirectHub> hubContext)
+        public DirectController(IHubContext<DirectHub> hubContext, IUserAccessor accessor)
         {
             _hubContext = hubContext;
+            _accessor = accessor;
         }
 
         [HttpPost()]
@@ -56,11 +59,12 @@ namespace API.Controllers
         public async Task<IActionResult> CreateMessage(CreateMessageDto command)
         {
             var result = await Mediator.Send(new Create.Command { Body = command.Body, ChatId = command.ChatId });
-            var users = await Mediator
-                .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
             
             if (result.IsSuccess)
             {
+                var users = await Mediator
+                    .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+                
                 foreach (var u in users.Value)
                 {
                     await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", result.Value);
@@ -84,7 +88,22 @@ namespace API.Controllers
         [HttpPost("updateSeen")]
         public async Task<IActionResult> UpdateSeen(UpdateSeen.Command command)
         {
-            return HandleResult(await Mediator.Send(command));
+            var result = await Mediator.Send(command);
+            
+            if (result.IsSuccess)
+            {
+                var users = await Mediator
+                    .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+                
+                foreach (var u in users.Value)
+                {
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewSeen", 
+                        new UpdatedSeenDto {Username = _accessor.GetUsername(), 
+                            ChatId = command.ChatId,
+                            LastSeen = command.NewLastSeen});
+                }
+            }
+            return HandleResult(result);
         }
     }
 }
