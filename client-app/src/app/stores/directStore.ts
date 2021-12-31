@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChatDto, createLocalChat, ImageElem, Message, SearchChatDto, UpdatedSeenDto } from "../models/chat";
+import { ChatDto, createLocalChat, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from "../models/chat";
 import { store } from "./store";
 
 let id = -10
@@ -42,10 +42,9 @@ export default class DirectStore {
                 });
             });
 
-            this.hubConnection.on('ReceiveNewMessage', (result: Message) => {
-                runInAction(() => {
-                    this.addNewMessage(result);
-                })
+            this.hubConnection.on('ReceiveNewMessage', (result: MessageNotifDto) => {
+                this.addNewMessage(result);
+                console.log(result)
             });
 
             this.hubConnection.on('ReceiveNewSeen', (result: UpdatedSeenDto) => {
@@ -265,24 +264,32 @@ export default class DirectStore {
         return {id:id + 1, msg};
     }
 
-    addNewMessage = (response: Message) => {
-        if(this.currentChat && this.currentChat.privateChat) {
-            response.createdAt = new Date(response.createdAt);
-
-            switch(this.currentChat.type) {
-                case 0:
-                    this.currentChat.privateChat!.messages = [...this.currentChat.privateChat!.messages, response];
-                    break;
-                case 1:
-                    this.currentChat.groupChat!.messages = [...this.currentChat.groupChat!.messages, response];
-                    break;
-                case 2:
-                    this.currentChat.channelChat!.messages = [...this.currentChat.channelChat!.messages, response];
-                    break;
-            }
-
-            this.updateMessages();
+    addNewMessage = (response: MessageNotifDto) => {
+        if(!this.currentChat || this.currentChat.id !== response.chatId) {
+            return;
         }
+
+        response.message.createdAt = new Date(response.message.createdAt);
+
+        switch(this.currentChat.type) {
+            case 0:
+                const privateChat = this.currentChat.privateChat!;
+                privateChat.messages = [...this.currentChat.privateChat!.messages, response.message];
+                this.currentChat = {...this.currentChat, privateChat};
+                break;
+            case 1:
+                const groupChat = this.currentChat.groupChat!;
+                groupChat.messages =  [...groupChat.messages, response.message];
+                this.currentChat = {...this.currentChat, groupChat};
+                break;
+            case 2:
+                const channelChat = this.currentChat.channelChat!;
+                channelChat.messages =  [...channelChat.messages, response.message];
+                this.currentChat = {...this.currentChat, channelChat};
+                break;
+        }
+
+        this.updateMessages();
     }
 
     updateLocalMessage = (response: Message, id: number) => {

@@ -67,7 +67,11 @@ namespace API.Controllers
                 
                 foreach (var u in users.Value)
                 {
-                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", result.Value);
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", new MessageNotifDto
+                    {
+                        Message = result.Value,
+                        ChatId = command.ChatId   
+                    });
                 }
             }
             return HandleResult(result);

@@ -97,6 +97,11 @@ export interface UpdatedSeenDto {
     lastSeen: Date;
 }
 
+export interface MessageNotifDto {
+    message: Message;
+    chatId: string;
+}
+
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);
