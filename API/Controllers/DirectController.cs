@@ -80,13 +80,45 @@ namespace API.Controllers
         [HttpPost("photos")]
         public async Task<IActionResult> CreatePhoto([FromForm] Application.Messages.Images.Create.Command command)
         {
-            return HandleResult(await Mediator.Send(command));
+            var result = await Mediator.Send(command);
+            
+            if (result.IsSuccess)
+            {
+                var users = await Mediator
+                    .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+                
+                foreach (var u in users.Value)
+                {
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", new MessageNotifDto
+                    {
+                        Message = result.Value,
+                        ChatId = command.ChatId   
+                    });
+                }
+            }
+            return HandleResult(result);
         }
         
         [HttpPost("videos")]
         public async Task<IActionResult> CreateVideo([FromForm] Application.Messages.Videos.Create.Command command)
         {
-            return HandleResult(await Mediator.Send(command));
+            var result = await Mediator.Send(command);
+            
+            if (result.IsSuccess)
+            {
+                var users = await Mediator
+                    .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+                
+                foreach (var u in users.Value)
+                {
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", new MessageNotifDto
+                    {
+                        Message = result.Value,
+                        ChatId = command.ChatId   
+                    });
+                }
+            }
+            return HandleResult(result);
         }
         
         [HttpPost("updateSeen")]
