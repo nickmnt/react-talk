@@ -19,13 +19,15 @@ import { Profile } from '../../../app/models/profile';
 import { useState } from 'react';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
 import { useStore } from '../../../app/stores/store';
+import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
+import Done from '@mui/icons-material/Done';
 
 export interface Props {
     chatPage: ChatPage;
 }
 
 export default function AddMember({chatPage}: Props) {
-    const { chatStore: {removeFromStack} } = useStore();
+    const { chatStore: {removeFromStack}, directStore: {addMembers} } = useStore();
     const [members, setMembers] = useState<Profile[]>([]);
 
     if(!chatPage.followings || (!chatPage.groupData && !chatPage.channelData)) {
@@ -122,6 +124,15 @@ export default function AddMember({chatPage}: Props) {
                     </List >
                 </Paper >
             </Box>
+            {members.length > 0 && <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                icon={<Done />}
+                onClick={() => {
+                    chatPage.groupData ? addMembers(chatPage.groupData, members) : chatPage.channelData && addMembers(chatPage.channelData, members)
+                    removeFromStack(chatPage)
+                }}
+            />}
         </div>
     )
 }

@@ -2,6 +2,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signal
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { ChatDto, createLocalChat, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from "../models/chat";
+import { Profile } from "../models/profile";
 import { store } from "./store";
 
 let id = -10
@@ -449,6 +450,14 @@ export default class DirectStore {
         }
         try {
             await agent.Chats.updateSeen(this.currentChat.id, newLastSeen);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    addMembers = async (chat: ChatDto, members: Profile[]) => {
+        try {
+            await agent.Chats.addMembers(chat.id, members.map(x => x.username));
         } catch(error) {
             console.log(error);
         }
