@@ -4,6 +4,7 @@ import Messages from "./messages/Index";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../app/stores/store";
 import ChatDetails from "./ChatDetails";
+import AddMember from "./AddMember";
 
 export default observer(function ChatView() {
     const {directStore: {currentChat}, chatStore: {stack}} = useStore();
@@ -20,6 +21,8 @@ export default observer(function ChatView() {
                 {elem.type === 0 && <ChatDetails chatPage={elem}/>}
                 {elem.type === 1 && <ChatDetails chatPage={elem}/>}
                 {elem.type === 2 && <ChatDetails chatPage={elem}/>}
+                {elem.type === 20 && <AddMember chatPage={elem}/>}
+                {elem.type === 21 && <AddMember chatPage={elem}/>}
                 </div>
             )}
             </>:

@@ -82,6 +82,7 @@ export interface ChatPage {
     accountData?: Profile;
     groupData?: ChatDto;
     channelData?: ChatDto;
+    followings?: Profile[];
     index: number;
 }
 

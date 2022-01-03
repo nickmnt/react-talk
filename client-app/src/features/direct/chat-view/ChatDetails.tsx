@@ -22,6 +22,8 @@ import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import Tabs from '@mui/material/Tabs/Tabs';
 import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 export interface Props {
     chatPage: ChatPage;
@@ -29,12 +31,15 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
+
+    if(!accountData && !groupData && !channelData)
+        return <LoadingComponent />
 
     return (
         <div style={{top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue', overflow: 'hidden'}}>
@@ -130,6 +135,9 @@ export default observer(function ChatDetails({chatPage}: Props) {
                         {
                                 value === 0 && (
                                     <>
+                                        {groupData?.groupChat?.members && <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{width: '100%'}} onClick={() => addAddMembersToStack(groupData)}>
+                                            Add Member
+                                        </Button>}
                                         {groupData?.groupChat?.members.map(x => (
                                             <ListItem
                                             key={x.username}
@@ -149,6 +157,9 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                             </ListItemButton>
                                         </ListItem>
                                         ))}
+                                        {channelData?.channelChat?.members && <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{width: '100%'}} onClick={() => addAddMembersToStack(channelData)}>
+                                            Add Member
+                                        </Button>}
                                         {channelData?.channelChat?.members.map(x => (
                                             <ListItem
                                             key={x.username}
