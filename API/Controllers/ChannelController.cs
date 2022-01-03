@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Application.Chats;
 using Application.Chats.ChannelChats;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,6 @@ namespace API.Controllers
     {
         [HttpPost()]
         public async Task<IActionResult> CreateChannel(Create.Command command)
-        {
-            return HandleResult(await Mediator.Send(command));
-        }
-        
-        [HttpPost("addMember")]
-        public async Task<IActionResult> AddChannelMembers(AddMembers.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

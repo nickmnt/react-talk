@@ -144,10 +144,11 @@ const Chats = {
     createChannel: (name: string, description: string) => 
         requests.post<ChatDto>('/channel/', {name, description}),
     getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
-    addMembers: (id: string, members: string[]) => requests.post<boolean>('channel/addMember', {id, members}),
+    addMembers: (id: string, members: string[]) => requests.post<boolean>('direct/addMember', {id, members}),
     createGroup: (name: string, members: string[]) => requests.post<ChatDto>('/group/', {name, members}),
     getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
-    updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, {chatId, newLastSeen})
+    updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, {chatId, newLastSeen}),
+    removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember`, {chatId, username})
 }
 
 const agent = {

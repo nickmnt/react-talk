@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using API.DTOs;
 using API.SignalR;
 using Application.Chats;
-using Application.Chats.PrivateChats;
+using Application.Chats.ChannelChats;
 using Application.Chats.UserChats;
 using Application.Interfaces;
-using Application.Messages;
 using Domain.Direct;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Create = Application.Messages.Create;
+using Details = Application.Chats.PrivateChats.Details;
 
 
 namespace API.Controllers
@@ -140,6 +141,18 @@ namespace API.Controllers
                 }
             }
             return HandleResult(result);
+        }
+        
+        [HttpPost("addMember")]
+        public async Task<IActionResult> AddMembers(AddMembers.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+        
+        [HttpPost("removeMember")]
+        public async Task<IActionResult> RemoveMember(RemoveMember.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
         }
     }
 }

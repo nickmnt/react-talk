@@ -43,18 +43,18 @@ namespace Application.Chats.ChannelChats
                 _mapper = mapper;
                 _accessor = accessor;
             }
+            
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var chat = await _context.UserChats
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
                     .FirstOrDefaultAsync(x => x.Chat.Id == request.Id, cancellationToken);
 
                 if (chat == null)
                     return null;
-                if (chat.Chat.Type != ChatType.Channel)
+                if (chat.Chat.Type != ChatType.Channel && chat.Chat.Type != ChatType.Group)
                 {
-                    return Result<bool>.Failure("Chat is not a channel.");
+                    return Result<bool>.Failure("Chat is not a channel or group.");
                 }
 
                 var curMembers = await _context.UserChats
