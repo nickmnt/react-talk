@@ -304,11 +304,29 @@ export default class DirectStore {
             }
             msg.local = false;
             msg.createdAt = new Date(response.createdAt);
+            msg.createdAt.setMilliseconds(999);
             msg.image = response.image;
             msg.publicId = response.publicId;
             msg.url = response.url
             msg.id = response.id;
             msg.localBlob = undefined;
+            switch(this.currentChat.type) {
+                case 0:
+                    const privateChat = this.currentChat.privateChat!; 
+                    privateChat.messages = [...privateChat.messages.filter(x => x.id !== id), msg];
+                    this.currentChat = {...this.currentChat, privateChat};
+                    break;
+                case 1:
+                    const groupChat = this.currentChat!.groupChat!;
+                    groupChat.messages = [...groupChat.messages.filter(x => x.id !== id), msg];
+                    this.currentChat! = {...this.currentChat, groupChat};
+                    break;
+                case 2:
+                    const channelChat = this.currentChat!.channelChat!;
+                    channelChat.messages = [...channelChat.messages.filter(x => x.id !== id), msg];
+                    this.currentChat! = {...this.currentChat, channelChat};
+                    break;
+            }
         }
     } 
 
