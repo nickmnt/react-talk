@@ -148,7 +148,7 @@ const Chats = {
     createGroup: (name: string, members: string[]) => requests.post<ChatDto>('/group/', {name, members}),
     getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
     updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, {chatId, newLastSeen}),
-    removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember`, {chatId, username})
+    removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember/`, {chatId, username})
 }
 
 const agent = {

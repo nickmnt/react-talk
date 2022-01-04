@@ -462,4 +462,26 @@ export default class DirectStore {
             console.log(error);
         }
     }
+
+    removeMember = async (username: string) => {
+        if(!this.currentChat)
+            return;
+        try {
+            await agent.Chats.removeMember(this.currentChat.id, username);
+            switch(this.currentChat.type) {
+                case 1:
+                    const groupChat = this.currentChat.groupChat!;
+                    groupChat.members = groupChat.members.filter(x => x.username !== username);
+                    this.currentChat = {...this.currentChat, groupChat};
+                    break;
+                case 2:
+                    const channelChat = this.currentChat.channelChat!;
+                    channelChat.members = channelChat.members.filter(x => x.username !== username);
+                    this.currentChat = {...this.currentChat, channelChat};
+                    break;
+            }
+        } catch(error) {
+            console.log(error);
+        }
+    }
 }

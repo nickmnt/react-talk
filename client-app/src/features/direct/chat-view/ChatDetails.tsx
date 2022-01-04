@@ -38,7 +38,7 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack}, directStore: {removeMember} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
     const [open, setOpen] = useState('');
     const handleOpen = (username: string) => setOpen(username);
@@ -219,7 +219,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                                 aria-describedby="modal-modal-description"
                                             >
                                                 <Box sx={style}>
-                                                    <MenuList>
+                                                    <MenuList onClick={handleClose}>
                                                         <MenuItem>
                                                             <ListItemIcon>
                                                                 <LocalPoliceOutlinedIcon fontSize="large"/>
@@ -232,7 +232,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                                             </ListItemIcon>
                                                             <ListItemText primaryTypographyProps={{fontSize: 14}}>Change Permissions</ListItemText>
                                                         </MenuItem>
-                                                        <MenuItem sx={{color: '#ff2800'}}>
+                                                        <MenuItem sx={{color: '#ff2800'}} onClick={() => removeMember(open)}>
                                                             <ListItemIcon>
                                                                 <RemoveCircleOutlineOutlinedIcon sx={{color: '#ff2800'}} fontSize="large" />
                                                             </ListItemIcon>
