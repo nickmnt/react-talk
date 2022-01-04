@@ -34,7 +34,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new AddPrivateChat.Command { TargetUserId = "tom" };
+                var tom = await context.Users.FirstOrDefaultAsync(x => x.UserName == "tom");
+                var tomId = tom.Id;
+                var request = new AddPrivateChat.Command { TargetUserId = tomId };
 
                 var userAccessor = MockUserAccessor.Create().Object;
                 var handler = new AddPrivateChat.Handler(context, mapper, userAccessor);

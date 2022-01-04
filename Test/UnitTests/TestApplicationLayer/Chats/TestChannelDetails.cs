@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Chats.ChannelChats;
+using Application.Core;
+using AutoMapper;
 using Domain;
 using Domain.Direct;
 using Microsoft.EntityFrameworkCore;
@@ -37,8 +39,12 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 context.UserChats.Add(userChat1);
                 await context.SaveChangesAsync();
                 
+                var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
+                var mapper = config.CreateMapper();
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new Details.Query { ChatId = dbUserChat.Entity.ChatId };
-                var handler = new Details.Handler(context);
+                var handler = new Details.Handler(context, mapper, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
@@ -67,8 +73,12 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 await context.SaveChangesAsync();
                 
+                var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
+                var mapper = config.CreateMapper();
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new Details.Query { ChatId = new Guid() };
-                var handler = new Details.Handler(context);
+                var handler = new Details.Handler(context, mapper, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
@@ -96,8 +106,12 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 await context.SaveChangesAsync();
                 
+                var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
+                var mapper = config.CreateMapper();
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new Details.Query { ChatId = dbChat.Entity.ChatId };
-                var handler = new Details.Handler(context);
+                var handler = new Details.Handler(context, mapper, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
