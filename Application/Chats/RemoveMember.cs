@@ -25,7 +25,6 @@ namespace Application.Chats
         {
             public CommandValidator()
             {
-                RuleFor(x => x.ChatId).NotEmpty();
                 RuleFor(x => x.Username).NotEmpty();
             }
         }
@@ -58,13 +57,16 @@ namespace Application.Chats
                     return Result<bool>.Failure("Chat is not a channel or group.");
                 }
 
-                if (userChats.All(x => x.AppUser.UserName != request.Username))
+                var target = userChats.Find(x => x.AppUser.UserName == request.Username);
+
+                if (target == null)
                 {
                     return Result<bool>.Failure("The user you want to remove is not a member of this chat.");
                 }
+
+                _context.UserChats.Remove(target);
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);
-
                 if (result > 0)
                 {
                     return Result<bool>.Success(true);
