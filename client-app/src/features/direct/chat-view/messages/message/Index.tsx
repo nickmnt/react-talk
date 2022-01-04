@@ -56,36 +56,38 @@ export default observer(function Message({message, onRightClick}: Props) {
         }
     }, [currentChat, message.createdAt, user, user?.username]);
 
-    if(!user)
-        return null;
-
-    if(inViewport) {
-        console.log(`viewport!!! ${message.body}`)
-        if(currentChat) {
-            let seenDate = null;
-
-            switch(currentChat.type) {
-                case 0:
-                    seenDate = currentChat.privateChat!.myLastSeen;
-                    if(message.createdAt > seenDate) {
-                        updateLastSeen(message.createdAt);
-                    }
-                    break;
-                case 1:
-                    seenDate = currentChat.groupChat!.me!.lastSeen;
-                    if(message.createdAt > seenDate) {
-                        updateLastSeen(message.createdAt);
-                    }
-                    break;
-                case 2:
-                    seenDate = currentChat.channelChat!.me!.lastSeen;
-                    if(message.createdAt > seenDate) {
-                        updateLastSeen(message.createdAt);
-                    }
-                    break;
+    useEffect(() => {
+        if(inViewport) {
+            // console.log(`viewport!!! ${message.body}`)
+            if(currentChat) {
+                let seenDate = null;
+    
+                switch(currentChat.type) {
+                    case 0:
+                        seenDate = currentChat.privateChat!.myLastSeen;
+                        if(message.createdAt > seenDate) {
+                            updateLastSeen(message.createdAt);
+                        }
+                        break;
+                    case 1:
+                        seenDate = currentChat.groupChat!.me!.lastSeen;
+                        if(message.createdAt > seenDate) {
+                            updateLastSeen(message.createdAt);
+                        }
+                        break;
+                    case 2:
+                        seenDate = currentChat.channelChat!.me!.lastSeen;
+                        if(message.createdAt > seenDate) {
+                            updateLastSeen(message.createdAt);
+                        }
+                        break;
+                }
             }
         }
-    }
+    }, [currentChat, inViewport, message.body, message.createdAt, updateLastSeen]);
+
+    if(!user)
+        return null;
 
     const isMe = user.username === message.username;
     const showImg = false;

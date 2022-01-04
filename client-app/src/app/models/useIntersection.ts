@@ -10,7 +10,8 @@ export default function useIntersection(element: any, rootMargin: any) {
             }, { rootMargin }
         );
 
-        element && observer.observe(element);
+        if(element)
+            observer.observe(element);
 
         return () => element && observer.unobserve(element);
     }, [element, rootMargin]);
