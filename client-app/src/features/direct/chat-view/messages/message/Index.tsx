@@ -12,7 +12,7 @@ interface Props {
 
 export default observer(function Message({message, onRightClick}: Props) {
     const ref = useRef<any>(null);
-    const inViewport = useIntersection(ref.current, '0px');
+    const inViewport = useIntersection(ref.current, '+1px');
     const [doubleTick, setDoubleTick] = useState(false);
 
     const {userStore: {user}, directStore: {currentChat, updateLastSeen}} = useStore(); 
@@ -60,7 +60,7 @@ export default observer(function Message({message, onRightClick}: Props) {
         return null;
 
     if(inViewport) {
-        // console.log(`viewport!!! ${message.body}`)
+        console.log(`viewport!!! ${message.body}`)
         if(currentChat) {
             let seenDate = null;
 

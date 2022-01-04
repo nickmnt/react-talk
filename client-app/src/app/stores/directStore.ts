@@ -116,6 +116,7 @@ export default class DirectStore {
             chat.privateChat.messages.forEach(x => {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
+                x.createdAt.setMilliseconds(999);
             });
             chat.privateChat.myLastSeen = new Date(chat.privateChat.myLastSeen + 'Z');
             chat.privateChat.otherLastSeen = new Date(chat.privateChat.otherLastSeen + 'Z');
@@ -132,6 +133,7 @@ export default class DirectStore {
             chat.groupChat!.messages.forEach(x => {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
+                x.createdAt.setMilliseconds(999);
             });
             chat.groupChat!.members.forEach(x => {
                 x.lastSeen = new Date(x.lastSeen + 'Z');
@@ -151,6 +153,7 @@ export default class DirectStore {
             chat.channelChat!.messages.forEach(x => {
                 x.local = false
                 x.createdAt = new Date(x.createdAt + 'Z');
+                x.createdAt.setMilliseconds(999);
             });
             chat.channelChat!.members.forEach(x => {
                 x.lastSeen = new Date(x.lastSeen + 'Z');
