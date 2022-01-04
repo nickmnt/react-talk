@@ -22,9 +22,9 @@ export default observer(function Chat({chat}: Props) {
                     </div>
                     <div className="chat__rightBottom">
                     <div className="last-msg">
-                        {"Random last message / status change of group channel and so on .................................".substring(0,15)}
+                        {chat.lastMessage ? chat.lastMessage.body.substring(0,15) : "No message yet"}
                     </div>
-                        {currentChat && currentChat.id !== chat.id && <div className="chat__badge">1696</div>}
+                        {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && <div className="chat__badge">{chat.notSeenCount}</div>}
                     </div>
                 </div>
             </div>

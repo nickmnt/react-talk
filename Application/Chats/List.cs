@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
+using Application.Messages;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Direct;
@@ -46,11 +48,19 @@ namespace Application.Chats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.ChannelChat)
+                    .ThenInclude(x => x.Messages)
+                    .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Users)
                     .ThenInclude(x => x.AppUser)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.GroupChat)
+                    .ThenInclude(x => x.Messages)
+                    .ThenInclude(x => x.Sender)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.PrivateChat)
+                    .ThenInclude(x => x.Messages)
+                    .ThenInclude(x => x.Sender)
                     .Where(x => x.AppUser.UserName == user.UserName)
                     .ToListAsync(cancellationToken);
 
@@ -58,20 +68,71 @@ namespace Application.Chats
                 {
                     var chat = userChat.Chat;
 
+                    ChatDto mapped = null;
                     switch (chat.Type)
                     {
                         case ChatType.Channel:
-                            var channelDto = ChatMapping.MapChannel(userChat);
-                            result.Add(channelDto);
+                            mapped = ChatMapping.MapChannel(userChat);
                             break;
                         case ChatType.Group:
-                            var groupDto = ChatMapping.MapGroup(userChat);
-                            result.Add(groupDto);
+                            mapped = ChatMapping.MapGroup(userChat);
                             break;
                         case ChatType.PrivateChat:
-                            result.Add(_mapper.Map<ChatDto>(userChat));
+                            mapped = _mapper.Map<ChatDto>(userChat);
                             break;
                     }
+
+                    Message lastMessage = null;
+                    
+                    switch (chat.Type)
+                    {
+                        case ChatType.Channel:
+                            lastMessage = userChat.Chat.ChannelChat.Messages.OrderByDescending
+                                (x => x.CreatedAt).FirstOrDefault();
+                            break;
+                        case ChatType.Group:
+                            lastMessage = userChat.Chat.GroupChat.Messages.OrderByDescending
+                                (x => x.CreatedAt).FirstOrDefault();
+                            break;
+                        case ChatType.PrivateChat:
+                            lastMessage = userChat.Chat.PrivateChat.Messages.OrderByDescending
+                                (x => x.CreatedAt).FirstOrDefault();
+                            break;
+                    }
+
+                    var beenSeen = false;
+                    if (lastMessage?.Sender.UserName == _accessor.GetUsername())
+                    {
+                        beenSeen = _context.UserChats
+                            .Include(x => x.AppUser)
+                            .Any(x => x.AppUser.UserName != _accessor.GetUsername() &&
+                                      x.LastSeen > lastMessage.CreatedAt);
+                        
+                    }
+
+                    mapped!.LastMessage = _mapper.Map<MessageDto>(lastMessage);
+                    mapped.LastMessageSeen = beenSeen;
+
+                    int notSeenCount = 0;
+                    switch (chat.Type)
+                    {
+                        case ChatType.Channel:
+                            notSeenCount = userChat.Chat.ChannelChat.Messages
+                                .Count(x => x.CreatedAt > userChat.LastSeen);
+                            break;
+                        case ChatType.Group:
+                            notSeenCount = userChat.Chat.GroupChat.Messages
+                                .Count(x => x.CreatedAt > userChat.LastSeen);
+                            break;
+                        case ChatType.PrivateChat:
+                            notSeenCount = userChat.Chat.PrivateChat.Messages
+                                .Count(x => x.CreatedAt > userChat.LastSeen);
+                            break;
+                    }
+
+                    mapped.NotSeenCount = notSeenCount;
+                    
+                    result.Add(mapped);
                 }
 
                 return Result<List<ChatDto>>.Success(result);

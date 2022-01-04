@@ -9,6 +9,9 @@ export interface ChatDto {
     privateChat?: PrivateChat | null;
     groupChat?: GroupDetailsDto | null;
     channelChat?: ChannelDetailsDto | null;
+    lastMessage: Message | null;
+    lastMessageSeen: boolean;
+    notSeenCount: number;
 }
 
 export interface SearchChatDto {
@@ -107,5 +110,5 @@ export const createLocalChat = (username: string, displayName: string, image: st
     var date = new Date();
     date.setDate(date.getDate() - 1);
     const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat} as ChatDto;
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0} as ChatDto;
 }

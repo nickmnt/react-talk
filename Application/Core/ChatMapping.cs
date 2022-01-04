@@ -1,9 +1,11 @@
-﻿using Application.Chats;
+﻿using System.Linq;
+using Application.Chats;
+using Application.Interfaces;
 using Domain.Direct;
 
 namespace Application.Core
 {
-    public class ChatMapping
+    public static class ChatMapping
     {
         public static ChatDto MapChannel(UserChat userChat)
         {
