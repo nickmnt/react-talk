@@ -12,7 +12,7 @@ interface Props {
 
 export default observer(function Message({message, onRightClick}: Props) {
     const ref = useRef<any>(null);
-    const inViewport = useIntersection(ref.current, '+1px');
+    const inViewport = useIntersection(ref, 1);
     const [doubleTick, setDoubleTick] = useState(false);
 
     const {userStore: {user}, directStore: {currentChat, updateLastSeen}} = useStore(); 
@@ -67,18 +67,21 @@ export default observer(function Message({message, onRightClick}: Props) {
                         seenDate = currentChat.privateChat!.myLastSeen;
                         if(message.createdAt > seenDate) {
                             updateLastSeen(message.createdAt);
+                            // console.log(`update!!! ${message.body}`)
                         }
                         break;
                     case 1:
                         seenDate = currentChat.groupChat!.me!.lastSeen;
                         if(message.createdAt > seenDate) {
                             updateLastSeen(message.createdAt);
+                            // console.log(`update!!! ${message.body}`)
                         }
                         break;
                     case 2:
                         seenDate = currentChat.channelChat!.me!.lastSeen;
                         if(message.createdAt > seenDate) {
                             updateLastSeen(message.createdAt);
+                            // console.log(`update!!! ${message.body}`)
                         }
                         break;
                 }
