@@ -1,4 +1,3 @@
-import { ArrowBack, MoreVert } from '@mui/icons-material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -24,6 +23,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import Modal from '@mui/material/Modal/Modal';
+import MenuList from '@mui/material/MenuList/MenuList';
+import MenuItem from '@mui/material/MenuItem/MenuItem';
+import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import LockIcon from '@mui/icons-material/Lock';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export interface Props {
     chatPage: ChatPage;
@@ -33,6 +40,21 @@ export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
     const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
+    const [open, setOpen] = useState('');
+    const handleOpen = (username: string) => setOpen(username);
+    const handleClose = () => setOpen('');
+
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '0px solid #000',
+        boxShadow: 24,
+        borderRadius: 2,
+      };      
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -54,12 +76,12 @@ export default observer(function ChatDetails({chatPage}: Props) {
                         sx={{ mr: 2 }}
                         onClick={() => removeFromStack(chatPage)}
                     >
-                        <ArrowBack fontSize="large" />
+                        <ArrowBackIcon fontSize="large" />
                     </IconButton>
                     <div style={{flexGrow: 1}}>
                     </div>
                     <IconButton sx={{}}>
-                        <MoreVert />
+                        <MoreVertIcon />
                     </IconButton>
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative'}} alignItems="center" justifyContent="center">
@@ -140,22 +162,28 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                         </Button>}
                                         {groupData?.groupChat?.members.map(x => (
                                             <ListItem
-                                            key={x.username}
-                                            sx={{width:'100%', padding: '0 2rem'}}
-                                            disablePadding
-                                            onClick={() => addProfileDetailsToStack(x.username)}
-                                            >
-                                            <ListItemButton role={undefined}  sx={{padding: '1.3rem'}} dense>
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                alt={`${x.displayName}`}
-                                                src={x.image}
-                                                sx={{ width: 48, height: 48 }}
-                                                />
-                                            </ListItemAvatar>
-                                            <ListItemText primaryTypographyProps={{fontSize: '1.6rem'}}  primary={x.displayName} />
-                                            </ListItemButton>
-                                        </ListItem>
+                                                key={x.username}
+                                                sx={{width:'100%', padding: '0 2rem'}}
+                                                disablePadding
+                                                onClick={() => addProfileDetailsToStack(x.username)}
+                                                onContextMenu={(e) => {
+                                                    e.preventDefault();
+                                                    handleOpen(x.username);
+                                                }
+                                                }
+                                                >
+                                                <ListItemButton role={undefined}  sx={{padding: '1.3rem'}} dense>
+                                                <ListItemAvatar>
+                                                    <Avatar
+                                                    alt={`${x.displayName}`}
+                                                    src={x.image}
+                                                    sx={{ width: 48, height: 48 }}
+                                                    />
+                                                </ListItemAvatar>
+                                                <ListItemText primaryTypographyProps={{fontSize: '1.6rem'}}  primary={x.displayName} />
+                                                </ListItemButton>
+                                            </ListItem>
+
                                         ))}
                                         {channelData?.channelChat?.members && <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{width: '100%'}} onClick={() => addAddMembersToStack(channelData)}>
                                             Add Member
@@ -166,6 +194,11 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                             sx={{width:'100%', padding: '0 2rem'}}
                                             disablePadding
                                             onClick={() => addProfileDetailsToStack(x.username)}
+                                            onContextMenu={(e) => {
+                                                e.preventDefault();
+                                                handleOpen(x.username);
+                                            }
+                                            }
                                             >
                                             <ListItemButton role={undefined}  sx={{padding: '1.3rem'}} dense>
                                             <ListItemAvatar>
@@ -179,6 +212,35 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                             </ListItemButton>
                                         </ListItem>
                                         ))}
+                                        <Modal
+                                                open={open.length > 0}
+                                                onClose={handleClose}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                            >
+                                                <Box sx={style}>
+                                                    <MenuList>
+                                                        <MenuItem>
+                                                            <ListItemIcon>
+                                                                <LocalPoliceOutlinedIcon fontSize="large"/>
+                                                            </ListItemIcon>
+                                                            <ListItemText primaryTypographyProps={{fontSize: 14}}>Promote to admin</ListItemText>
+                                                        </MenuItem>
+                                                        <MenuItem>
+                                                            <ListItemIcon>
+                                                                <LockIcon fontSize="large" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primaryTypographyProps={{fontSize: 14}}>Change Permissions</ListItemText>
+                                                        </MenuItem>
+                                                        <MenuItem sx={{color: '#ff2800'}}>
+                                                            <ListItemIcon>
+                                                                <RemoveCircleOutlineOutlinedIcon sx={{color: '#ff2800'}} fontSize="large" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primaryTypographyProps={{fontSize: 14}}>Remove from group</ListItemText>
+                                                        </MenuItem>
+                                                    </MenuList>
+                                                </Box>
+                                        </Modal>
                                     </>
                                 )
                             }
