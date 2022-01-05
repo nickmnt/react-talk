@@ -33,6 +33,10 @@ export default class DirectStore {
 
             this.hubConnection.on('LoadChats', (chats: ChatDto[]) => {
                 runInAction(() => {
+                    chats.forEach(x => {
+                        if(x.lastMessage)
+                            x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt + 'Z')
+                    })
                     this.chats = chats;
                 })
             });

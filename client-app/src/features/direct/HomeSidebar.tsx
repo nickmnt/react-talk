@@ -7,7 +7,8 @@ import SearchResult from "./SearchResult";
 import ChooseMembers from "./home-sidebar/ChooseMembers";
 import GroupFinalization from "./home-sidebar/GroupFinalization";
 import Channelnitial from "./home-sidebar/Channelnitial";
-
+import List from '@mui/material/List';
+import Paper from "@mui/material/Paper/Paper";
 
 export default observer(function HomeSidebar() {
 
@@ -37,17 +38,17 @@ export default observer(function HomeSidebar() {
     }
 
     return (
-        <div className="homeSidebar">
+        <Paper square className="homeSidebar" elevation={2}>
             <Actions searchVal={searchVal} setSearchVal={setSearchVal} />
             <div className="homeSidebar__chats"> 
                 {!searchVal ? 
-                <>
+                <List disablePadding>
                 {
                     chats.map((chat) => 
                     <Chat chat={chat} key={chat.id}/>
                     )
                 }
-                </>
+                </List >
                 :
                 <>
                     {
@@ -59,6 +60,6 @@ export default observer(function HomeSidebar() {
                 }
             </div>
             
-        </div>
+        </Paper>
     );
 });

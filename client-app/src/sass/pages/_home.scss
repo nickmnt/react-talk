@@ -15,8 +15,8 @@
         height: 100%;
         // background-color: red;
         display: flex;
+        flex-direction: row-reverse;
         border: 1px solid $color-grey-light;
-        border-radius: .7rem;
         overflow: hidden;
 
         &--expanded {
@@ -28,7 +28,7 @@
 
     &__sidebar {
         width: 30%;
-        border-right: 1px solid $color-grey-light;
+        // border-right: 1px solid $color-grey-light;
         // background-color: royalblue;
         position: relative;
     }
@@ -38,6 +38,7 @@
         background-image: url('../../images/background.jpg');
         position: relative;
         width: 70%;
+        overflow: hidden;
         // background-color: green;
     }
 
