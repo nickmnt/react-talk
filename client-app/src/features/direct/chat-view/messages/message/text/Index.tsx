@@ -6,6 +6,7 @@ import { Message } from '../../../../../../app/models/chat';
 import { useLightbox } from 'simple-react-lightbox';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../../../app/stores/store';
+import Paper from '@mui/material/Paper/Paper';
 
 interface Props {
     isMe: boolean;
@@ -28,7 +29,7 @@ export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,
     const {directStore: {getImageIndex}} = useStore()
 
     return (
-        <div className={`text${isMe ? "--me" : "--other"}`}>
+        <Paper className={`text${isMe ? "--me" : "--other"}`} square elevation={6}>
             {type === 1 && <img onClick={() => openLightbox(getImageIndex(message.id))} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
             {type === 2 && <ReactPlayer controls={true} url={isLocal ?  URL.createObjectURL(localBlob!) : attachedVideo} />}
             <div className="text__container">
@@ -44,6 +45,6 @@ export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,
                     {isMe && (isLocal ? <AccessTimeIcon sx={{color: '#57b84c'}} /> : (isDoubleTick ? <DoubleTick /> : <Tick />))}
                 </div>
             </div>
-        </div>
+        </Paper>
     );
 })
