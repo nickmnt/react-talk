@@ -4,7 +4,8 @@ import { useStore } from '../../../app/stores/store';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import { ListItem } from '@mui/material';
+import Done from '@mui/icons-material/Done';
+import DoubleTick from '../chat-view/messages/message/text/DoubleTick';
 
 interface Props {
     chat: ChatDto;
@@ -13,7 +14,7 @@ interface Props {
 
 export default observer(function Chat({chat}: Props) {
 
-    const {directStore: {currentChat, getChatDetails}} = useStore(); 
+    const {directStore: {currentChat, getChatDetails}, userStore: {user}} = useStore(); 
     return (
         <ListItemButton className={`chat__container`} selected={!!currentChat && currentChat.id===chat.id} onClick={() => getChatDetails(chat)} >
             <ListItemAvatar>
@@ -26,7 +27,16 @@ export default observer(function Chat({chat}: Props) {
             <div className="chat__right">
                 <div className="chat__rightTop">
                     <div className="chat__name">{chat.displayName}</div>
-                    <div>{chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+                    
+                    <div>
+                    {chat.lastMessage?.username === user!.username && (
+                        chat.lastMessageSeen ? 
+                            <DoubleTick></DoubleTick>
+                        :<Done>
+
+                        </Done>
+                    )}
+                    {chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                 </div>
                 <div className="chat__rightBottom">
                 <div className="last-msg">

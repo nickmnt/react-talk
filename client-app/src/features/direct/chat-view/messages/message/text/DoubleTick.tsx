@@ -1,14 +1,7 @@
-import Tick from "./Tick";
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 export default function DoubleTick() {
     return (
-        <div className="doubleTick">
-            <div className="doubleTick__firstTick">
-                <Tick />
-            </div>
-            <div className="doubleTick__secondTick">
-                <Tick />
-            </div>
-        </div>
+        <DoneAllIcon sx={{color: "#57b84c", width: 20, height: 20}}/>
     )
 }
