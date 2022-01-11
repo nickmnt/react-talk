@@ -31,6 +31,7 @@ import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOut
 import LockIcon from '@mui/icons-material/Lock';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EditIcon from '@mui/icons-material/Edit';
 
 export interface Props {
     chatPage: ChatPage;
@@ -38,7 +39,7 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack}, directStore: {removeMember} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack}, directStore: {removeMember} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
     const [open, setOpen] = useState<GroupMember | null>(null);
     const handleOpen = (profile: GroupMember) => setOpen(profile);
@@ -80,8 +81,11 @@ export default observer(function ChatDetails({chatPage}: Props) {
                     </IconButton>
                     <div style={{flexGrow: 1}}>
                     </div>
-                    <IconButton sx={{}}>
-                        <MoreVertIcon />
+                    {chatPage.groupData && <IconButton onClick={() => addEditGroupToStack(chatPage.groupData!)}>
+                        <EditIcon sx={{width: 24, height: 24}}/>
+                    </IconButton>}
+                    <IconButton>
+                        <MoreVertIcon sx={{width: 24, height: 24}}/>
                     </IconButton>
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative'}} alignItems="center" justifyContent="center">

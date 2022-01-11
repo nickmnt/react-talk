@@ -5,7 +5,6 @@ import DirectDrawer from './chat-view/DirectDrawer';
 import Paper from '@mui/material/Paper/Paper';
 import InputBase from '@mui/material/InputBase/InputBase';
 import IconButton from '@mui/material/IconButton/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 
 
 interface Props {

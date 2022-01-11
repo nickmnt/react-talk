@@ -1,23 +1,16 @@
-import React, { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { GroupMember } from "../../../app/models/chat";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { ChatPage } from "../../../app/models/chat";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton/IconButton";
 import Avatar from "@mui/material/Avatar/Avatar";
-import Input from "@mui/material/Input/Input";
 import Paper from "@mui/material/Paper/Paper";
 import ListItem from "@mui/material/ListItem/ListItem";
 import List from "@mui/material/List/List";
 import ListItemButton from "@mui/material/ListItemButton/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
-import ListItemAvatar from "@mui/material/ListItemAvatar/ListItemAvatar";
-import Checkbox from "@mui/material/Checkbox/Checkbox";
-import { Profile } from "../../../app/models/profile";
-import { useState } from "react";
 import ListItemText from "@mui/material/ListItemText/ListItemText";
 import { useStore } from "../../../app/stores/store";
 import SpeedDial from "@mui/material/SpeedDial/SpeedDial";
@@ -25,7 +18,7 @@ import Done from "@mui/icons-material/Done";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Stack from "@mui/material/Stack/Stack";
 import Switch from "@mui/material/Switch/Switch";
-import { Form, Formik, FormikProps, useField } from "formik";
+import { Formik, FormikProps, useField } from "formik";
 
 export interface ToggleFieldProps {
   name: string;

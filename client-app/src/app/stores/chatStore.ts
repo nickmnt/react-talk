@@ -85,4 +85,9 @@ export default class ChatStore {
         this.stack = [...this.stack, {type: 30, index: this.i, member}];
         this.i += 1;
     }
+
+    addEditGroupToStack = (chat: ChatDto) => {
+        this.stack = [...this.stack, {type: 40, index: this.i, groupData: chat}];
+        this.i += 1;
+    }
 }
