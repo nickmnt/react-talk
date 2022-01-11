@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChatDto, ChatPage } from "../models/chat";
+import { ChatDto, ChatPage, GroupMember } from "../models/chat";
 import { store } from "./store";
 
 export default class ChatStore {
@@ -79,5 +79,10 @@ export default class ChatStore {
                 }
                 break;
         }
+    }
+
+    addPermissionsToStack = (member: GroupMember) => {
+        this.stack = [...this.stack, {type: 30, index: this.i, member}];
+        this.i += 1;
     }
 }

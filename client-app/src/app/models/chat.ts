@@ -86,6 +86,7 @@ export interface ChatPage {
     groupData?: ChatDto;
     channelData?: ChatDto;
     followings?: Profile[];
+    member?: GroupMember;
     index: number;
 }
 

@@ -7,7 +7,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Tab from '@mui/material/Tab';
 import { useState } from 'react';
-import { ChatPage } from '../../../app/models/chat';
+import { ChatPage, GroupMember } from '../../../app/models/chat';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import IconButton from '@mui/material/IconButton/IconButton';
@@ -38,11 +38,11 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack}, directStore: {removeMember} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack}, directStore: {removeMember} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
-    const [open, setOpen] = useState('');
-    const handleOpen = (username: string) => setOpen(username);
-    const handleClose = () => setOpen('');
+    const [open, setOpen] = useState<GroupMember | null>(null);
+    const handleOpen = (profile: GroupMember) => setOpen(profile);
+    const handleClose = () => setOpen(null);
 
     const style = {
         position: 'absolute' as 'absolute',
@@ -168,7 +168,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                                 onClick={() => addProfileDetailsToStack(x.username)}
                                                 onContextMenu={(e) => {
                                                     e.preventDefault();
-                                                    handleOpen(x.username);
+                                                    handleOpen(x);
                                                 }
                                                 }
                                                 >
@@ -196,7 +196,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                             onClick={() => addProfileDetailsToStack(x.username)}
                                             onContextMenu={(e) => {
                                                 e.preventDefault();
-                                                handleOpen(x.username);
+                                                handleOpen(x);
                                             }
                                             }
                                             >
@@ -213,7 +213,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                         </ListItem>
                                         ))}
                                         <Modal
-                                                open={open.length > 0}
+                                                open={open !== null}
                                                 onClose={handleClose}
                                                 aria-labelledby="modal-modal-title"
                                                 aria-describedby="modal-modal-description"
@@ -226,13 +226,13 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                                             </ListItemIcon>
                                                             <ListItemText primaryTypographyProps={{fontSize: 14}}>Promote to admin</ListItemText>
                                                         </MenuItem>
-                                                        <MenuItem>
+                                                        <MenuItem onClick={() => addPermissionsToStack(open!)}>
                                                             <ListItemIcon>
                                                                 <LockIcon fontSize="large" />
                                                             </ListItemIcon>
                                                             <ListItemText primaryTypographyProps={{fontSize: 14}}>Change Permissions</ListItemText>
                                                         </MenuItem>
-                                                        <MenuItem sx={{color: '#ff2800'}} onClick={() => removeMember(open)}>
+                                                        <MenuItem sx={{color: '#ff2800'}} onClick={() => removeMember(open!.username)}>
                                                             <ListItemIcon>
                                                                 <RemoveCircleOutlineOutlinedIcon sx={{color: '#ff2800'}} fontSize="large" />
                                                             </ListItemIcon>

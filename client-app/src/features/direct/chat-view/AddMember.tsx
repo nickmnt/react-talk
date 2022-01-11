@@ -1,6 +1,5 @@
 import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { ChatPage } from '../../../app/models/chat'
-import { ArrowBack, MoreVert } from '@mui/icons-material'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,6 +20,8 @@ import ListItemText from '@mui/material/ListItemText/ListItemText';
 import { useStore } from '../../../app/stores/store';
 import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 import Done from '@mui/icons-material/Done';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export interface Props {
     chatPage: ChatPage;
@@ -62,24 +63,24 @@ export default function AddMember({chatPage}: Props) {
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <AppBar position="relative" elevation={1} sx={{backgroundColor: 'white', color:'black'}}>
                     <Toolbar variant="dense">
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                        onClick={() => removeFromStack(chatPage)}
-                    >
-                        <ArrowBack fontSize="large" />
-                    </IconButton>
-                    <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: '500', fontSize: '2rem' }}>
-                        Add Members
-                    </Typography>
-                    <div style={{flexGrow: 1}}>
-                    </div>
-                    <IconButton sx={{}}>
-                        <MoreVert />
-                    </IconButton>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                            onClick={() => removeFromStack(chatPage)}
+                        >
+                            <ArrowBackIcon fontSize="large" />
+                        </IconButton>
+                        <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: '500', fontSize: '2rem' }}>
+                            Add Members
+                        </Typography>
+                        <div style={{flexGrow: 1}}>
+                        </div>
+                        <IconButton sx={{}}>
+                            <MoreVertIcon />
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <Paper sx={{backgroundColor: "white", width: '100%', borderRadius: '0'}} elevation={0}>
