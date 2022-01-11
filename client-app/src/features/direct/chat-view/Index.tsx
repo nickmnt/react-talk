@@ -7,6 +7,7 @@ import ChatDetails from "./ChatDetails";
 import AddMember from "./AddMember";
 import MemberPermissions from "./MemberPermissions";
 import GroupEdit from "./GroupEdit";
+import MemberPermissionsAll from "./MemberPermissionsAll";
 
 export default observer(function ChatView() {
     const {directStore: {currentChat}, chatStore: {stack}} = useStore();
@@ -27,6 +28,7 @@ export default observer(function ChatView() {
                 {elem.type === 21 && <AddMember chatPage={elem}/>}
                 {elem.type === 30 && <MemberPermissions chatPage={elem} member={elem.member!}/>}
                 {elem.type === 40 && <GroupEdit chatPage={elem} chat={elem.groupData!}/>}
+                {elem.type === 50 && <MemberPermissionsAll chatPage={elem} chat={elem.groupData!}/>}
                 </div>
             )}
             </>:

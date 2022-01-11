@@ -32,7 +32,7 @@ export interface Props {
 
 export default function GroupEdit({ chatPage, chat }: Props) {
   const {
-    chatStore: { removeFromStack },
+    chatStore: { removeFromStack, addPermissionsAllToStack },
   } = useStore();
 
   return (
@@ -76,7 +76,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
               component="div"
               sx={{ flexGrow: 1, fontWeight: "500", fontSize: "2rem" }}
             >
-              Change Permissions
+              Edit
             </Typography>
           </Toolbar>
         </AppBar>
@@ -174,7 +174,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
           }}
         >
           <MenuList>
-            <MenuItem>
+            <MenuItem onClick={() => addPermissionsAllToStack(chat)}>
               <ListItemIcon>
                 <LockIcon fontSize="large" />
               </ListItemIcon>

@@ -1,12 +1,8 @@
-import { useRef } from "react";
-import { GroupMember } from "../../../app/models/chat";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
-import { ChatPage } from "../../../app/models/chat";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton/IconButton";
-import Avatar from "@mui/material/Avatar/Avatar";
 import Paper from "@mui/material/Paper/Paper";
 import List from "@mui/material/List/List";
 import { useStore } from "../../../app/stores/store";
@@ -14,20 +10,19 @@ import SpeedDial from "@mui/material/SpeedDial/SpeedDial";
 import Done from "@mui/icons-material/Done";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Stack from "@mui/material/Stack/Stack";
-import { Formik, FormikProps } from "formik";
+import { Formik } from "formik";
+import { ChatDto, ChatPage } from "../../../app/models/chat";
 import { ToggleField } from "./ToggleField";
 
 export interface Props {
   chatPage: ChatPage;
-  member: GroupMember;
+  chat: ChatDto;
 }
 
-export default function MemberPermissions({ member, chatPage }: Props) {
+export default function MemberPermissionsAll({ chatPage }: Props) {
   const {
     chatStore: { removeFromStack },
   } = useStore();
-
-  const formRef = useRef<FormikProps<any> | null>(null);
 
   return (
     <div
@@ -75,30 +70,6 @@ export default function MemberPermissions({ member, chatPage }: Props) {
           </Toolbar>
         </AppBar>
 
-        <Paper square sx={{ marginBottom: "1rem" }}>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              width: "100%",
-              marginTop: "2rem",
-              marginBottom: "2rem",
-              position: "relative",
-            }}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Avatar
-              sx={{ width: 48, height: 48 }}
-              alt="Okay"
-              src={member.image}
-            />
-            <Typography variant="h4" sx={{ color: "#333", fontWeight: "500" }}>
-              {member.displayName}
-            </Typography>
-          </Stack>
-        </Paper>
-
         <Paper square elevation={0} sx={{ flex: 1, display: "flex" }}>
           <Stack
             direction="column"
@@ -116,7 +87,7 @@ export default function MemberPermissions({ member, chatPage }: Props) {
               variant="h5"
               sx={{ color: "#007FFF", fontWeight: "500" }}
             >
-              What can this user do?
+              What can members of this group do?
             </Typography>
 
             <Formik
@@ -128,7 +99,6 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                 pinMessages: false,
                 changeChatInfo: false,
               }}
-              innerRef={formRef}
             >
               {({ isSubmitting, isValid, handleSubmit, dirty }) => (
                 <>
