@@ -107,6 +107,14 @@ export interface MessageNotifDto {
     chatId: string;
 }
 
+export interface GroupMemberPermissions {
+    sendMessages: boolean;
+    sendMedia: boolean;
+    addUsers: boolean;
+    pinMessages: boolean;
+    changeChatInfo: boolean;
+}
+
 export const createLocalChat = (username: string, displayName: string, image: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);

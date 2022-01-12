@@ -9,5 +9,6 @@ namespace Domain.Direct
         public string Name { get; set; }
         public string Description { get; set; }
         public ICollection<Message> Messages { get; set; } = new List<Message>();
+        public GroupMemberPermissions MemberPermissions { get; set; } = new ();
     }
 }
