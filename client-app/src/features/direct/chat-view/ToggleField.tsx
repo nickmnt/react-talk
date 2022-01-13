@@ -17,15 +17,6 @@ export interface ToggleFieldProps {
 // toggle field converts yes or no to true or false
 export const ToggleField = (props: ToggleFieldProps) => {
   const [field] = useField<boolean>(props);
-  
-  useEffect(() => {
-    if(props.values.sendMessages === false) {
-      props.setFieldValue('sendMedia', false);
-    }
-    if(props.values.sendMedia === true) {
-      props.setFieldValue('sendMessages', true)
-    }
-  }, [props]);
 
   const onChange = (event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
     if(props.name === 'sendMessages' && checked === false) {
