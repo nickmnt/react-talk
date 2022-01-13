@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Domain.Direct
 {
@@ -10,5 +11,6 @@ namespace Domain.Direct
         public string Description { get; set; }
         public ICollection<Message> Messages { get; set; } = new List<Message>();
         public GroupMemberPermissions MemberPermissions { get; set; } = new ();
+        [JsonIgnore] public int MemberPermissionsId { get; set; }
     }
 }
