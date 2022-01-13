@@ -9,6 +9,8 @@ import MemberPermissions from "./MemberPermissions";
 import GroupEdit from "./GroupEdit";
 import MemberPermissionsAll from "./MemberPermissionsAll";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import Paper from "@mui/material/Paper/Paper";
+import ChatIcon from '@mui/icons-material/Chat';
 
 export default observer(function ChatView() {
   const {
@@ -47,7 +49,12 @@ export default observer(function ChatView() {
           ))}
         </>
       ) : (
-        <>Select a chat to start messaging</>
+        <div className="chatView__welcome">
+          <Paper className="chatView__welcomeContainer" elevation={5}>
+            <ChatIcon sx ={{width: 100, height: 100, marginBottom: '2.5rem'}}/>
+            Select a chat to start messaging
+          </Paper>
+        </div>
       )}
     </div>
   );
