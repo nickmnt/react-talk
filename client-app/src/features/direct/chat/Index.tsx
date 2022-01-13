@@ -6,6 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Done from '@mui/icons-material/Done';
 import DoubleTick from '../chat-view/messages/message/text/DoubleTick';
+import Paper from '@mui/material/Paper/Paper';
 
 interface Props {
     chat: ChatDto;
@@ -42,7 +43,7 @@ export default observer(function Chat({chat}: Props) {
                 <div className="last-msg">
                     {chat.lastMessage ? chat.lastMessage.body.substring(0,15) : "No message yet"}
                 </div>
-                    {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && <div className="chat__badge">{chat.notSeenCount}</div>}
+                    {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && <Paper sx={{backgroundColor: '#0088CC', color: 'white'}} square className="chat__badge">{chat.notSeenCount}</Paper>}
                 </div>
             </div>
         </ListItemButton>

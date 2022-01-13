@@ -72,10 +72,23 @@
 
     &__badge {
         color: white;
-        padding: .3rem;
+        // padding: 1rem;
         background-color: $color-blue;
-        border-radius: 3rem;
+        border-radius: 100%;
+        min-width: 2rem;
+        // height: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // min-height: 2rem;
+
         text-align: center;
+
+        &:before {
+            content: "";
+	        float: left;
+	        padding-top: 100%; 
+        }
     }
 
     &__name {
