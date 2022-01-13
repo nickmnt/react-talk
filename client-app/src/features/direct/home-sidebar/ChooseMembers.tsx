@@ -33,7 +33,7 @@ export default observer(function ChooseMembers() {
       toggleMember(profile);
     };
 
-    if(!createdChannel) {
+    if(type !== 'group' && !createdChannel) {
       return <LoadingComponent />
     }
   
@@ -106,7 +106,7 @@ export default observer(function ChooseMembers() {
           if (type === 'group')
             nextPhase()
           else {
-            addMembers(createdChannel, members);
+            addMembers(createdChannel!, members);
             stopEditing();
           }
         }}/>
