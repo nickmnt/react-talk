@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
+import { ChatDto } from "../models/chat";
 import { Profile } from "../models/profile";
 import { store } from "./store";
 
@@ -12,6 +13,7 @@ export default class GroupStore {
     phase = 0;
     name = '';
     description = '';
+    createdChannel: ChatDto | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -38,6 +40,7 @@ export default class GroupStore {
         this.name = '';
         this.description = '';
         this.type = 'channel';
+        this.createdChannel = null;
     }
 
     setName = (val: string) => {
@@ -81,5 +84,9 @@ export default class GroupStore {
 
     previousPhase = () => {
         this.phase--;
+    }
+
+    setCreatedChannel = (chat: ChatDto) => {
+        this.createdChannel = chat;
     }
 }

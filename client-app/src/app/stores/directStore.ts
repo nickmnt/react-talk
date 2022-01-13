@@ -407,9 +407,12 @@ export default class DirectStore {
         try {
             const response = await agent.Chats.createChannel(name, description);
 
-            if(this.currentChat)
             this.setChat(response);
-            runInAction(() => this.currentChat = response);
+            runInAction(() => {
+                this.currentChat = response;
+                store.groupStore.setCreatedChannel(response);
+                this.getChatDetails(this.currentChat);
+            });
         } catch(error) {
             console.log(error);
         }

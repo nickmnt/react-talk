@@ -23,7 +23,7 @@ import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 
 
 export default observer(function ChooseMembers() {
-    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type}} = useStore();
+    const {groupStore: {loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type, createdChannel}, directStore: {addMembers}} = useStore();
     
     useEffect(() => {
       loadFollowings();
@@ -33,6 +33,9 @@ export default observer(function ChooseMembers() {
       toggleMember(profile);
     };
 
+    if(!createdChannel) {
+      return <LoadingComponent />
+    }
   
     return (
         <div style={{backgroundColor: 'white', height: '100%'}}>
@@ -99,8 +102,14 @@ export default observer(function ChooseMembers() {
         ariaLabel="SpeedDial basic example"
         sx={{ position: 'absolute', bottom: 16, right: 16 }}
         icon={type === 'group' ? <ArrowForwardIcon /> : <Done />}
-        onClick={nextPhase}
-        />}
-        </div>
+        onClick={() => {
+          if (type === 'group')
+            nextPhase()
+          else {
+            addMembers(createdChannel, members);
+            stopEditing();
+          }
+        }}/>
+        }</div>
     )
 })
