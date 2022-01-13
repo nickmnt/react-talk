@@ -27,25 +27,9 @@ namespace API.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> CreatePrivateChat(PrivateChatStartDto command)
+        public async Task<IActionResult> CreatePrivateChat(AddPrivateChat.Command command)
         {
-            var result = await Mediator.Send(new AddPrivateChat.Command
-                { TargetUserId = command.TargetUserId });
-            if (result.IsSuccess && result.Value != null)
-            {
-                var finalResult = await Mediator.Send(new Create.Command
-                    { Body = command.Body, ChatId = result.Value.Id });
-                if (finalResult.IsSuccess && finalResult.Value != null)
-                {
-                    return Ok(new PrivateChatResultDto { Message = finalResult.Value, ChatId = result.Value.Id });
-                }
-
-                return NotFound();
-            }
-            else
-            {
-                return HandleResult(result);
-            }
+            return HandleResult(await Mediator.Send(command));
         }
 
         [HttpGet("privateChatDetails/{chatId}")]
