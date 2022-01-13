@@ -117,7 +117,7 @@ const Search = {
 };
 
 const Chats = {
-    createPrivateChat: (targetUserId: string, body: string) => requests.post<PrivateChatResultDto>(`/direct/`, {targetUserId, body}),
+    createPrivateChat: (targetUsername: string) => requests.post<ChatDto>(`/direct/`, {targetUsername}),
     getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
     createMessage: (body: string, chatId: string) => requests.post<Message>('/direct/messages', {body,chatId}),
     createPhoto: (file: Blob, body: string, chatId: string, config: any) => {

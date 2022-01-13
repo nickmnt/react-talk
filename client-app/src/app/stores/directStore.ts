@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
+import { FileRecord } from "../../features/direct/chat-view/ChatInput";
 import agent from "../api/agent";
 import { ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from "../models/chat";
 import { Profile } from "../models/profile";
@@ -387,16 +388,27 @@ export default class DirectStore {
         this.updateLocalMessage(response.data, id);
     }
 
-    createPrivateChat = async (userId: string, body: string) => {
+    createPrivateChat = async (username: string, body: string, file: FileRecord | null) => {
         try {
+            console.log('yup')
+
             if(!this.currentChat)
                 return;
 
-            const response = await agent.Chats.createPrivateChat(userId, body);
-            this.setChat({...this.currentChat, id: response.chatId});
-            runInAction(() => {
-                if(this.currentChat)
-                    this.currentChat.privateChat!.messages = [response.message];
+            console.log('yupi')
+
+            const response = await agent.Chats.createPrivateChat(username);
+            this.setChat(response);
+            this.getChatDetails(response).then(() => {
+                if(!file) {
+                    this.createMessage(body);
+                } else {
+                    if(file.video) {
+                        this.createVideo(file.file, body);
+                    } else {
+                        this.createPhoto(file.file, body);
+                    }
+                }
             });
         } catch(error) {
             console.log(error);

@@ -11,7 +11,7 @@ const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
 }
 
-interface FileRecord {
+export interface FileRecord {
     video: boolean;
     file: Blob;
 }
@@ -61,8 +61,7 @@ export default observer(function ChatInput() {
             <Formik
                 onSubmit={(values, { resetForm }) =>{
                     if(!currentChat.id) {
-                        if(currentChat.type === 0)
-                            createPrivateChat(currentChat.privateChat!.otherUserId,values.body).then(() => resetForm());
+                        createPrivateChat(currentChat.privateChat!.otherUsername,values.body, file).then(() => {resetForm();setFile(null);});
                     } else {
                         if(!file) {
                             createMessage(values.body).then(() => resetForm());
@@ -87,11 +86,10 @@ export default observer(function ChatInput() {
                     <TextareaAutosize maxRows={2} className="chatInput__input" placeholder="Message"  {...props.field}
                     onKeyPress={(e) => {
                         if (e.key === "Enter" && e.shiftKey) {
-                        return;
+                            return;
                         }
                         if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
-                            console.log('entering,sending')
                             isValid && handleSubmit()
                         }
                     }}/>
