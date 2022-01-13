@@ -50,13 +50,13 @@ export default observer(function HomeSidebar() {
                 }
                 </List >
                 :
-                <>
+                <List>
                     {
                         searchResults.map((result) => (
                             <SearchResult searchResult={result} key={result.username}/>
                         ))
                     }
-                </>
+                </List>
                 }
             </div>
             
