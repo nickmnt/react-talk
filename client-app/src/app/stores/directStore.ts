@@ -193,7 +193,7 @@ export default class DirectStore {
         if(!this.currentChat)
             return -1
 
-        this.getCurrentMessages()!.push({
+        this.getCurrentMessages()?.push({
                 body,
                 createdAt: new Date(),
                 displayName: store.userStore.user!.displayName,
@@ -322,19 +322,13 @@ export default class DirectStore {
             msg.localBlob = undefined;
             switch(this.currentChat.type) {
                 case 0:
-                    const privateChat = this.currentChat.privateChat!; 
-                    privateChat.messages = [...privateChat.messages.filter(x => x.id !== id), msg];
-                    this.currentChat = {...this.currentChat, privateChat};
+                    this.currentChat = {...this.currentChat};
                     break;
                 case 1:
-                    const groupChat = this.currentChat!.groupChat!;
-                    groupChat.messages = [...groupChat.messages.filter(x => x.id !== id), msg];
-                    this.currentChat! = {...this.currentChat, groupChat};
+                    this.currentChat! = {...this.currentChat};
                     break;
                 case 2:
-                    const channelChat = this.currentChat!.channelChat!;
-                    channelChat.messages = [...channelChat.messages.filter(x => x.id !== id), msg];
-                    this.currentChat! = {...this.currentChat, channelChat};
+                    this.currentChat! = {...this.currentChat};
                     break;
             }
         }
