@@ -38,7 +38,7 @@ export default class DirectStore {
                 runInAction(() => {
                     chats.forEach(x => {
                         if(x.lastMessage)
-                            x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt + 'Z')
+                            x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt)
                     })
                     this.chats = chats;
                 })
@@ -52,7 +52,6 @@ export default class DirectStore {
 
             this.hubConnection.on('ReceiveNewMessage', (result: MessageNotifDto) => {
                 this.addNewMessage(result);
-                console.log(result)
             });
 
             this.hubConnection.on('ReceiveNewSeen', (result: UpdatedSeenDto) => {
@@ -74,24 +73,33 @@ export default class DirectStore {
         if(!this.currentChat || this.currentChat.id !== result.chatId) {
             return;
         }
-        if(this.currentChat) {
-            switch(this.currentChat.type) {
-                case 0:
-                    const privateChat = {...this.currentChat.privateChat!, otherLastSeen: new Date(result.lastSeen)}; 
-                    this.currentChat = {...this.currentChat, privateChat};
-                    break;
-                case 1:
-                    const groupChat = this.currentChat!.groupChat!;
-                    groupChat!.members!.find(x => x.username === result.username)!.lastSeen = new Date(result.lastSeen); 
-                    this.currentChat! = {...this.currentChat, groupChat};
-                    break;
-                case 2:
-                    const channelChat = this.currentChat!.channelChat!;
-                    channelChat!.members!.find(x => x.username === result.username)!.lastSeen = new Date(result.lastSeen); 
-                    this.currentChat! = {...this.currentChat, channelChat};
-                    break;
-            }
+        const curChat = this.currentChat;
+        result.lastSeen = new Date(result.lastSeen);
+        switch(this.currentChat.type) {
+            case 0:
+                if(curChat.privateChat!.otherLastSeen! <= result.lastSeen)
+                    curChat.privateChat = {...curChat.privateChat!, otherLastSeen: result.lastSeen}; 
+                break;
+            case 1:
+                if(curChat.groupChat!.members!.find(x => x.username === result.username)!.lastSeen <= result.lastSeen)
+                    curChat.groupChat!.members!.find(x => x.username === result.username)!.lastSeen = result.lastSeen; 
+                break;
+            case 2:
+                if(curChat.channelChat!.members!.find(x => x.username === result.username)!.lastSeen <= result.lastSeen)
+                    curChat.channelChat!.members!.find(x => x.username === result.username)!.lastSeen = result.lastSeen; 
+                break;
         }
+        const chats = this.chats;
+        const chat = chats.find(x => x.id === result.chatId);
+        if(chat 
+            && chat.lastMessage 
+            && chat.lastMessage.username === store.userStore.user?.username 
+            && result.username !== store.userStore.user?.username
+            && result.lastSeen >= chat.lastMessage.createdAt) {
+            chat.lastMessageSeen = true;
+            this.chats = [...chats.filter(x => x.id !== result.chatId), chat];
+        }
+        this.currentChat = {...curChat};
     }
 
     searchChats = async (term: string) => {
@@ -308,6 +316,7 @@ export default class DirectStore {
 
     updateLocalMessage = (response: Message, id: number) => {
         if(this.currentChat) {
+            const curChat = this.currentChat;
             let msg = this.getCurrentMessages()?.find(x => x.id === id);
             if(!msg) {
                 return
@@ -320,17 +329,11 @@ export default class DirectStore {
             msg.url = response.url
             msg.id = response.id;
             msg.localBlob = undefined;
-            switch(this.currentChat.type) {
-                case 0:
-                    this.currentChat = {...this.currentChat};
-                    break;
-                case 1:
-                    this.currentChat! = {...this.currentChat};
-                    break;
-                case 2:
-                    this.currentChat! = {...this.currentChat};
-                    break;
+            if(!curChat.lastMessage || msg.createdAt > curChat.lastMessage.createdAt) {
+                curChat.lastMessage = msg;
+                curChat.lastMessageSeen = false;
             }
+            this.currentChat = curChat;
         }
     } 
 
