@@ -70,11 +70,23 @@ export default class DirectStore {
     }
 
     updateSeen = (result: UpdatedSeenDto) => {
+        result.lastSeen = new Date(result.lastSeen);
+
+        const chats = this.chats;
+        const chat = chats.find(x => x.id === result.chatId);
+        if(chat 
+            && chat.lastMessage 
+            && chat.lastMessage.username === store.userStore.user?.username 
+            && result.username !== store.userStore.user?.username
+            && result.lastSeen >= chat.lastMessage.createdAt) {
+            chat.lastMessageSeen = true;
+            this.chats = chats;
+        }
+
         if(!this.currentChat || this.currentChat.id !== result.chatId) {
             return;
         }
         const curChat = this.currentChat;
-        result.lastSeen = new Date(result.lastSeen);
         switch(this.currentChat.type) {
             case 0:
                 if(curChat.privateChat!.otherLastSeen! <= result.lastSeen)
@@ -89,16 +101,7 @@ export default class DirectStore {
                     curChat.channelChat!.members!.find(x => x.username === result.username)!.lastSeen = result.lastSeen; 
                 break;
         }
-        const chats = this.chats;
-        const chat = chats.find(x => x.id === result.chatId);
-        if(chat 
-            && chat.lastMessage 
-            && chat.lastMessage.username === store.userStore.user?.username 
-            && result.username !== store.userStore.user?.username
-            && result.lastSeen >= chat.lastMessage.createdAt) {
-            chat.lastMessageSeen = true;
-            this.chats = chats;
-        }
+
         this.currentChat = {...curChat};
     }
 
