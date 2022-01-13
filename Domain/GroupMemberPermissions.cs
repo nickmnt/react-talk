@@ -1,7 +1,10 @@
-﻿namespace Domain
+﻿using System.Text.Json.Serialization;
+
+namespace Domain
 {
     public class GroupMemberPermissions
     {
+        [JsonIgnore]
         public int Id { get; set; }
         public bool SendMessages { get; set; } = true;
         public bool SendMedia { get; set; } = true;

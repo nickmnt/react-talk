@@ -47,7 +47,7 @@ namespace Application.Chats.ChannelChats
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
 
-                var userChat = new UserChat { Chat = chat, AppUser = user };
+                var userChat = new UserChat { Chat = chat, AppUser = user, MembershipType = MemberType.Owner };
                 _context.UserChats.Add(userChat);
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);

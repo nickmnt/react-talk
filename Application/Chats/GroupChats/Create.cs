@@ -59,7 +59,7 @@ namespace Application.Chats.GroupChats
                 if (targets.Count == 0)
                     return Result<ChatDto>.Failure("There are 0 valid members");
       
-                var userChat = new UserChat { Chat = chat, AppUser = user };
+                var userChat = new UserChat { Chat = chat, AppUser = user, MembershipType = MemberType.Owner };
                 _context.UserChats.Add(userChat);
                 
                 
