@@ -95,4 +95,9 @@ export default class ChatStore {
         this.stack = [...this.stack, {type: 50, index: this.i, groupData: chat}];
         this.i += 1;
     }
+
+    clearStack = () => {
+        this.stack = [];
+        this.i = 0;
+    }
 }

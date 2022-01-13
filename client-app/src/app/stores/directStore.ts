@@ -15,6 +15,7 @@ export default class DirectStore {
     images: ImageElem[] = []
     videos: string[] = []
     updatingPermissionsAll = false;
+    loadingChatDetails = false;
 
     constructor() {
         makeAutoObservable(this);        
@@ -171,6 +172,8 @@ export default class DirectStore {
     }
 
     getChatDetails = async (chat: ChatDto) => {
+        store.chatStore.clearStack();
+        this.loadingChatDetails = true;
         switch(chat.type) {
             case 0:
                 await this.getPrivateChatDetails(chat);
@@ -182,6 +185,7 @@ export default class DirectStore {
                 await this.getChannelChatDetails(chat);
                 break;
         }
+        this.loadingChatDetails = false;
     }
     
     createLocalMessage = (body: string) => {
