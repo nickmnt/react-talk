@@ -57,6 +57,7 @@ export interface GroupDetailsDto {
     memberCount?: number;
     messages: Message[];
     me?: GroupMember;
+    memberPermissions: GroupMemberPermissions;
 }
 
 export interface GroupMember {

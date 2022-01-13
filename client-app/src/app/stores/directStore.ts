@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ChatDto, createLocalChat, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from "../models/chat";
+import { ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from "../models/chat";
 import { Profile } from "../models/profile";
 import { store } from "./store";
 
@@ -14,6 +14,7 @@ export default class DirectStore {
     currentChat: ChatDto | null = null;
     images: ImageElem[] = []
     videos: string[] = []
+    updatingPermissionsAll = false;
 
     constructor() {
         makeAutoObservable(this);        
@@ -505,6 +506,24 @@ export default class DirectStore {
                     this.currentChat = {...this.currentChat, channelChat};
                     break;
             }
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    updatePermissions = async (chat: ChatDto, permissions: GroupMemberPermissions, chatPage: ChatPage) => {
+        try {
+            this.updatingPermissionsAll = true;
+            await agent.Chats.updateMemberPermissions(chat.id,permissions);
+            runInAction(() => {
+                if(this.currentChat && this.currentChat.type === 1) {
+                    const groupChat = this.currentChat.groupChat!;
+                    groupChat.memberPermissions = permissions;
+                    this.currentChat = {...this.currentChat, groupChat};
+                    store.chatStore.removeFromStack(chatPage);
+                    this.updatingPermissionsAll = false;
+                }
+            })
         } catch(error) {
             console.log(error);
         }

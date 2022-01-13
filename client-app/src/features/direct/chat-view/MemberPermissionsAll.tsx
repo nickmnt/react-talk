@@ -13,16 +13,21 @@ import Stack from "@mui/material/Stack/Stack";
 import { Formik } from "formik";
 import { ChatDto, ChatPage } from "../../../app/models/chat";
 import { ToggleField } from "./ToggleField";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { observer } from "mobx-react-lite";
 
 export interface Props {
   chatPage: ChatPage;
   chat: ChatDto;
 }
 
-export default function MemberPermissionsAll({ chatPage }: Props) {
+export default observer(function MemberPermissionsAll({ chatPage, chat }: Props) {
   const {
-    chatStore: { removeFromStack },
+    chatStore: { removeFromStack }, directStore: {updatePermissions, updatingPermissionsAll}
   } = useStore();
+
+  if(updatingPermissionsAll)
+    return <LoadingComponent />
 
   return (
     <div
@@ -89,16 +94,9 @@ export default function MemberPermissionsAll({ chatPage }: Props) {
             >
               What can members of this group do?
             </Typography>
-
             <Formik
-              onSubmit={(values, { resetForm }) => {}}
-              initialValues={{
-                sendMessages: false,
-                sendMedia: false,
-                addUsers: false,
-                pinMessages: false,
-                changeChatInfo: false,
-              }}
+              onSubmit={(values, { resetForm }) => { updatePermissions(chat, values, chatPage) }}
+              initialValues={chat.groupChat!.memberPermissions}
             >
               {({ isSubmitting, isValid, handleSubmit, dirty }) => (
                 <>
@@ -117,7 +115,7 @@ export default function MemberPermissionsAll({ chatPage }: Props) {
                       ariaLabel="SpeedDial basic example"
                       sx={{ position: "absolute", bottom: 16, right: 16 }}
                       icon={<Done />}
-                      onClick={() => {}}
+                      onClick={() => handleSubmit() }
                     />
                   )}
                 </>
@@ -128,4 +126,4 @@ export default function MemberPermissionsAll({ chatPage }: Props) {
       </Box>
     </div>
   );
-}
+});

@@ -16,7 +16,7 @@ export const ToggleField = (props: ToggleFieldProps) => {
   // use `field` but override onChange
   return (
     <ListItem
-      secondaryAction={<Switch {...field} />}
+      secondaryAction={<Switch {...field} checked={field.value} />}
       sx={{ paddingRight: "1rem" }}
     >
       <ListItemButton>
