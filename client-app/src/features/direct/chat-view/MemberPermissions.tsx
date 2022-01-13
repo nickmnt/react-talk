@@ -130,16 +130,43 @@ export default function MemberPermissions({ member, chatPage }: Props) {
               }}
               innerRef={formRef}
             >
-              {({ isSubmitting, isValid, handleSubmit, dirty }) => (
+              {({ isSubmitting, isValid, handleSubmit, dirty, values, touched, setFieldValue }) => (
                 <>
                   <List sx={{ width: "60%" }}>
-                    <ToggleField name="sendMessages" label="Send Messages" />
-                    <ToggleField name="sendMedia" label="Send Media" />
-                    <ToggleField name="addUsers" label="Add Users" />
-                    <ToggleField name="pinMessages" label="Pin Messages" />
+                    <ToggleField
+                      name="sendMessages"
+                      label="Send Messages"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="sendMedia"
+                      label="Send Media"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="addUsers"
+                      label="Add Users"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="pinMessages"
+                      label="Pin Messages"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
                     <ToggleField
                       name="changeChatInfo"
                       label="Change Chat Info"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
                     />
                   </List>
                   {dirty && (

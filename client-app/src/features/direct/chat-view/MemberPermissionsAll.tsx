@@ -21,13 +21,16 @@ export interface Props {
   chat: ChatDto;
 }
 
-export default observer(function MemberPermissionsAll({ chatPage, chat }: Props) {
+export default observer(function MemberPermissionsAll({
+  chatPage,
+  chat,
+}: Props) {
   const {
-    chatStore: { removeFromStack }, directStore: {updatePermissions, updatingPermissionsAll}
+    chatStore: { removeFromStack },
+    directStore: { updatePermissions, updatingPermissionsAll },
   } = useStore();
 
-  if(updatingPermissionsAll)
-    return <LoadingComponent />
+  if (updatingPermissionsAll) return <LoadingComponent />;
 
   return (
     <div
@@ -95,19 +98,56 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
               What can members of this group do?
             </Typography>
             <Formik
-              onSubmit={(values, { resetForm }) => { updatePermissions(chat, values, chatPage) }}
+              onSubmit={(values, { resetForm }) => {
+                updatePermissions(chat, values, chatPage);
+              }}
               initialValues={chat.groupChat!.memberPermissions}
             >
-              {({ isSubmitting, isValid, handleSubmit, dirty }) => (
+              {({
+                isSubmitting,
+                isValid,
+                handleSubmit,
+                dirty,
+                setFieldValue,
+                values,
+                touched,
+              }) => (
                 <>
                   <List sx={{ width: "60%" }}>
-                    <ToggleField name="sendMessages" label="Send Messages" />
-                    <ToggleField name="sendMedia" label="Send Media" />
-                    <ToggleField name="addUsers" label="Add Users" />
-                    <ToggleField name="pinMessages" label="Pin Messages" />
+                    <ToggleField
+                      name="sendMessages"
+                      label="Send Messages"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="sendMedia"
+                      label="Send Media"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="addUsers"
+                      label="Add Users"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
+                    <ToggleField
+                      name="pinMessages"
+                      label="Pin Messages"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
+                    />
                     <ToggleField
                       name="changeChatInfo"
                       label="Change Chat Info"
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      touched={touched}
                     />
                   </List>
                   {dirty && (
@@ -115,7 +155,7 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
                       ariaLabel="SpeedDial basic example"
                       sx={{ position: "absolute", bottom: 16, right: 16 }}
                       icon={<Done />}
-                      onClick={() => handleSubmit() }
+                      onClick={() => handleSubmit()}
                     />
                   )}
                 </>
