@@ -97,7 +97,7 @@ export default class DirectStore {
             && result.username !== store.userStore.user?.username
             && result.lastSeen >= chat.lastMessage.createdAt) {
             chat.lastMessageSeen = true;
-            this.chats = [...chats.filter(x => x.id !== result.chatId), chat];
+            this.chats = chats;
         }
         this.currentChat = {...curChat};
     }
@@ -346,10 +346,12 @@ export default class DirectStore {
             msg.url = response.url
             msg.id = response.id;
             msg.localBlob = undefined;
-            if(!curChat.lastMessage || msg.createdAt > curChat.lastMessage.createdAt) {
-                curChat.lastMessage = msg;
-                curChat.lastMessageSeen = false;
+            const chat = this.chats.find(x => x.id === curChat.id)!;
+            if(!chat.lastMessage || msg.createdAt > chat.lastMessage.createdAt) {
+                chat.lastMessage = msg;
+                chat.lastMessageSeen = false;
             }
+            this.chats = [...this.chats];
             this.currentChat = curChat;
         }
     } 
