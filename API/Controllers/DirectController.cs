@@ -52,10 +52,13 @@ namespace API.Controllers
                 
                 foreach (var u in users.Value)
                 {
+                    var notSeenCount = await Mediator
+                        .Send(new NotSeenCount.Query { ChatId = command.ChatId, TargetUserId = u });
                     await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", new MessageNotifDto
                     {
                         Message = result.Value,
-                        ChatId = command.ChatId   
+                        ChatId = command.ChatId,
+                        NotSeenCount = notSeenCount.Value
                     });
                 }
             }
@@ -121,7 +124,8 @@ namespace API.Controllers
                     await _hubContext.Clients.User(u).SendAsync("ReceiveNewSeen", 
                         new UpdatedSeenDto {Username = _accessor.GetUsername(), 
                             ChatId = command.ChatId,
-                            LastSeen = command.NewLastSeen});
+                            LastSeen = command.NewLastSeen
+                        });
                 }
             }
             return HandleResult(result);

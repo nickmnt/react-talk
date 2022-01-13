@@ -7,5 +7,6 @@ namespace API.DTOs
     {
         public MessageDto Message { get; set; }
         public Guid ChatId { get; set; }
+        public int NotSeenCount { get; set; }
     }
 }

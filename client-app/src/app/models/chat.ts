@@ -106,6 +106,7 @@ export interface UpdatedSeenDto {
 export interface MessageNotifDto {
     message: Message;
     chatId: string;
+    notSeenCount: number;
 }
 
 export interface GroupMemberPermissions {

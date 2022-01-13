@@ -287,11 +287,28 @@ export default class DirectStore {
     }
 
     addNewMessage = (response: MessageNotifDto) => {
+        const chats = this.chats;
+        const chat = this.chats.find(x => x.id === response.chatId);
+
+        response.message.createdAt = new Date(response.message.createdAt);
+
+        if(chat) {
+            if(!chat.lastMessage) {
+                chat.lastMessage = response.message;
+                chat.notSeenCount = response.notSeenCount;
+            } else {
+                if(chat.lastMessage.createdAt < response.message.createdAt) {
+                    chat.lastMessage = response.message;
+                    chat.notSeenCount = response.notSeenCount;
+                }
+            }
+        }
+
+        this.chats = chats;
+        
         if(!this.currentChat || this.currentChat.id !== response.chatId) {
             return;
         }
-
-        response.message.createdAt = new Date(response.message.createdAt);
 
         switch(this.currentChat.type) {
             case 0:
@@ -479,6 +496,24 @@ export default class DirectStore {
         if(!this.currentChat)
             return;
 
+        const chats = this.chats;
+        const chat = chats.find(x => x.id === this.currentChat?.id);
+
+        if(chat) {
+            switch(chat.type) {
+                case 0:
+                    chat.notSeenCount = chat.privateChat!.messages.filter(x => x.createdAt > newLastSeen).length;
+                    break;
+                case 1:
+                    chat.notSeenCount = chat.groupChat!.messages.filter(x => x.createdAt > newLastSeen).length;
+                    break;
+                case 2:
+                    chat.notSeenCount = chat.channelChat!.messages.filter(x => x.createdAt > newLastSeen).length;
+                    break;
+            }
+            this.chats = chats;
+        }
+
         switch(this.currentChat.type) {
             case 0:
                 this.currentChat.privateChat!.myLastSeen = newLastSeen;
@@ -490,6 +525,9 @@ export default class DirectStore {
                 this.currentChat.channelChat!.me!.lastSeen = newLastSeen;
                 break;
         }
+
+        this.currentChat = {...this.currentChat};
+
         try {
             await agent.Chats.updateSeen(this.currentChat.id, newLastSeen);
         } catch(error) {
