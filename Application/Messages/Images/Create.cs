@@ -22,6 +22,7 @@ namespace Application.Messages.Images
             public IFormFile File { get; set; }
             public string Body { get; set; }
             public Guid ChatId { get; set; }
+            public int ReplyToMessageId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<MessageDto>>
@@ -45,18 +46,62 @@ namespace Application.Messages.Images
                 if(request.File.Length > 52_428_800)
                     return Result<MessageDto>.Failure("File size is larger than 50 Megabytes.");
                 
-                var userChat = await _context
+                UserChat userChat = null;
+                if (request.ReplyToMessageId != -1)
+                {
+                  userChat = await _context
                     .UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .Include(x => x.Chat.PrivateChat)
+                    .ThenInclude(x => x.Messages)
                     .Include(x => x.Chat.GroupChat)
+                    .ThenInclude(x => x.Messages)
                     .Include(x => x.Chat.ChannelChat)
+                    .ThenInclude(x => x.Messages)
                     .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
-
+                }
+                else
+                {
+                    userChat = await _context
+                        .UserChats
+                        .Include(x => x.AppUser)
+                        .Include(x => x.Chat)
+                        .Include(x => x.Chat.PrivateChat)
+                        .Include(x => x.Chat.GroupChat)
+                        .Include(x => x.Chat.ChannelChat)
+                        .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
+                                                   x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
+                }
                 if (userChat == null)
                     return null;
+
+                Message replyTo = null;
+                if (request.ReplyToMessageId != -1)
+                {
+                    switch (userChat.Chat.Type)
+                    {
+                        case ChatType.PrivateChat:
+                            replyTo = userChat.Chat.PrivateChat.Messages.FirstOrDefault(x =>
+                                x.Id == request.ReplyToMessageId);
+                            break;
+                        case ChatType.Group:
+                            replyTo = userChat.Chat.GroupChat.Messages.FirstOrDefault(x =>
+                                x.Id == request.ReplyToMessageId);
+                            break;
+                        case ChatType.Channel:
+                            replyTo = userChat.Chat.ChannelChat.Messages.FirstOrDefault(x =>
+                                x.Id == request.ReplyToMessageId);
+                            break;
+                    }
+
+                    if (replyTo == null)
+                    {
+                        return Result<MessageDto>.Failure(
+                            "The messages you wanted to reply to does not exist in the chat");
+                    }
+                }
 
                 var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
 
@@ -66,7 +111,8 @@ namespace Application.Messages.Images
                     Sender = userChat.AppUser,
                     Body = request.Body,
                     Url = photoUploadResult.Url,
-                    PublicId = photoUploadResult.PublicId
+                    PublicId = photoUploadResult.PublicId,
+                    ReplyTo = replyTo
                 };
                 
                 switch (userChat.Chat.Type)

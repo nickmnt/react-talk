@@ -14,5 +14,6 @@ namespace Application.Messages
         public string PublicId { get; set; }
         public string Url { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int ReplyToId { get; set; }
     }
 }

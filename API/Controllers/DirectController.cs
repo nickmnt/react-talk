@@ -41,9 +41,9 @@ namespace API.Controllers
         }
 
         [HttpPost("messages")]
-        public async Task<IActionResult> CreateMessage(CreateMessageDto command)
+        public async Task<IActionResult> CreateMessage(Create.Command command)
         {
-            var result = await Mediator.Send(new Create.Command { Body = command.Body, ChatId = command.ChatId });
+            var result = await Mediator.Send(command);
             
             if (result.IsSuccess)
             {

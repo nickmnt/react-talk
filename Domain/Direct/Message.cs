@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Direct
 {
@@ -11,5 +12,8 @@ namespace Domain.Direct
         public string PublicId { get; set; }
         public string Url { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int? ReplyToId { get; set; }
+        [ForeignKey("ReplyToId")]
+        public virtual Message ReplyTo { get; set; }
     }
 }

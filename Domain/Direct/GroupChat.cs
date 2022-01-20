@@ -11,6 +11,6 @@ namespace Domain.Direct
         public string Description { get; set; }
         public ICollection<Message> Messages { get; set; } = new List<Message>();
         public GroupMemberPermissions MemberPermissions { get; set; } = new ();
-        [JsonIgnore] public int MemberPermissionsId { get; set; }
+        [JsonIgnore] public int? MemberPermissionsId { get; set; }
     }
 }
