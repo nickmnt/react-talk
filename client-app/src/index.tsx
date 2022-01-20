@@ -20,7 +20,7 @@ export const history = createBrowserHistory();
 const theme = createTheme({
   typography: {
     // In Japanese the characters are usually larger.
-    fontSize: 16,
+    htmlFontSize: 10,
     fontFamily: [
       'Roboto',
       '-apple-system',

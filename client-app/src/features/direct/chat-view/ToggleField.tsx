@@ -3,7 +3,7 @@ import ListItemButton from "@mui/material/ListItemButton/ListItemButton";
 import ListItemText from "@mui/material/ListItemText/ListItemText";
 import Switch from "@mui/material/Switch/Switch";
 import { FormikTouched, useField } from "formik";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { GroupMemberPermissions } from "../../../app/models/chat";
 
 export interface ToggleFieldProps {
