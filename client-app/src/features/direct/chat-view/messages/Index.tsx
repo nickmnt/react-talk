@@ -13,6 +13,11 @@ import Menu from "@mui/material/Menu/Menu";
 import MenuItem from "@mui/material/MenuItem/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText/ListItemText";
+import Paper from "@mui/material/Paper/Paper";
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from "@mui/material/IconButton/IconButton";
+import Stack from "@mui/material/Stack/Stack";
+import Typography from "@mui/material/Typography/Typography";
 
 export default observer(function Messages() {
 
@@ -40,7 +45,7 @@ export default observer(function Messages() {
         return null;
 
     return (
-        <>
+        <div style={{display: 'flex', flex: 1, overflowY: 'auto', flexDirection: 'column-reverse'}}>
             <ScrollableFeed className="messages">
                 {(currentChat?.type === 0 || currentChat?.type === -10) && user && 
                 currentChat.privateChat?.messages.map((message, i) => 
@@ -58,6 +63,21 @@ export default observer(function Messages() {
                     <Message onRightClick={onRightClick} message={message} />
                 </div>)}
             </ScrollableFeed>
+            <Paper square sx={{height: '5.5rem', width: '100%', backgroundColor: 'white', display: 'flex', flexDirection: 'row'}}>
+                <div style={{flex:1}}>
+                    <Stack direction="column" justifyContent='center' sx={{marginLeft: '1.5rem', fontSize: '1rem', height: '100%'}}>
+                        <Typography fontSize='1.4rem' variant='h6' sx={{color: '#007FFF'}}>
+                            Pinned Message
+                        </Typography>
+                        <Typography fontSize='1.4rem'>
+                            abcdABCDabcdABCDabcdABCD
+                        </Typography>
+                    </Stack>
+                </div>
+                <IconButton style={{width: 48, height: 48}}>
+                    <CloseIcon />
+                </IconButton>
+            </Paper>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -101,6 +121,6 @@ export default observer(function Messages() {
                 </MenuItem>
             </Menu>
             <SRLWrapper elements={images} />
-        </>
+        </div>
     );
 });
