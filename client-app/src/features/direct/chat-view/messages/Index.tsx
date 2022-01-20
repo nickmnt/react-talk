@@ -26,7 +26,7 @@ export default observer(function Messages() {
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
 
   const {
-    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById },
+    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply },
     userStore: { user },
   } = useStore();
 
@@ -121,7 +121,7 @@ export default observer(function Messages() {
               <Typography fontSize="1.4rem">{replyMessage.body}</Typography>
             </Stack>
           </div>
-          <IconButton style={{ width: 48, height: 48, margin: "auto 0" }}>
+          <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={clearReply}>
             <CloseIcon />
           </IconButton>
         </Paper>
@@ -175,7 +175,9 @@ export default observer(function Messages() {
           backgroundColor: "white",
           display: "flex",
           flexDirection: "row",
+          zIndex: 1
         }}
+        elevation={3}
       >
         <div style={{ flex: 1 }}>
           <Stack

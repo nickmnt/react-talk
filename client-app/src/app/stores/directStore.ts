@@ -186,6 +186,7 @@ export default class DirectStore {
 
     getChatDetails = async (chat: ChatDto) => {
         store.chatStore.clearStack();
+        this.replyMessage = null;
         this.loadingChatDetails = true;
         switch(chat.type) {
             case 0:
@@ -216,7 +217,7 @@ export default class DirectStore {
                 image: "",
                 publicId: "",
                 url: "",
-                replyToId: 0
+                replyToId: this.replyMessage ? this.replyMessage.id : 0
             });
         
         id--;
@@ -238,7 +239,8 @@ export default class DirectStore {
             image: "",
             publicId: "",
             url: "",
-            localBlob: file
+            localBlob: file,
+            replyToId: this.replyMessage ? this.replyMessage.id : 0
         } as Message;
 
         switch(this.currentChat.type) {
@@ -272,7 +274,8 @@ export default class DirectStore {
             image: "",
             publicId: "",
             url: "",
-            localBlob: file
+            localBlob: file,
+            replyToId: this.replyMessage ? this.replyMessage.id : 0
         } as Message;
 
         switch(this.currentChat.type) {
@@ -366,9 +369,10 @@ export default class DirectStore {
             return;
         const id = this.createLocalMessage(body);
         if(id === -1) 
-            return
+            return;
         const response = await agent.Chats.createMessage(body, this.currentChat.id, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response, id);
+        this.replyMessage = null;
     }
 
     createPhoto = async (file: Blob, body: string) => {
@@ -388,6 +392,7 @@ export default class DirectStore {
         let config = {};
         const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
+        this.replyMessage = null;
     }
 
     createVideo = async (file: Blob, body: string) => {
@@ -407,6 +412,7 @@ export default class DirectStore {
         let config = {}
         const response = await agent.Chats.createVideo(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
+        this.replyMessage = null;
     }
 
     createPrivateChat = async (username: string, body: string, file: FileRecord | null) => {
@@ -600,5 +606,9 @@ export default class DirectStore {
 
     getMessageIndexById = (id: number) => {
         return this.getCurrentMessages()?.findIndex(x => x.id === id);
+    }
+
+    clearReply = () => {
+        this.replyMessage = null;
     }
 }

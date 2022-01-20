@@ -4,9 +4,9 @@ import { useStore } from '../../../app/stores/store';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import Done from '@mui/icons-material/Done';
 import DoubleTick from '../chat-view/messages/message-component/text/DoubleTick';
 import Paper from '@mui/material/Paper/Paper';
+import Tick from '../chat-view/messages/message-component/text/Tick';
 
 interface Props {
     chat: ChatDto;
@@ -32,10 +32,8 @@ export default observer(function Chat({chat}: Props) {
                     <div>
                     {chat.lastMessage?.username === user!.username && (
                         chat.lastMessageSeen ? 
-                            <DoubleTick></DoubleTick>
-                        :<Done>
-
-                        </Done>
+                            <DoubleTick/>
+                        :<Tick/>
                     )}
                     {chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                 </div>
