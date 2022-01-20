@@ -46,6 +46,22 @@ export default observer(function Messages() {
 
     return (
         <div style={{display: 'flex', flex: 1, overflowY: 'auto', flexDirection: 'column-reverse'}}>
+            <Paper square sx={{height: '5.5rem', width: '100%', backgroundColor: 'white', display: 'flex', flexDirection: 'row'}}>
+                <ReplyIcon className="mirror" style={{width: 30, height: 30, margin: 'auto 0', marginLeft: '1rem', color: '#007FFF'}}/>
+                <div style={{flex:1}}>
+                    <Stack direction="column" justifyContent='center' sx={{marginLeft: '1.5rem', fontSize: '1rem', height: '100%'}}>
+                        <Typography fontSize='1.4rem' variant='h6' sx={{color: '#007FFF'}}>
+                            Cool Sample Username
+                        </Typography>
+                        <Typography fontSize='1.4rem'>
+                            abcdABCDabcdABCDabcdABCD
+                        </Typography>
+                    </Stack>
+                </div>
+                <IconButton style={{width: 48, height: 48, margin: 'auto 0'}}>
+                    <CloseIcon />
+                </IconButton>
+            </Paper>
             <ScrollableFeed className="messages">
                 {(currentChat?.type === 0 || currentChat?.type === -10) && user && 
                 currentChat.privateChat?.messages.map((message, i) => 
@@ -74,7 +90,7 @@ export default observer(function Messages() {
                         </Typography>
                     </Stack>
                 </div>
-                <IconButton style={{width: 48, height: 48}}>
+                <IconButton style={{width: 48, height: 48, margin: 'auto 0'}}>
                     <CloseIcon />
                 </IconButton>
             </Paper>
