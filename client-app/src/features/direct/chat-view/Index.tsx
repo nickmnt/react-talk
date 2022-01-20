@@ -29,7 +29,7 @@ export default observer(function ChatView() {
             <ChatInput />
           </>
             }
-          {stack.map((elem, i) => (
+          <div style={{zIndex: 1000}}>{stack.map((elem, i) => (
             <div key={i}>
               {elem.type === 0 && <ChatDetails chatPage={elem} />}
               {elem.type === 1 && <ChatDetails chatPage={elem} />}
@@ -47,6 +47,7 @@ export default observer(function ChatView() {
               )}
             </div>
           ))}
+          </div>
         </>
       ) : (
         <div className="chatView__welcome">
