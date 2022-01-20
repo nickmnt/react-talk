@@ -10,7 +10,7 @@ interface Props {
     onRightClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export default observer(function Message({message, onRightClick}: Props) {
+export default observer(function MessageComponent({message, onRightClick}: Props) {
     const ref = useRef<any>(null);
     const inViewport = useIntersection(ref, 1);
     const [doubleTick, setDoubleTick] = useState(false);

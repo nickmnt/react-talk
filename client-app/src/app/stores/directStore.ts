@@ -17,6 +17,7 @@ export default class DirectStore {
     videos: string[] = []
     updatingPermissionsAll = false;
     loadingChatDetails = false;
+    replyMessage: Message | null = null;
 
     constructor() {
         makeAutoObservable(this);        
@@ -586,5 +587,9 @@ export default class DirectStore {
         } catch(error) {
             console.log(error);
         }
+    }
+
+    setReplyMessage = (message: Message) => {
+        this.replyMessage = message;
     }
 }

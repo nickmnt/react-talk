@@ -5,7 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Done from '@mui/icons-material/Done';
-import DoubleTick from '../chat-view/messages/message/text/DoubleTick';
+import DoubleTick from '../chat-view/messages/message-component/text/DoubleTick';
 import Paper from '@mui/material/Paper/Paper';
 
 interface Props {
