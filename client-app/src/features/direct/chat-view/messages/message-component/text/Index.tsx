@@ -7,6 +7,8 @@ import { useLightbox } from 'simple-react-lightbox';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../../../app/stores/store';
 import Paper from '@mui/material/Paper/Paper';
+import Stack from "@mui/material/Stack/Stack";
+import Typography from "@mui/material/Typography/Typography";
 
 interface Props {
     isMe: boolean;
@@ -21,15 +23,36 @@ interface Props {
     isLocal: boolean;
     localBlob: Blob | undefined;
     message: Message;
+    goToMessage: (id: number) => void;
 }
 
-export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message}: Props) {
+export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage}: Props) {
     const { openLightbox } = useLightbox()
 
-    const {directStore: {getImageIndex}} = useStore()
+    const {directStore: {getImageIndex, getMessageById}} = useStore()
+    const replyTo = getMessageById(message.replyToId);
 
     return (
         <Paper className={`text${isMe ? "--me" : "--other"}`} square elevation={6}>
+            {replyTo && 
+            <div style={{width: '100%', marginLeft: '1rem', height: '3.5rem', display: 'flex', marginTop: '1rem', opacity: '.8', cursor: 'pointer'}}
+                onClick={() => goToMessage(replyTo.id)}>
+                <div style={{width: '.3rem', height: '100%', backgroundColor: '#007fff'}} />
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    sx={{ margin: "0 1.5rem", fontSize: "1rem", height: "100%" }}
+                >
+                    <Typography
+                        fontSize="1.4rem"
+                        variant="h6"
+                        sx={{ color: "#007FFF" }}
+                    >
+                    {replyTo.username}
+                    </Typography>
+                    <Typography fontSize="1.4rem">{replyTo.body}</Typography>
+                </Stack>
+            </div>}
             {type === 1 && <img onClick={() => openLightbox(getImageIndex(message.id))} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
             {type === 2 && <ReactPlayer controls={true} url={isLocal ?  URL.createObjectURL(localBlob!) : attachedVideo} />}
             <div className="text__container">

@@ -119,23 +119,25 @@ const Search = {
 const Chats = {
     createPrivateChat: (targetUsername: string) => requests.post<ChatDto>(`/direct/`, {targetUsername}),
     getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
-    createMessage: (body: string, chatId: string) => requests.post<Message>('/direct/messages', {body,chatId}),
-    createPhoto: (file: Blob, body: string, chatId: string, config: any) => {
+    createMessage: (body: string, chatId: string, replyToMessageId: number) => requests.post<Message>('/direct/messages', {body,chatId, replyToMessageId}),
+    createPhoto: (file: Blob, body: string, chatId: string, config: any, replyToMessageId: number) => {
         let formData = new FormData();
         formData.append('File', file);
         formData.append('File', file);
         formData.append('Body', body);
         formData.append('ChatId', chatId);
+        formData.append('ReplyToMessageId', replyToMessageId.toString());
         return axios.post<Message>('/direct/photos', formData, {
             headers: {'Content-type': 'multipart/form-data'},
             ...config
         });
     },
-    createVideo: (file: Blob, body: string, chatId: string, config: any) => {
+    createVideo: (file: Blob, body: string, chatId: string, config: any, replyToMessageId: number) => {
         let formData = new FormData();
         formData.append('File', file);
         formData.append('Body', body);
         formData.append('ChatId', chatId);
+        formData.append('ReplyToMessageId', replyToMessageId.toString());
         return axios.post<Message>('/direct/videos', formData, {
             headers: {'Content-type': 'multipart/form-data'},
             ...config

@@ -41,6 +41,7 @@ export interface Message {
     local: boolean;
     localBlob?: Blob;
     localProgress?: number;
+    replyToId: number;
 }
 
 export interface ChannelDetailsDto {

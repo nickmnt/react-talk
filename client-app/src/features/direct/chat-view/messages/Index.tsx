@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useStore } from "../../../../app/stores/store";
 import MessageComponent from "./message-component/Index";
 import ReplyIcon from "@mui/icons-material/Reply";
@@ -23,11 +23,37 @@ import { Message } from "../../../../app/models/chat";
 export default observer(function Messages() {
   const [menuTop, setMenuTop] = useState(0);
   const [menuLeft, setMenuLeft] = useState(0);
+  const messagesRef = useRef<(HTMLElement | null)[]>([]);
 
   const {
-    directStore: { currentChat, images, replyMessage, setReplyMessage },
+    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById },
     userStore: { user },
   } = useStore();
+
+  const goToMessage = (id: number) => {
+    const searchResult = getMessageIndexById(id);
+    if(searchResult !== undefined) {
+      console.log(searchResult)
+      messagesRef.current[searchResult]?.scrollIntoView(({ behavior: 'smooth', block: 'nearest', inline: 'start' }));
+    }
+  }
+
+  useEffect(() => {
+    if(!currentChat)
+      return;
+    switch(currentChat.type) {
+      case 0:
+        messagesRef.current = messagesRef.current.slice(0, currentChat.privateChat?.messages.length);
+        break;
+      case 1:
+        messagesRef.current = messagesRef.current.slice(0, currentChat.groupChat?.messages.length);
+        break;
+      case 2:
+        messagesRef.current = messagesRef.current.slice(0, currentChat.channelChat?.messages.length);
+        break;
+    }
+  }, [currentChat]);
+ 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [menuMsg, setMenuMsg] = React.useState<null | Message>(null);
   const open = Boolean(anchorEl);
@@ -109,8 +135,9 @@ export default observer(function Messages() {
                 message.username === user.username && "messages__message--me"
               }`}
               key={i}
+              ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} />
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
             </div>
           ))}
         {currentChat?.type === 1 &&
@@ -121,8 +148,9 @@ export default observer(function Messages() {
                 message.username === user.username && "messages__message--me"
               }`}
               key={i}
+              ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} />
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
             </div>
           ))}
         {currentChat?.type === 2 &&
@@ -133,8 +161,9 @@ export default observer(function Messages() {
                 message.username === user.username && "messages__message--me"
               }`}
               key={i}
+              ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} />
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
             </div>
           ))}
       </ScrollableFeed>

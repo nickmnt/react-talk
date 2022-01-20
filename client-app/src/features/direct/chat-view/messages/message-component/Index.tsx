@@ -8,9 +8,10 @@ import useIntersection from "../../../../../app/models/useIntersection";
 interface Props {
     message: Message;
     onRightClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+    goToMessage: (id: number) => void;
 }
 
-export default observer(function MessageComponent({message, onRightClick}: Props) {
+export default observer(function MessageComponent({message, onRightClick, goToMessage}: Props) {
     const ref = useRef<any>(null);
     const inViewport = useIntersection(ref, 1);
     const [doubleTick, setDoubleTick] = useState(false);
@@ -101,7 +102,8 @@ export default observer(function MessageComponent({message, onRightClick}: Props
             <div className="message" onContextMenu={onRightClick} ref={ref}>
                 {(!isMe && showImg) && <img src={imgSrc} alt="user" className="message__img" />}
                 <Text name={message.displayName} isMe={isMe} text={message.body} date={message.createdAt} isDoubleTick={doubleTick} showImg={showImg} attachedImg={message.type === 1? message.url : ''}
-                    attachedVideo={message.type === 2? message.url: ''} isLocal={message.local} localBlob={message.localBlob} type={message.type} message={message}/>
+                    attachedVideo={message.type === 2? message.url: ''} isLocal={message.local} localBlob={message.localBlob} type={message.type} message={message}
+                    goToMessage={goToMessage}/>
             </div>   
         </>
     );

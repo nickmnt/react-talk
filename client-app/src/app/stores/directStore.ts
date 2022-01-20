@@ -215,7 +215,8 @@ export default class DirectStore {
                 type: 0,
                 image: "",
                 publicId: "",
-                url: ""
+                url: "",
+                replyToId: 0
             });
         
         id--;
@@ -366,7 +367,7 @@ export default class DirectStore {
         const id = this.createLocalMessage(body);
         if(id === -1) 
             return
-        const response = await agent.Chats.createMessage(body, this.currentChat.id);
+        const response = await agent.Chats.createMessage(body, this.currentChat.id, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response, id);
     }
 
@@ -385,7 +386,7 @@ export default class DirectStore {
         //   },
         // };
         let config = {};
-        const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id, config);
+        const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
     }
 
@@ -404,7 +405,7 @@ export default class DirectStore {
         //   },
         // };
         let config = {}
-        const response = await agent.Chats.createVideo(file ,body, this.currentChat.id, config);
+        const response = await agent.Chats.createVideo(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
     }
 
@@ -591,5 +592,13 @@ export default class DirectStore {
 
     setReplyMessage = (message: Message) => {
         this.replyMessage = message;
+    }
+
+    getMessageById = (id: number) => {
+        return this.getCurrentMessages()?.find(x => x.id === id);
+    }
+
+    getMessageIndexById = (id: number) => {
+        return this.getCurrentMessages()?.findIndex(x => x.id === id);
     }
 }
