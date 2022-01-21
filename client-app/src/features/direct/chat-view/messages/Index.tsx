@@ -20,6 +20,7 @@ import Stack from "@mui/material/Stack/Stack";
 import Typography from "@mui/material/Typography/Typography";
 import { Message } from "../../../../app/models/chat";
 import DateMessage from "./DateMessage";
+import { toast } from "react-toastify";
 
 export default observer(function Messages() {
   const [menuTop, setMenuTop] = useState(0);
@@ -221,7 +222,10 @@ export default observer(function Messages() {
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => {
+          navigator.clipboard.writeText(menuMsg!.body);
+          toast('Copied text to clipboard', {type: 'success'});
+        }}>
           <ListItemIcon>
             <ContentCopyIcon fontSize="small" />
           </ListItemIcon>
