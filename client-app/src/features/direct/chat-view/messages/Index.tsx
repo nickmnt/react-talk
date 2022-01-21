@@ -19,6 +19,7 @@ import IconButton from "@mui/material/IconButton/IconButton";
 import Stack from "@mui/material/Stack/Stack";
 import Typography from "@mui/material/Typography/Typography";
 import { Message } from "../../../../app/models/chat";
+import DateMessage from "./DateMessage";
 
 export default observer(function Messages() {
   const [menuTop, setMenuTop] = useState(0);
@@ -137,7 +138,8 @@ export default observer(function Messages() {
               key={i}
               ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
+              {message.type === 1000 ? <DateMessage message={message} /> : 
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
             </div>
           ))}
         {currentChat?.type === 1 &&
@@ -150,7 +152,8 @@ export default observer(function Messages() {
               key={i}
               ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
+              {message.type === 1000 ? <DateMessage message={message} /> : 
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
             </div>
           ))}
         {currentChat?.type === 2 &&
@@ -163,7 +166,8 @@ export default observer(function Messages() {
               key={i}
               ref={el => messagesRef.current[i] = el} 
             >
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>
+              {message.type === 1000 ? <DateMessage message={message} /> :
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
             </div>
           ))}
       </ScrollableFeed>

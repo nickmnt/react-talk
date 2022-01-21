@@ -199,6 +199,7 @@ export default class DirectStore {
                 await this.getChannelChatDetails(chat);
                 break;
         }
+        this.handleDateMessages();
         this.loadingChatDetails = false;
     }
     
@@ -337,6 +338,7 @@ export default class DirectStore {
         }
 
         this.updateMessages();
+        this.handleDateMessages();
     }
 
     updateLocalMessage = (response: Message, id: number) => {
@@ -373,6 +375,7 @@ export default class DirectStore {
         const response = await agent.Chats.createMessage(body, this.currentChat.id, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response, id);
         this.replyMessage = null;
+        this.handleDateMessages();
     }
 
     createPhoto = async (file: Blob, body: string) => {
@@ -393,6 +396,7 @@ export default class DirectStore {
         const response = await agent.Chats.createPhoto(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
         this.replyMessage = null;
+        this.handleDateMessages();
     }
 
     createVideo = async (file: Blob, body: string) => {
@@ -413,6 +417,7 @@ export default class DirectStore {
         const response = await agent.Chats.createVideo(file ,body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
         this.replyMessage = null;
+        this.handleDateMessages();
     }
 
     createPrivateChat = async (username: string, body: string, file: FileRecord | null) => {
@@ -610,5 +615,39 @@ export default class DirectStore {
 
     clearReply = () => {
         this.replyMessage = null;
+    }
+
+    handleDateMessages = () => { 
+        if(!this.currentChat)
+            return;
+        const withoutDates = this.getCurrentMessages()?.filter(x => x.type !== 1000);
+        const result: Message[] = [];
+        let lastDate: Date | null = null;
+        withoutDates?.forEach((x,i) => {
+            const withoutTime = new Date(Date.UTC(x.createdAt.getFullYear(),x.createdAt.getMonth(), x.createdAt.getDate()));
+            if(!lastDate || withoutTime > lastDate) {
+                lastDate = withoutTime;
+                result.push({
+                    id,
+                    type: 1000,
+                    createdAt: withoutTime} as Message);
+                result.push(x);
+                id--;
+            } else {
+                result.push(x);
+            }
+        })
+        switch(this.currentChat?.type) {
+            case 0:
+                this.currentChat.privateChat!.messages = result; 
+                break;
+            case 1:
+                this.currentChat.groupChat!.messages = result; 
+                break;
+            case 2:
+                this.currentChat.channelChat!.messages = result; 
+                break;
+        }
+        this.currentChat = {...this.currentChat};
     }
 }
