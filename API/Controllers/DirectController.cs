@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using API.DTOs;
 using API.SignalR;
+using Application;
 using Application.Chats;
 using Application.Chats.ChannelChats;
 using Application.Chats.UserChats;
@@ -139,6 +140,12 @@ namespace API.Controllers
         
         [HttpPost("removeMember")]
         public async Task<IActionResult> RemoveMember(RemoveMember.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpPost("addPin")]
+        public async Task<IActionResult> AddPin(AddPin.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

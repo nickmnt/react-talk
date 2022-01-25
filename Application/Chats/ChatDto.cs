@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Application.Messages;
 
@@ -16,5 +17,6 @@ namespace Application.Chats
         public bool LastMessageSeen { get; set; }
         public int NotSeenCount { get; set; }
         [JsonIgnore] public string ParticipantUsername { get; set; }
+        public ICollection<PinDto> Pins { get; set; } = new List<PinDto>();
     }
 }

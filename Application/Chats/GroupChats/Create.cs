@@ -71,7 +71,7 @@ namespace Application.Chats.GroupChats
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);
                 if (result > 0)
-                    return Result<ChatDto>.Success(ChatMapping.MapGroup(userChat));
+                    return Result<ChatDto>.Success(ChatMapping.MapGroup(userChat, _mapper));
                 
                 return Result<ChatDto>.Failure("Failed to create the new group chat.");
             }

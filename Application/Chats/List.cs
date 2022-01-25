@@ -61,6 +61,8 @@ namespace Application.Chats
                     .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.Pins)
                     .Where(x => x.AppUser.UserName == user.UserName)
                     .ToListAsync(cancellationToken);
 
@@ -72,10 +74,10 @@ namespace Application.Chats
                     switch (chat.Type)
                     {
                         case ChatType.Channel:
-                            mapped = ChatMapping.MapChannel(userChat);
+                            mapped = ChatMapping.MapChannel(userChat, _mapper);
                             break;
                         case ChatType.Group:
-                            mapped = ChatMapping.MapGroup(userChat);
+                            mapped = ChatMapping.MapGroup(userChat, _mapper);
                             break;
                         case ChatType.PrivateChat:
                             mapped = _mapper.Map<ChatDto>(userChat);

@@ -11,5 +11,6 @@ namespace Domain.Direct
         public GroupChat GroupChat { get; set; }
         public ChannelChat ChannelChat { get; set; }
         public ICollection<UserChat> Users { get; set; }
+        public ICollection<Pin> Pins { get; set; } = new List<Pin>();
     }
 }

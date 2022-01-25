@@ -78,7 +78,8 @@ namespace Application.Core
                 .ForMember(d => d.PrivateChatId, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.PrivateChat.Id : -1))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.DisplayName: null))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.Photos.FirstOrDefault(x => x.IsMain).Url : null))
-                .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.AppUser.UserName));
+                .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.Pins, o => o.MapFrom(s => s.Chat.Pins.Where(x => x.IsMutual || x.AppUserId == s.AppUserId)));
             CreateMap<Message, MessageDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Sender.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
@@ -100,6 +101,7 @@ namespace Application.Core
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(d => d.ChatId, o => o.MapFrom(s => s.ChatId));
+            CreateMap<Pin, PinDto>();
         }
     }
 }
