@@ -7,7 +7,7 @@ import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
 import { SearchResult } from '../models/search';
-import { ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, PrivateChat } from '../models/chat';
+import { ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -152,7 +152,9 @@ const Chats = {
     updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, {chatId, newLastSeen}),
     removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember/`, {chatId, username}),
     updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions) => 
-        requests.post<boolean>(`group/updateMembersPermissions`, {chatId, ...permissions})
+        requests.post<boolean>(`group/updateMembersPermissions`, {chatId, ...permissions}),
+    addPin: (chatId: string, messageId: number, isMutual: boolean) => 
+        requests.post<Pin>('direct/addPin', {chatId, messageId, isMutual})
 }
 
 const agent = {

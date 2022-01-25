@@ -1,5 +1,11 @@
 import { Profile } from "./profile";
 
+export interface Pin {
+    id: number;
+    messageId: number;
+    isMutual: boolean;
+}
+
 export interface ChatDto {
     id: string;
     type: number;
@@ -12,6 +18,7 @@ export interface ChatDto {
     lastMessage: Message | null;
     lastMessageSeen: boolean;
     notSeenCount: number;
+    pins: Pin[];
 }
 
 export interface SearchChatDto {
@@ -122,5 +129,5 @@ export const createLocalChat = (username: string, displayName: string, image: st
     var date = new Date();
     date.setDate(date.getDate() - 1);
     const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0} as ChatDto;
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: []} as ChatDto;
 }

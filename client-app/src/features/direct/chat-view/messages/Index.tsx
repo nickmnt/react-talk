@@ -28,7 +28,7 @@ export default observer(function Messages() {
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
 
   const {
-    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply },
+    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin },
     userStore: { user },
   } = useStore();
 
@@ -77,6 +77,7 @@ export default observer(function Messages() {
 
   if (!currentChat) return null;
 
+  {console.log(currentChat.pins.length)}
   return (
     <div
       style={{
@@ -172,7 +173,7 @@ export default observer(function Messages() {
             </div>
           ))}
       </ScrollableFeed>
-      <Paper
+      {currentChat.pins.length > 0 && <Paper
         square
         sx={{
           height: "5.5rem",
@@ -197,13 +198,13 @@ export default observer(function Messages() {
             >
               Pinned Message
             </Typography>
-            <Typography fontSize="1.4rem">abcdABCDabcdABCDabcdABCD</Typography>
+            <Typography fontSize="1.4rem">{getMessageById(currentChat.pins[0].messageId)?.body}</Typography>
           </Stack>
         </div>
         <IconButton style={{ width: 48, height: 48, margin: "auto 0" }}>
           <CloseIcon />
         </IconButton>
-      </Paper>
+      </Paper>}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -237,7 +238,7 @@ export default observer(function Messages() {
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => addPin(currentChat.id, menuMsg!.id, true)}>
           <ListItemIcon>
             <PushPinIcon fontSize="small" />
           </ListItemIcon>

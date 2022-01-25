@@ -650,4 +650,16 @@ export default class DirectStore {
         }
         this.currentChat = {...this.currentChat};
     }
+
+    addPin = async (chatId: string, messageId: number, isMutual: boolean) => {
+        if(!this.currentChat)
+            return;
+        try {
+            const response = await agent.Chats.addPin(chatId, messageId, isMutual);
+            this.currentChat.pins = [...this.currentChat.pins, response];
+            this.currentChat.pins = this.currentChat.pins.sort((a,b) => a.id - b.id);
+        } catch(error) {
+            console.log(error);
+        }
+    }
 }
