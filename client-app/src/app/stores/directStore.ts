@@ -18,6 +18,7 @@ export default class DirectStore {
     updatingPermissionsAll = false;
     loadingChatDetails = false;
     replyMessage: Message | null = null;
+    removingPin = false;
 
     constructor() {
         makeAutoObservable(this);        
@@ -660,6 +661,25 @@ export default class DirectStore {
             this.currentChat.pins = this.currentChat.pins.sort((a,b) => a.id - b.id);
         } catch(error) {
             console.log(error);
+        }
+    }
+
+    removePin = async (chatId: string, pinId: number) => {
+        try {
+            this.removingPin = true;
+            await agent.Chats.removePin(chatId, pinId);
+            runInAction(() => {
+                if(!this.currentChat)
+                    return;
+                this.currentChat.pins = this.currentChat?.pins.filter(x => x.id !== pinId);
+                this.currentChat = {...this.currentChat};
+                this.removingPin = false;
+            });
+        } catch(error) {
+            console.log(error);
+            runInAction(() => {
+                this.removingPin = false;
+            });
         }
     }
 }

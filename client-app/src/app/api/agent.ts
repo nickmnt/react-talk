@@ -154,7 +154,9 @@ const Chats = {
     updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions) => 
         requests.post<boolean>(`group/updateMembersPermissions`, {chatId, ...permissions}),
     addPin: (chatId: string, messageId: number, isMutual: boolean) => 
-        requests.post<Pin>('direct/addPin', {chatId, messageId, isMutual})
+        requests.post<Pin>('direct/addPin', {chatId, messageId, isMutual}),
+    removePin: (chatId: string, pinId: number) =>
+        requests.post<boolean>('direct/removePin', {chatId, pinId})
 }
 
 const agent = {

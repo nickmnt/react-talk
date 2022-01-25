@@ -149,5 +149,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+
+        [HttpPost("removePin")]
+        public async Task<IActionResult> RemovePin(RemovePin.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

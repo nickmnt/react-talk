@@ -26,16 +26,16 @@ export default observer(function Messages() {
   const [menuTop, setMenuTop] = useState(0);
   const [menuLeft, setMenuLeft] = useState(0);
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
+  const [selectedPin, setSelectedPin] = useState(0);
 
   const {
-    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin },
+    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin },
     userStore: { user },
   } = useStore();
 
   const goToMessage = (id: number) => {
     const searchResult = getMessageIndexById(id);
     if(searchResult !== undefined) {
-      console.log(searchResult)
       messagesRef.current[searchResult]?.scrollIntoView(({ behavior: 'smooth', block: 'nearest', inline: 'start' }));
     }
   }
@@ -55,6 +55,12 @@ export default observer(function Messages() {
         break;
     }
   }, [currentChat]);
+
+  useEffect(() => {
+    if(!currentChat)
+      return;
+    setSelectedPin(currentChat.pins.length-1);
+  }, [currentChat, currentChat?.pins.length])
  
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [menuMsg, setMenuMsg] = React.useState<null | Message>(null);
@@ -77,7 +83,6 @@ export default observer(function Messages() {
 
   if (!currentChat) return null;
 
-  {console.log(currentChat.pins.length)}
   return (
     <div
       style={{
@@ -173,7 +178,7 @@ export default observer(function Messages() {
             </div>
           ))}
       </ScrollableFeed>
-      {currentChat.pins.length > 0 && <Paper
+      {currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && <Paper
         square
         sx={{
           height: "5.5rem",
@@ -189,20 +194,28 @@ export default observer(function Messages() {
           <Stack
             direction="column"
             justifyContent="center"
-            sx={{ marginLeft: "1.5rem", fontSize: "1rem", height: "100%" }}
+            sx={{ marginLeft: "1.5rem", fontSize: "1rem", height: "100%", cursor: 'pointer' }}
+            onClick={() => {
+              let newIndex = selectedPin -1;
+              if(newIndex === -1) {
+                newIndex = currentChat.pins.length - 1;
+              }
+              goToMessage(currentChat.pins[selectedPin].messageId);
+              setSelectedPin(newIndex);
+            }}
           >
             <Typography
               fontSize="1.4rem"
               variant="h6"
               sx={{ color: "#007FFF" }}
             >
-              Pinned Message
+              Pinned Message {selectedPin !== currentChat.pins.length-1 && "#" + (selectedPin+1).toString()}
             </Typography>
-            <Typography fontSize="1.4rem">{getMessageById(currentChat.pins[0].messageId)?.body}</Typography>
+            <Typography fontSize="1.4rem">{getMessageById(currentChat.pins[selectedPin].messageId)?.body}</Typography>
           </Stack>
         </div>
         <IconButton style={{ width: 48, height: 48, margin: "auto 0" }}>
-          <CloseIcon />
+          <CloseIcon onClick={() => !removingPin && removePin(currentChat.id, currentChat.pins[selectedPin].id)} sx={{ opacity: removingPin ? 0.25 : 1 }}/>
         </IconButton>
       </Paper>}
       <Menu
