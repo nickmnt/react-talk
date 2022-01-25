@@ -653,12 +653,16 @@ export default class DirectStore {
     }
 
     addPin = async (chatId: string, messageId: number, isMutual: boolean) => {
-        if(!this.currentChat)
-            return;
         try {
             const response = await agent.Chats.addPin(chatId, messageId, isMutual);
-            this.currentChat.pins = [...this.currentChat.pins, response];
-            this.currentChat.pins = this.currentChat.pins.sort((a,b) => a.id - b.id);
+            runInAction(() => {
+                if(!this.currentChat)
+                    return;
+                this.currentChat.pins = [...this.currentChat.pins, response];
+                this.currentChat.pins = this.currentChat.pins.sort((a,b) => a.id - b.id);
+                const chat = this.chats.find(x => x.id === this.currentChat!.id)!;
+                chat.pins = this.currentChat.pins;
+            })  
         } catch(error) {
             console.log(error);
         }
@@ -673,6 +677,8 @@ export default class DirectStore {
                     return;
                 this.currentChat.pins = this.currentChat?.pins.filter(x => x.id !== pinId);
                 this.currentChat = {...this.currentChat};
+                const chat = this.chats.find(x => x.id === this.currentChat!.id)!;
+                chat.pins = this.currentChat.pins;
                 this.removingPin = false;
             });
         } catch(error) {
