@@ -5,18 +5,23 @@
     background-color: $color-white;
     border-bottom: 1px solid $color-grey-light;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     font-size: 1.4rem;
     font-weight: 400;
+    // background-color: green;
 
     &__left {
-        margin: 1.5rem;
+        flex: 1;
+        margin-left: 1.5rem;
+        // background-color: red;
+        @media (max-width: $small) {
+            margin: 0;
+        }
     }
 
     &__right {
-        margin: 1.5rem;
-        margin-right: 3rem;
+        // background-color: blue;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -40,5 +45,16 @@
     &__ellipsisIco {
         width: 2rem;
         height: 2rem;
+    }
+
+    &__back {
+        opacity: 0;
+        display: none !important;
+        
+        @media (max-width: $small) {
+            opacity: 1;
+            display: inline-block !important;
+            margin: 0 .5rem;
+        }
     }
 }

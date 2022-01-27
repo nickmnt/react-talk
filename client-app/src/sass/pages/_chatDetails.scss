@@ -1,0 +1,25 @@
+.chatDetails {
+    &__tabs {
+        width: 100%;
+    }
+
+    &__tabsBox {
+        margin-top: .5rem;
+        border-bottom: 1;
+        border-color: 'divider';
+        width: 60%;
+
+        @media (max-width: $small) {
+            width: 95%;
+        }
+    }
+
+    &__infoStack {
+        width: 60%;
+        margin-top: 2rem;
+
+        @media (max-width: $mini) {
+            width: 95%;
+        }
+    }
+}

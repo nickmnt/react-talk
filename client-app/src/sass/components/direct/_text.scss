@@ -1,14 +1,12 @@
 .text {
 
     &--me, &--other {
-        display: inline-block;
-        flex: 1 0 0;
-        min-width: 0;
+        // flex: 1 0 0;
+        max-width: 60%;
         height: 100%;
         margin: 0 1rem;
         border-radius: 1.5rem;
-        padding-top: .5rem;
-        padding-left: .5rem;
+        padding: .5rem .5rem;
 
         box-shadow: 0 0 1px rgba(0,0,0,0.1);
         
@@ -17,8 +15,11 @@
 
         overflow: hidden;
         position: relative;
-    }
 
+        @media (max-width: $mini) {
+            max-width: 85%;
+        }
+    }
 
     &__container {
         padding: 1rem;
@@ -76,8 +77,9 @@
 
     &--me {
         background-color: $color-green;
-        margin-right: 1.5rem;
+        // margin-right: 1.5rem;
         border-bottom-right-radius: 0;
+        margin-left: auto;
     }
 
     &--other::after, &--me::after {

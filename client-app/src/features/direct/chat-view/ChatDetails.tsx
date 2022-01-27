@@ -90,7 +90,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative'}} alignItems="center" justifyContent="center">
                         <Avatar sx={{ width: 100, height: 100 }} alt="Okay" src="/broken-image.jpg"/>
-                        <Typography variant="h3" sx={{color: '#333', fontWeight: '500'}}>
+                        <Typography variant="h4" sx={{color: '#333', fontWeight: '500'}}>
                             {accountData && accountData.displayName}
                             {groupData && groupData.displayName}
                             {channelData && channelData.displayName}
@@ -102,9 +102,9 @@ export default observer(function ChatDetails({chatPage}: Props) {
                 </AppBar>
                 <Paper sx={{backgroundColor: "white", width: '100%', borderRadius: '0', flex: 1}} elevation={0}>
                     <Stack direction="row" spacing={2} sx={{width: '100%'}} alignItems="center" justifyContent="center">
-                        <Stack direction="column" spacing={2} sx={{width: '60%', marginTop: '2rem'}} >
+                        <Stack direction="column" spacing={2} className="chatDetails__infoStack" >
                         
-                        <Typography variant="h5" sx={{color: '#0080FF', fontWeight: '500', marginTop: '1.5rem', marginLeft: '2rem'}}>
+                        <Typography variant="h5" sx={{color: '#0080FF', fontWeight: '500', marginTop: '1.5rem'}}>
                             Info
                         </Typography>
                         {(accountData?.bio || groupData?.groupChat?.description || channelData?.channelChat?.description) &&
@@ -114,12 +114,12 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                     <InfoOutlinedIcon sx={{width: 35, height: 35}}/>
                                 </ListItemIcon>
                                 <Stack direction="column" spacing={.25}>
-                                    <Typography variant="h5" sx={{color: '#333', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
+                                    <Typography variant="h6" sx={{color: '#333', fontWeight: '500', marginLeft: 'rem'}}>
                                         {accountData?.bio && accountData?.bio}
                                         {groupData?.groupChat?.description && groupData?.groupChat?.description}
                                         {channelData?.channelChat?.description && channelData?.channelChat?.description}
                                     </Typography>
-                                    <Typography variant="h5" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
+                                    <Typography variant="h6" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
                                         Bio
                                     </Typography>
                                 </Stack>
@@ -132,10 +132,10 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                     <AlternateEmailIcon sx={{width: 35, height: 35}}/>
                                 </ListItemIcon>
                                 <Stack direction="column" spacing={.25}>
-                                    <Typography variant="h5" sx={{color: '#333', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
+                                    <Typography variant="h6" sx={{color: '#333', fontWeight: '500', marginLeft: 'rem'}}>
                                         {accountData?.username}
                                     </Typography>
-                                    <Typography variant="h5" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
+                                    <Typography variant="h6" sx={{color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem'}}>
                                         Username
                                     </Typography>
                                 </Stack>
@@ -145,19 +145,21 @@ export default observer(function ChatDetails({chatPage}: Props) {
                         </Stack>
                     </Stack>
                     <Stack direction="row" spacing={2} sx={{width: '100%'}} alignItems="center" justifyContent="center">
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '60%' }}>
-                        <Tabs centered value={value} onChange={handleChange} aria-label="basic tabs example">
-                            {groupData?.groupChat?.members && 
-                            <Tab label="Members" sx={{fontSize: '1.4rem'}} />
-                            }
-                            {channelData?.channelChat?.members && 
-                            <Tab label="Members" sx={{fontSize: '1.4rem'}} />
-                            }
-                            <Tab label="Media" sx={{fontSize: '1.4rem'}} />
-                            <Tab label="Links" sx={{fontSize: '1.4rem'}} />
-                            <Tab label="Voice" sx={{fontSize: '1.4rem'}} />
-                            <Tab label="Groups" sx={{fontSize: '1.4rem'}} />
-                        </Tabs>
+                    <Box className="chatDetails__tabsBox">
+                        <Box sx={{width: '100', display: 'flex', justifyContent: 'center'}}>
+                            <Tabs variant="scrollable" value={value} onChange={handleChange} aria-label="basic tabs example">
+                                {groupData?.groupChat?.members && 
+                                <Tab label="Members" sx={{fontSize: '1.4rem'}} />
+                                }
+                                {channelData?.channelChat?.members && 
+                                <Tab label="Members" sx={{fontSize: '1.4rem'}} />
+                                }
+                                <Tab label="Media" sx={{fontSize: '1.4rem'}} />
+                                <Tab label="Links" sx={{fontSize: '1.4rem'}} />
+                                <Tab label="Voice" sx={{fontSize: '1.4rem'}} />
+                                <Tab label="Groups" sx={{fontSize: '1.4rem'}} />
+                            </Tabs>
+                        </Box>
                         {
                                 value === 0 && (
                                     <>

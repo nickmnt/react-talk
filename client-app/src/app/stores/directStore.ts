@@ -688,4 +688,8 @@ export default class DirectStore {
             });
         }
     }
+
+    removeCurrentChat = () => {
+        this.currentChat = null;
+    }
 }

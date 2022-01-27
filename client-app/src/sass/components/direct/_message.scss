@@ -1,6 +1,8 @@
 .message {
-    display: flex;
     //height: 10rem;
+    // background-color: red;
+    width: 100%;
+    display: flex;
 
     &__img {
         object-fit: cover;
@@ -10,6 +12,4 @@
         height: 4rem;
         border-radius: 100%;
     }
-
-    
 }
