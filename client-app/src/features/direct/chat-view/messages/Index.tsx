@@ -22,7 +22,12 @@ import { Message } from "../../../../app/models/chat";
 import DateMessage from "./DateMessage";
 import { toast } from "react-toastify";
 
-export default observer(function Messages() {
+export interface Props {
+  selected: Message[];
+  toggleSelected: (messsage: Message) => void;
+}
+
+export default observer(function Messages({selected, toggleSelected}: Props) {
   const [menuTop, setMenuTop] = useState(0);
   const [menuLeft, setMenuLeft] = useState(0);
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
@@ -92,7 +97,7 @@ export default observer(function Messages() {
         flexDirection: "column-reverse",
       }}
     >
-      {replyMessage && (
+      {selected.length === 0 && replyMessage && (
         <Paper
           square
           sx={{
@@ -146,7 +151,7 @@ export default observer(function Messages() {
               ref={el => messagesRef.current[i] = el} 
             >
               {message.type === 1000 ? <DateMessage message={message} /> : 
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected}/>}
             </div>
           ))}
         {currentChat?.type === 1 &&
@@ -160,7 +165,7 @@ export default observer(function Messages() {
               ref={el => messagesRef.current[i] = el} 
             >
               {message.type === 1000 ? <DateMessage message={message} /> : 
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected}/>}
             </div>
           ))}
         {currentChat?.type === 2 &&
@@ -174,11 +179,11 @@ export default observer(function Messages() {
               ref={el => messagesRef.current[i] = el} 
             >
               {message.type === 1000 ? <DateMessage message={message} /> :
-              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage}/>}
+              <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected}/>}
             </div>
           ))}
       </ScrollableFeed>
-      {currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && <Paper
+      {selected.length === 0 && currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && <Paper
         square
         sx={{
           height: "5.5rem",

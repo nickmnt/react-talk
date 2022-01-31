@@ -6,6 +6,10 @@ import * as Yup from "yup";
 import { ChangeEvent, useRef, useState } from "react";
 import { toast } from 'react-toastify';
 import Paper from "@mui/material/Paper/Paper";
+import Stack from '@mui/material/Stack/Stack';
+import Typography from '@mui/material/Typography/Typography';
+import Button from '@mui/material/Button/Button';
+import ShortcutIcon from '@mui/icons-material/Shortcut';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -16,7 +20,11 @@ export interface FileRecord {
     file: Blob;
 }
 
-export default observer(function ChatInput() {
+export interface Props {
+    selectedCount: number;
+}
+
+export default observer(function ChatInput({selectedCount}: Props) {
     
     const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo}} = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
@@ -54,6 +62,25 @@ export default observer(function ChatInput() {
 
     if(!currentChat)
         return <></>;
+
+    if(selectedCount > 0) {
+        return (
+            <Paper square className="chatInput" elevation={3} sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button sx={{color: '#363636', textTransform: 'none'}}>
+                    <Stack direction="row" alignItems="center" sx={{marginLeft: '1rem'}}>
+                        <ShortcutIcon className="mirror" sx={{marginRight: '1rem'}}/>
+                        <Typography variant="h6">Reply</Typography>
+                    </Stack>
+                </Button>
+                <Button sx={{color: '#363636', textTransform: 'none'}}>
+                    <Stack direction="row" alignItems="center" sx={{marginRight: '1rem'}}>
+                        <ShortcutIcon sx={{marginRight: '1rem'}}/>
+                        <Typography variant="h6">Forward</Typography>
+                    </Stack>
+                </Button>
+            </Paper>
+        )
+    }
 
     return (
         <Paper square className="chatInput" elevation={3}>

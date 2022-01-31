@@ -11,22 +11,53 @@ import MemberPermissionsAll from "./MemberPermissionsAll";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import Paper from "@mui/material/Paper/Paper";
 import ChatIcon from '@mui/icons-material/Chat';
+import { Message } from "../../../app/models/chat";
+import SelectHeader from "./SelectHeader";
+import { toast } from "react-toastify";
 
 export default observer(function ChatView() {
   const {
-    directStore: { currentChat, loadingChatDetails },
+    directStore: { currentChat, loadingChatDetails,selected, setSelected },
     chatStore: { stack },
   } = useStore();
+  
+  const toggleSelected = (message: Message) => {
+    const msg = selected.find(x => x.id === message.id)!!;
+    if(msg) {
+      setSelected(selected.filter(x => x.id !== message.id));
+    } else {
+      setSelected([...selected, message]);
+    }
+  }
 
+  const clearSelected = () => {
+    setSelected([]);
+  }
+
+  const copyMessages = () => {
+    const sorted = selected.sort((x,y) => x.createdAt.getTime() - y.createdAt.getTime());
+    let result = '';
+    sorted.forEach((x) => {
+      result = result + x.displayName + ':\n';
+      result = result + x.body;
+      result = result + '\n';
+    });
+    result = result.replace(/\n*$/, "");
+    navigator.clipboard.writeText(result);
+    toast('Copied text to clipboard', {type: 'success'});
+    setSelected([]);
+  }
+  
   return (
     <div className="chatView">
       {currentChat ? (
         <>
             {loadingChatDetails ? <LoadingComponent/> :
           <>
-            <Header />
-            <Messages />
-            <ChatInput />
+            {selected.length === 0 ? <Header />
+            : <SelectHeader count={selected.length} clearSelected={clearSelected} copyMessages={copyMessages} />}
+            <Messages selected={selected} toggleSelected={toggleSelected} />
+            <ChatInput selectedCount={selected.length} />
           </>
             }
           <div style={{zIndex: 1000}}>{stack.map((elem, i) => (

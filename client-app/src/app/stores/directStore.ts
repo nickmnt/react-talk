@@ -19,6 +19,7 @@ export default class DirectStore {
     loadingChatDetails = false;
     replyMessage: Message | null = null;
     removingPin = false;
+    selected: Message[] = [];
 
     constructor() {
         makeAutoObservable(this);        
@@ -201,6 +202,7 @@ export default class DirectStore {
                 break;
         }
         this.handleDateMessages();
+        this.selected = [];
         this.loadingChatDetails = false;
     }
     
@@ -691,5 +693,9 @@ export default class DirectStore {
 
     removeCurrentChat = () => {
         this.currentChat = null;
+    }
+
+    setSelected = (selected: Message[]) => {
+        this.selected = selected;
     }
 }
