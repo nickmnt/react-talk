@@ -27,7 +27,9 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 var request = new Create.Command { Name = "channel", Description = "optional" };
                 var userAccessor = MockUserAccessor.Create().Object;
-                var handler = new Create.Handler(context, userAccessor);
+                var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
+                var mapper = config.CreateMapper();
+                var handler = new Create.Handler(context, mapper, userAccessor);
 
                 //Act
                 var result = await handler.Handle(request, new System.Threading.CancellationToken());
