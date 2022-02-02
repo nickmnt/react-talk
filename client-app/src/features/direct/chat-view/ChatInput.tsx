@@ -26,7 +26,7 @@ export interface Props {
 
 export default observer(function ChatInput({selectedCount}: Props) {
     
-    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo}} = useStore();
+    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding}} = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [file,setFile] = useState<null | FileRecord>(null);
 
@@ -72,7 +72,7 @@ export default observer(function ChatInput({selectedCount}: Props) {
                         <Typography variant="h6">Reply</Typography>
                     </Stack>
                 </Button>
-                <Button sx={{color: '#363636', textTransform: 'none'}}>
+                <Button sx={{color: '#363636', textTransform: 'none'}} onClick={() => setForwarding(true)}>
                     <Stack direction="row" alignItems="center" sx={{marginRight: '1rem'}}>
                         <ShortcutIcon sx={{marginRight: '1rem'}}/>
                         <Typography variant="h6">Forward</Typography>

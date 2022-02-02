@@ -14,10 +14,11 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { Message } from "../../../app/models/chat";
 import SelectHeader from "./SelectHeader";
 import { toast } from "react-toastify";
+import ForwardDialog from "./ForwardDialog";
 
 export default observer(function ChatView() {
   const {
-    directStore: { currentChat, loadingChatDetails,selected, setSelected },
+    directStore: { currentChat, loadingChatDetails,selected, setSelected, forwarding, setForwarding },
     chatStore: { stack },
   } = useStore();
   
@@ -88,6 +89,7 @@ export default observer(function ChatView() {
           </Paper>
         </div>
       )}
+      <ForwardDialog open={selected.length > 0 && forwarding} onClose={() => setForwarding(false)}/>
     </div>
   );
 });

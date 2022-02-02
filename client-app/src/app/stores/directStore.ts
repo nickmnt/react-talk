@@ -20,6 +20,7 @@ export default class DirectStore {
     replyMessage: Message | null = null;
     removingPin = false;
     selected: Message[] = [];
+    forwarding = false;
 
     constructor() {
         makeAutoObservable(this);        
@@ -697,5 +698,9 @@ export default class DirectStore {
 
     setSelected = (selected: Message[]) => {
         this.selected = selected;
+    }
+
+    setForwarding = (value: boolean) => {
+        this.forwarding = value;
     }
 }

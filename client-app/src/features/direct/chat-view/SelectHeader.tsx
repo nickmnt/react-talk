@@ -4,6 +4,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ShortcutIcon from '@mui/icons-material/Shortcut';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Typography from "@mui/material/Typography/Typography";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../../app/stores/store";
 
 export interface Props {
     count: number;
@@ -11,7 +13,8 @@ export interface Props {
     copyMessages: () => void;
 }
 
-export default function SelectHeader({count, clearSelected, copyMessages}: Props) {
+export default observer(function SelectHeader({count, clearSelected, copyMessages}: Props) {
+    const {directStore: {setForwarding}} = useStore();
 
     return (
         <div className="chatHeader">
@@ -30,7 +33,7 @@ export default function SelectHeader({count, clearSelected, copyMessages}: Props
                 <IconButton onClick={copyMessages}>
                     <ContentCopyIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => setForwarding(true)}>
                     <ShortcutIcon />
                 </IconButton>
                 <IconButton>
@@ -40,4 +43,4 @@ export default function SelectHeader({count, clearSelected, copyMessages}: Props
             </>
         </div>
     );
-};
+});

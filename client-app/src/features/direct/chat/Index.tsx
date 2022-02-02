@@ -10,14 +10,14 @@ import Tick from '../chat-view/messages/message-component/text/Tick';
 
 interface Props {
     chat: ChatDto;
+    neverSelected?: boolean;
 }
 
-
-export default observer(function Chat({chat}: Props) {
+export default observer(function Chat({chat, neverSelected}: Props) {
 
     const {directStore: {currentChat, getChatDetails}, userStore: {user}} = useStore(); 
     return (
-        <ListItemButton className={`chat__container`} selected={!!currentChat && currentChat.id===chat.id} onClick={() => getChatDetails(chat)} >
+        <ListItemButton className={`chat__container`} selected={!neverSelected && !!currentChat && currentChat.id===chat.id} onClick={() => getChatDetails(chat)} >
             <ListItemAvatar>
                 <Avatar
                   alt={chat.displayName}
