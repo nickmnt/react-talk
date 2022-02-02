@@ -8,7 +8,6 @@ import ForwardIcon from "@mui/icons-material/Forward";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ScrollableFeed from "react-scrollable-feed";
-import { SRLWrapper } from "simple-react-lightbox";
 import Menu from "@mui/material/Menu/Menu";
 import MenuItem from "@mui/material/MenuItem/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
@@ -269,7 +268,6 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
           <ListItemText>Delete</ListItemText>
         </MenuItem>
       </Menu>
-      <SRLWrapper elements={images} />
     </div>
   );
 });

@@ -3,7 +3,6 @@ import DoubleTick from './DoubleTick';
 import Tick from './Tick';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Message } from '../../../../../../app/models/chat';
-import { useLightbox } from 'simple-react-lightbox';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../../../app/stores/store';
 import Paper from '@mui/material/Paper/Paper';
@@ -27,8 +26,6 @@ interface Props {
 }
 
 export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage}: Props) {
-    const { openLightbox } = useLightbox()
-
     const {directStore: {getImageIndex, getMessageById}} = useStore()
     const replyTo = getMessageById(message.replyToId);
 
@@ -53,7 +50,7 @@ export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,
                     <Typography fontSize="1.4rem">{replyTo.body}</Typography>
                 </Stack>
             </div>}
-            {type === 1 && <img onClick={() => openLightbox(getImageIndex(message.id))} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
+            {type === 1 && <img onClick={() => console.log('open lightbox with image index')} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
             {type === 2 && <ReactPlayer controls={true} url={isLocal ?  URL.createObjectURL(localBlob!) : attachedVideo} />}
             <div className="text__container">
                 {(!isMe && showImg) && <div className="text__name">

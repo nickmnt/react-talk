@@ -1,19 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/layout/App';
-import 'semantic-ui-css/semantic.min.css';
+// import App from './app/layout/App';
+// import 'semantic-ui-css/semantic.min.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import './sass/main.scss';
-import reportWebVitals from './reportWebVitals';
-import { store, StoreContext } from './app/stores/store';
+// import reportWebVitals from './reportWebVitals';
+// import { store, StoreContext } from './app/stores/store';
 import { Router } from 'react-router-dom';
 import {createBrowserHistory} from 'history';
-import ScrollToTop from './app/layout/ScrollToTop';
+// import ScrollToTop from './app/layout/ScrollToTop';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import SimpleReactLightbox from 'simple-react-lightbox'
+import { store, StoreContext } from './app/stores/store';
+import ScrollToTop from './app/layout/ScrollToTop';
+import App from './app/layout/App';
 
 export const history = createBrowserHistory();
 
@@ -46,9 +48,7 @@ ReactDOM.render(
     <Router history={history}> 
       <ScrollToTop />
       <ThemeProvider theme={theme}>
-        <SimpleReactLightbox>
           <App />
-        </SimpleReactLightbox>
       </ThemeProvider>
     </Router>
   </StoreContext.Provider>,
@@ -58,4 +58,4 @@ ReactDOM.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals();

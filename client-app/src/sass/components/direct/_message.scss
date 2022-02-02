@@ -4,6 +4,8 @@
     width: 100%;
     display: flex;
     position: relative;
+    min-width: 20rem;
+    // min-height: 10rem;
 
     &__img {
         object-fit: cover;
