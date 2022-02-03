@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage}: Props) {
-    const {directStore: {getImageIndex, getMessageById}} = useStore()
+    const {directStore: {getMessageById}} = useStore()
     const replyTo = getMessageById(message.replyToId);
 
     return (

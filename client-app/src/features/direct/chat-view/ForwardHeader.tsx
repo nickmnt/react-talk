@@ -3,12 +3,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from "@mui/material/Typography/Typography";
 import SearchIcon from '@mui/icons-material/Search';
 
-export default function ForwardHeader() {
+export interface Props {
+    onClose: () => void;
+}
+
+export default function ForwardHeader({onClose}: Props) {
 
     return (
         <div className="chatHeader">
             <div>
-                <IconButton >
+                <IconButton onClick={onClose} >
                     <CloseIcon />
                 </IconButton>
             </div>

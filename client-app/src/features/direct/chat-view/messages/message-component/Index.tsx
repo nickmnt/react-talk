@@ -29,7 +29,7 @@ export default observer(function MessageComponent({message, onRightClick, goToMe
         toggleSelected(message);
         setTimeout(() => {
             setReady(true);
-        }, 250);
+        }, 500);
     });    
     const ref = useRef<any>(null);
     const inViewport = useIntersection(ref, 1);

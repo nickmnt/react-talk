@@ -7,23 +7,66 @@ import Avatar from '@mui/material/Avatar';
 import DoubleTick from '../chat-view/messages/message-component/text/DoubleTick';
 import Paper from '@mui/material/Paper/Paper';
 import Tick from '../chat-view/messages/message-component/text/Tick';
+import DoneIcon from '@mui/icons-material/Done';
+import { useState } from 'react';
+import { useLongPress } from 'use-long-press';
 
 interface Props {
     chat: ChatDto;
-    neverSelected?: boolean;
+    forwarding?: boolean;
+    selected?: ChatDto[];
+    setSelected?: (chatDto: ChatDto[]) => void;
 }
 
-export default observer(function Chat({chat, neverSelected}: Props) {
+export default observer(function Chat({chat, forwarding, selected, setSelected}: Props) {
+
+    const [ready, setReady] = useState(true);
+
+    const bind = useLongPress(() => {
+        if(!selected || !setSelected)
+            return;
+        if(selected.length !== 0)
+            return;
+        setReady(false);
+            setSelected([chat]);
+        setTimeout(() => {
+            setReady(true);
+        }, 500);
+    });   
+
+    const clickedWhenForwarding = () => {
+        if(!ready || !selected || !setSelected) 
+            return;
+
+        if(selected.length > 0) {
+            const searchResult = selected?.find(x => x.id === chat.id);
+            if(searchResult) {
+                setSelected(selected?.filter(x => x.id !== chat.id));
+            } else {
+                setSelected([...selected, chat]);
+            }    
+        }
+    }
+
+    const isSelected = selected?.findIndex(x => x.id === chat.id) !== -1;
 
     const {directStore: {currentChat, getChatDetails}, userStore: {user}} = useStore(); 
     return (
-        <ListItemButton className={`chat__container`} selected={!neverSelected && !!currentChat && currentChat.id===chat.id} onClick={() => getChatDetails(chat)} >
-            <ListItemAvatar>
+        <ListItemButton 
+        className={`chat__container`} 
+        selected={!forwarding && !!currentChat && currentChat.id===chat.id} 
+        onClick={forwarding ? () => clickedWhenForwarding() : () => getChatDetails(chat)} 
+        {...bind} >
+            <ListItemAvatar sx={{position: 'relative', overflow: 'visible'}}>
                 <Avatar
                   alt={chat.displayName}
                   src={chat.image}
                   sx={{width: 48, height: 48}}
-                />
+                >
+                </Avatar>
+                {selected && selected.length > 0 && <div className={`chat__selectCircle ${isSelected && 'chat__selectCircle--selected'}`}>
+                {isSelected && <DoneIcon sx={{width: '1.75rem', height: '1.75rem', color: 'white'}}/>}
+                </div>}
             </ListItemAvatar>
             <div className="chat__right">
                 <div className="chat__rightTop">

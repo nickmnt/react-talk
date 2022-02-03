@@ -13,6 +13,6 @@ export default function ForwardDialog({ open, onClose }: Props) {
   };
 
   return <Dialog onClose={handleClose} open={open} sx={{minWidth: '50vw'}}>
-      <ForwardSelection />
+      <ForwardSelection onClose={onClose} />
   </Dialog>;
 }

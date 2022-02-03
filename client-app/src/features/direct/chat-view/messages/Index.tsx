@@ -33,7 +33,7 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
   const [selectedPin, setSelectedPin] = useState(0);
 
   const {
-    directStore: { currentChat, images, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin },
+    directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin },
     userStore: { user },
   } = useStore();
 

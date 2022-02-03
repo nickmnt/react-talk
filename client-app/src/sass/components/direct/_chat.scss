@@ -108,4 +108,26 @@
             color: $color-white;
         }
     }
+
+    &__selectCircle {
+        // width: '2rem', height: '2rem', backgroundColor: 'green', borderRadius: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid white'
+        position: absolute;
+        right: 0;
+        bottom: -.75rem;
+        width: 2rem;
+        height: 2rem;
+        background-color: rgba(#000, .20);
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid white;
+        align-self: flex-end;
+        margin: .5rem;
+        transition: background-color 250ms linear;
+
+        &--selected {
+            background-color: green;
+        }
+    }
 }
