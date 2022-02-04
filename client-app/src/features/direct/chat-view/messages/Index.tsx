@@ -35,7 +35,7 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
 
   const {
     directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin 
-    , forwarding, forwardingSingle, forwardedMessages},
+    , forwardingSingle, forwardedMessages},
     userStore: { user },
   } = useStore();
 

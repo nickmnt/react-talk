@@ -26,7 +26,7 @@ export interface Props {
 
 export default observer(function ChatInput({selectedCount}: Props) {
     
-    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo, forwarding, setForwarding}} = useStore();
+    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding}} = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [file,setFile] = useState<null | FileRecord>(null);
 

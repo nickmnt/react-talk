@@ -29,7 +29,7 @@ export default observer(function ForwardSelection({onClose}: Props) {
           ))}
         </List>
       </div>
-      {selected.length > 0 && <ForwardInput />}
+      {selected.length > 0 && <ForwardInput selected={selected} />}
     </Paper>
   );
 });

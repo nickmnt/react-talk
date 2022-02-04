@@ -18,7 +18,7 @@ import ForwardDialog from "./ForwardDialog";
 
 export default observer(function ChatView() {
   const {
-    directStore: { currentChat, loadingChatDetails,selected, setSelected, forwarding, setForwarding, forwardingSingle },
+    directStore: { currentChat, loadingChatDetails,selected, setSelected, forwarding, setForwarding },
     chatStore: { stack },
   } = useStore();
   

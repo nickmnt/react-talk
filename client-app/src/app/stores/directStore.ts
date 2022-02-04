@@ -23,6 +23,7 @@ export default class DirectStore {
     forwarding = false;
     forwardingSingle = false;
     forwardedMessages: Message[] = [];
+    srcChatId = '';
 
     constructor() {
         makeAutoObservable(this);        
@@ -205,9 +206,11 @@ export default class DirectStore {
                 break;
         }
         this.handleDateMessages();
-        this.selected = [];
-        this.forwarding = false;
-        this.loadingChatDetails = false;
+        runInAction(() => {
+            this.selected = [];
+            this.forwarding = false;
+            this.loadingChatDetails = false;
+        })
     }
     
     createLocalMessage = (body: string) => {
@@ -708,9 +711,66 @@ export default class DirectStore {
     }
 
     forwardToSingle = (chat: ChatDto) => {
+        if(!this.currentChat)
+            return;
         this.forwardedMessages = this.selected.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        this.srcChatId = this.currentChat.id;
         this.getChatDetails(chat);
         this.replyMessage = null;
         this.forwardingSingle = true;
+    }
+
+    forward = async (chatIds: string[], body: string, showSender: boolean = false) => {
+        if(!this.currentChat)
+            return;
+        const sorted = this.selected
+            .sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        const messageIds = sorted
+            .map(x => x.id);
+        const lastForwardedMsg = sorted[sorted.length-1];
+
+        try {
+            await agent.Chats.forwardMessages(chatIds, messageIds, this.currentChat.id, body, showSender);
+            const chats = this.chats;
+            chats.forEach(x => {
+                if(chatIds.find(y => y === x.id) && x.lastMessage && x.lastMessage.createdAt.getTime() < new Date().getTime()) {
+                    x.lastMessage = {...lastForwardedMsg, createdAt: new Date()};
+                    x.lastMessageSeen = false;
+                }
+            });
+            runInAction(() => {
+                this.chats = chats;
+                this.forwarding = false;
+            });
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    forwardSingle = async (body: string, showSender: boolean = false) => {
+        if(!this.currentChat)
+            return;
+        const sorted = this.forwardedMessages
+            .sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        const messageIds = sorted
+            .map(x => x.id);
+        const lastForwardedMsg = sorted[sorted.length-1];
+
+        try {
+            await agent.Chats.forwardMessages([this.currentChat.id], messageIds, this.currentChat.id, body, showSender);
+            const chats = this.chats;
+            const currentChatId = this.currentChat.id;
+            const x = chats.find(x => x.id === currentChatId);
+            if(x && x.lastMessage && x.lastMessage.createdAt.getTime() < new Date().getTime()) {
+                x.lastMessage = {...lastForwardedMsg, createdAt: new Date()};
+                x.lastMessageSeen = false;
+                this.chats = chats;
+            }
+            runInAction(() => {
+                this.forwarding = false;
+            });
+        } catch(error) {
+            console.log(error);
+        }
     }
 }

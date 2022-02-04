@@ -156,7 +156,9 @@ const Chats = {
     addPin: (chatId: string, messageId: number, isMutual: boolean) => 
         requests.post<Pin>('direct/addPin', {chatId, messageId, isMutual}),
     removePin: (chatId: string, pinId: number) =>
-        requests.post<boolean>('direct/removePin', {chatId, pinId})
+        requests.post<boolean>('direct/removePin', {chatId, pinId}),
+    forwardMessages: (chatIds: string[], messageIds: number[], srcChatId: string, body: string, showSender: boolean) => 
+        requests.post<boolean>('direct/forward', {chatIds, messageIds, srcChatId, body, showSender})
 }
 
 const agent = {
