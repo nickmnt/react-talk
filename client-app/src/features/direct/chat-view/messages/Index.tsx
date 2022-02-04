@@ -20,6 +20,7 @@ import Typography from "@mui/material/Typography/Typography";
 import { Message } from "../../../../app/models/chat";
 import DateMessage from "./DateMessage";
 import { toast } from "react-toastify";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export interface Props {
   selected: Message[];
@@ -33,7 +34,8 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
   const [selectedPin, setSelectedPin] = useState(0);
 
   const {
-    directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin },
+    directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin 
+    , forwarding, forwardingSingle, forwardedMessages},
     userStore: { user },
   } = useStore();
 
@@ -85,6 +87,23 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
     setAnchorEl(null);
   };
 
+  const onlyUnique = (value: any, index: any, self: any) => {
+    return self.indexOf(value) === index;
+  }
+
+  const forwardedSenderCount = forwardedMessages.map(x => x.username).filter(onlyUnique).length;
+  let forwardBody = '';
+  if(forwardedMessages.length === 1) {
+    forwardBody = forwardedMessages[0].displayName + ': ' + forwardedMessages[0].body;
+  } else {
+    if(forwardedSenderCount === 1) {
+      forwardBody =  `From  ${forwardedMessages[0].displayName}`;
+    } else if(forwardedSenderCount === 2) {
+      forwardBody = `From  ${forwardedMessages[0].displayName},${forwardedMessages[1].displayName}`;
+    } else if(forwardedSenderCount !== 0) {
+      forwardBody = `From  ${forwardedMessages[0].displayName} and ${(forwardedSenderCount-1).toString()} others`;
+    }
+  }
   if (!currentChat) return null;
 
   return (
@@ -131,6 +150,47 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
                 {replyMessage.displayName}
               </Typography>
               <Typography fontSize="1.4rem">{replyMessage.body}</Typography>
+            </Stack>
+          </div>
+          <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={clearReply}>
+            <CloseIcon />
+          </IconButton>
+        </Paper>
+      )}
+      {selected.length === 0 && forwardingSingle && (
+        <Paper
+          square
+          sx={{
+            height: "5.5rem",
+            width: "100%",
+            backgroundColor: "white",
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <ArrowForwardIcon
+            style={{
+              width: 30,
+              height: 30,
+              margin: "auto 0",
+              marginLeft: "1rem",
+              color: "#007FFF",
+            }}
+          />
+          <div style={{ flex: 1 }}>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              sx={{ marginLeft: "1.5rem", fontSize: "1rem", height: "100%" }}
+            >
+              <Typography
+                fontSize="1.4rem"
+                variant="h6"
+                sx={{ color: "#007FFF" }}
+              >
+                Forward {forwardedMessages.length === 1 ? 'message' : forwardedMessages.length + ' messages'}
+              </Typography>
+              <Typography fontSize="1.4rem">{forwardBody}</Typography>
             </Stack>
           </div>
           <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={clearReply}>

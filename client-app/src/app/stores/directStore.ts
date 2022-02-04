@@ -21,6 +21,8 @@ export default class DirectStore {
     removingPin = false;
     selected: Message[] = [];
     forwarding = false;
+    forwardingSingle = false;
+    forwardedMessages: Message[] = [];
 
     constructor() {
         makeAutoObservable(this);        
@@ -204,6 +206,7 @@ export default class DirectStore {
         }
         this.handleDateMessages();
         this.selected = [];
+        this.forwarding = false;
         this.loadingChatDetails = false;
     }
     
@@ -702,5 +705,12 @@ export default class DirectStore {
 
     setForwarding = (value: boolean) => {
         this.forwarding = value;
+    }
+
+    forwardToSingle = (chat: ChatDto) => {
+        this.forwardedMessages = this.selected.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        this.getChatDetails(chat);
+        this.replyMessage = null;
+        this.forwardingSingle = true;
     }
 }

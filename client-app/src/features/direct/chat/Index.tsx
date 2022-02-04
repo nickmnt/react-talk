@@ -19,16 +19,17 @@ interface Props {
 }
 
 export default observer(function Chat({chat, forwarding, selected, setSelected}: Props) {
-
+    
+    const {directStore: {currentChat, getChatDetails, forwardToSingle}, userStore: {user}} = useStore(); 
     const [ready, setReady] = useState(true);
-
+    
     const bind = useLongPress(() => {
         if(!selected || !setSelected)
-            return;
+        return;
         if(selected.length !== 0)
-            return;
+        return;
         setReady(false);
-            setSelected([chat]);
+        setSelected([chat]);
         setTimeout(() => {
             setReady(true);
         }, 500);
@@ -45,12 +46,13 @@ export default observer(function Chat({chat, forwarding, selected, setSelected}:
             } else {
                 setSelected([...selected, chat]);
             }    
+        } else {
+            forwardToSingle(chat);
         }
     }
 
     const isSelected = selected?.findIndex(x => x.id === chat.id) !== -1;
 
-    const {directStore: {currentChat, getChatDetails}, userStore: {user}} = useStore(); 
     return (
         <ListItemButton 
         className={`chat__container`} 
