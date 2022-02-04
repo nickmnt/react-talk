@@ -155,5 +155,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+
+        [HttpPost("forward")]
+        public async Task<IActionResult> Forward(ForwardMessages.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

@@ -15,5 +15,7 @@ namespace Domain.Direct
         public int? ReplyToId { get; set; }
         [ForeignKey("ReplyToId")]
         public virtual Message ReplyTo { get; set; }
+
+        public AppUser ForwardedFrom { get; set; }
     }
 }

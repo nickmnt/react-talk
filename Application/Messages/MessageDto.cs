@@ -15,5 +15,7 @@ namespace Application.Messages
         public string Url { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ReplyToId { get; set; }
+        public string ForwardDisplayName { get; set; }
+        public string ForwardUsername { get; set; }
     }
 }
