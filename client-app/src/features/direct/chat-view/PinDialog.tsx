@@ -34,7 +34,7 @@ export default observer(function PinDialog({ open, onClose }: Props) {
         <FormControlLabel sx={{margin: '1.5rem 0'}} control={<Checkbox value={value} onChange={e => setValue(e.target.checked)} />} label={`Also pin for ${currentChat.type === 0 ? currentChat?.displayName : 'other members'}`} />
         <Stack flexDirection="row" justifyContent='flex-end'>
           <Button variant="text" onClick={handleClose}>Cancel</Button>
-          <Button variant="text" onClick={() => addPin(currentChat.id, menuMsg?.id, value)}>Pin</Button>
+          <Button variant="text" onClick={() => {addPin(currentChat.id, menuMsg?.id, value); handleClose();}}>Pin</Button>
         </Stack>
       </Stack>  
     </Paper>

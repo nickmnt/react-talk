@@ -25,6 +25,7 @@ export default class DirectStore {
     forwardedMessages: Message[] = [];
     srcChatId = '';
     menuMsg: Message | null = null;
+    showSenderName = false;
 
     constructor() {
         makeAutoObservable(this);        
@@ -748,7 +749,7 @@ export default class DirectStore {
         }
     }
 
-    forwardSingle = async (body: string, showSender: boolean = false) => {
+    forwardSingle = async (body: string) => {
         if(!this.currentChat)
             return;
         const sorted = this.forwardedMessages
@@ -758,7 +759,7 @@ export default class DirectStore {
         const lastForwardedMsg = sorted[sorted.length-1];
 
         try {
-            await agent.Chats.forwardMessages([this.currentChat.id], messageIds, this.currentChat.id, body, showSender);
+            await agent.Chats.forwardMessages([this.currentChat.id], messageIds, this.currentChat.id, body, this.showSenderName);
             const chats = this.chats;
             const currentChatId = this.currentChat.id;
             const x = chats.find(x => x.id === currentChatId);
@@ -777,5 +778,16 @@ export default class DirectStore {
 
     setMenuMsg = (value: Message) => {
         this.menuMsg = value;
+    }
+
+    menuForward = () => {
+        if(!this.menuMsg)
+            return;
+        this.selected = [this.menuMsg];
+        this.forwarding = true;
+    }
+
+    setShowSenderName = (value: boolean) => {
+        this.showSenderName = value;
     }
 }

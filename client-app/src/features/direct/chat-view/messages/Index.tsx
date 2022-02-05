@@ -26,9 +26,10 @@ export interface Props {
   selected: Message[];
   toggleSelected: (messsage: Message) => void;
   openPinOptions: () => void;
+  openFoOptions: () => void;
 }
 
-export default observer(function Messages({selected, toggleSelected, openPinOptions}: Props) {
+export default observer(function Messages({selected, toggleSelected, openPinOptions, openFoOptions}: Props) {
   const [menuTop, setMenuTop] = useState(0);
   const [menuLeft, setMenuLeft] = useState(0);
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
@@ -36,7 +37,7 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
 
   const {
     directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, removingPin, removePin 
-    , forwardingSingle, forwardedMessages, menuMsg, setMenuMsg},
+    , forwardingSingle, forwardedMessages, menuMsg, setMenuMsg, menuForward },
     userStore: { user },
   } = useStore();
 
@@ -166,7 +167,9 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
             backgroundColor: "white",
             display: "flex",
             flexDirection: "row",
+            cursor: 'pointer'
           }}
+          onClick={openFoOptions}
         >
           <ArrowForwardIcon
             style={{
@@ -309,7 +312,7 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
           </ListItemIcon>
           <ListItemText>Copy</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={menuForward}>
           <ListItemIcon>
             <ForwardIcon fontSize="small" />
           </ListItemIcon>
