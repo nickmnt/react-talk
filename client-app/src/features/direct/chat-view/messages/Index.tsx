@@ -25,17 +25,18 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 export interface Props {
   selected: Message[];
   toggleSelected: (messsage: Message) => void;
+  openPinOptions: () => void;
 }
 
-export default observer(function Messages({selected, toggleSelected}: Props) {
+export default observer(function Messages({selected, toggleSelected, openPinOptions}: Props) {
   const [menuTop, setMenuTop] = useState(0);
   const [menuLeft, setMenuLeft] = useState(0);
   const messagesRef = useRef<(HTMLElement | null)[]>([]);
   const [selectedPin, setSelectedPin] = useState(0);
 
   const {
-    directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, addPin, removingPin, removePin 
-    , forwardingSingle, forwardedMessages},
+    directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, removingPin, removePin 
+    , forwardingSingle, forwardedMessages, menuMsg, setMenuMsg},
     userStore: { user },
   } = useStore();
 
@@ -69,7 +70,6 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
   }, [currentChat, currentChat?.pins.length])
  
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [menuMsg, setMenuMsg] = React.useState<null | Message>(null);
   const open = Boolean(anchorEl);
   
   const onRightClick = (e: React.MouseEvent<HTMLDivElement>, message: Message) => {
@@ -315,7 +315,7 @@ export default observer(function Messages({selected, toggleSelected}: Props) {
           </ListItemIcon>
           <ListItemText>Forward</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => addPin(currentChat.id, menuMsg!.id, true)}>
+        <MenuItem onClick={openPinOptions}>
           <ListItemIcon>
             <PushPinIcon fontSize="small" />
           </ListItemIcon>

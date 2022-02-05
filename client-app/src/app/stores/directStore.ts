@@ -24,6 +24,7 @@ export default class DirectStore {
     forwardingSingle = false;
     forwardedMessages: Message[] = [];
     srcChatId = '';
+    menuMsg: Message | null = null;
 
     constructor() {
         makeAutoObservable(this);        
@@ -772,5 +773,9 @@ export default class DirectStore {
         } catch(error) {
             console.log(error);
         }
+    }
+
+    setMenuMsg = (value: Message) => {
+        this.menuMsg = value;
     }
 }

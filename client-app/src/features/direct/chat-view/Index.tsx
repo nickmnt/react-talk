@@ -15,8 +15,13 @@ import { Message } from "../../../app/models/chat";
 import SelectHeader from "./SelectHeader";
 import { toast } from "react-toastify";
 import ForwardDialog from "./ForwardDialog";
+import { useState } from "react";
+import PinDialog from "./PinDialog";
 
 export default observer(function ChatView() {
+
+  const [pinOpen, setPinOpen] = useState(false);
+
   const {
     directStore: { currentChat, loadingChatDetails,selected, setSelected, forwarding, setForwarding },
     chatStore: { stack },
@@ -57,7 +62,7 @@ export default observer(function ChatView() {
           <>
             {selected.length === 0 ? <Header />
             : <SelectHeader count={selected.length} clearSelected={clearSelected} copyMessages={copyMessages} />}
-            <Messages selected={selected} toggleSelected={toggleSelected} />
+            <Messages selected={selected} toggleSelected={toggleSelected} openPinOptions={() => setPinOpen(true)} />
             <ChatInput selectedCount={selected.length} />
           </>
             }
@@ -89,6 +94,7 @@ export default observer(function ChatView() {
           </Paper>
         </div>
       )}
+      <PinDialog open={pinOpen} onClose={() => setPinOpen(false)} />
       <ForwardDialog open={selected.length > 0 && forwarding} onClose={() => setForwarding(false)}/>
     </div>
   );
