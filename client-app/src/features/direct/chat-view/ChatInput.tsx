@@ -26,7 +26,8 @@ export interface Props {
 
 export default observer(function ChatInput({selectedCount}: Props) {
     
-    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding}} = useStore();
+    const {directStore: {currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding, forwardingSingle
+    , forwardSingle}} = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [file,setFile] = useState<null | FileRecord>(null);
 
@@ -91,7 +92,11 @@ export default observer(function ChatInput({selectedCount}: Props) {
                         createPrivateChat(currentChat.privateChat!.otherUsername,values.body, file).then(() => {resetForm();setFile(null);});
                     } else {
                         if(!file) {
-                            createMessage(values.body).then(() => resetForm());
+                            if(forwardingSingle) {
+                                forwardSingle(values.body).then(() => resetForm());
+                            } else {
+                                createMessage(values.body).then(() => resetForm());
+                            }
                         } else {
                             if(file.video) {
                                 createVideo(file.file, values.body).then(() => {resetForm(); setFile(null)});

@@ -35,7 +35,7 @@ export default observer(function FoOptionsDialog({ open, onClose }: Props) {
             sx={{ margin: "1.5rem 0" }}
             control={
               <Checkbox
-                defaultChecked={value}
+                checked={value}
                 onChange={(e) => setValue(e.target.checked)}
               />
             }

@@ -37,7 +37,7 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
 
   const {
     directStore: { currentChat, replyMessage, setReplyMessage, getMessageIndexById, clearReply, getMessageById, removingPin, removePin 
-    , forwardingSingle, forwardedMessages, menuMsg, setMenuMsg, menuForward },
+    , forwardingSingle, forwardedMessages, menuMsg, setMenuMsg, menuForward, clearForwardingSingle },
     userStore: { user },
   } = useStore();
 
@@ -105,6 +105,11 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
       forwardBody = `From  ${forwardedMessages[0].displayName} and ${(forwardedSenderCount-1).toString()} others`;
     }
   }
+
+  const truncate = (str: string, n: number) => {
+    return str.length > n ? str.substring(0, n - 1) + "..." : str;
+  };
+
   if (!currentChat) return null;
 
   return (
@@ -113,6 +118,7 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
         display: "flex",
         flex: 1,
         overflowY: "auto",
+        overflowX: 'hidden',
         flexDirection: "column-reverse",
       }}
     >
@@ -150,7 +156,7 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
               >
                 {replyMessage.displayName}
               </Typography>
-              <Typography fontSize="1.4rem">{replyMessage.body}</Typography>
+              <Typography fontSize="1.4rem">{truncate(replyMessage.body, 30)}</Typography>
             </Stack>
           </div>
           <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={clearReply}>
@@ -193,10 +199,13 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
               >
                 Forward {forwardedMessages.length === 1 ? 'message' : forwardedMessages.length + ' messages'}
               </Typography>
-              <Typography fontSize="1.4rem">{forwardBody}</Typography>
+              <Typography fontSize="1.4rem">{truncate(forwardBody, 30)}</Typography>
             </Stack>
           </div>
-          <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={clearReply}>
+          <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={(e) => {
+            e.stopPropagation();
+            clearForwardingSingle();
+          }}>
             <CloseIcon />
           </IconButton>
         </Paper>
@@ -297,7 +306,10 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
         anchorReference="anchorPosition"
         anchorPosition={{ top: menuTop, left: menuLeft }}
       >
-        <MenuItem onClick={() => setReplyMessage(menuMsg!)}>
+        <MenuItem onClick={() => {
+          clearForwardingSingle();
+          setReplyMessage(menuMsg!);
+        }}>
           <ListItemIcon>
             <ReplyIcon fontSize="small" />
           </ListItemIcon>

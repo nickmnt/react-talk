@@ -83,7 +83,9 @@ namespace Application.Core
             CreateMap<Message, MessageDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Sender.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url));
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(d => d.ForwardUsername, o => o.MapFrom(s => s.ForwardedFrom.UserName))
+                .ForMember(d => d.ForwardDisplayName, o => o.MapFrom(s => s.ForwardedFrom.DisplayName));
             CreateMap<PrivateChat, PrivateChatDto>();
             CreateMap<ChannelChat, ChannelDetailsDto>();
             CreateMap<GroupChat, GroupDetailsDto>();

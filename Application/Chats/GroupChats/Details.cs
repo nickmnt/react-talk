@@ -49,6 +49,10 @@ namespace Application.Chats.GroupChats
                     .ThenInclude(x => x.GroupChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.GroupChat)
+                    .ThenInclude(x => x.Messages)
+                    .ThenInclude(x => x.ForwardedFrom)
                     .FirstOrDefaultAsync(x => x.ChatId == request.ChatId 
                                               && x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
 

@@ -49,6 +49,8 @@ export interface Message {
     localBlob?: Blob;
     localProgress?: number;
     replyToId: number;
+    forwardUsername: string;
+    forwardDisplayName: string;
 }
 
 export interface ChannelDetailsDto {

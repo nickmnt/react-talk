@@ -230,7 +230,9 @@ export default class DirectStore {
                 image: "",
                 publicId: "",
                 url: "",
-                replyToId: this.replyMessage ? this.replyMessage.id : 0
+                replyToId: this.replyMessage ? this.replyMessage.id : 0,
+                forwardUsername: '',
+                forwardDisplayName: ''
             });
         
         id--;
@@ -385,8 +387,10 @@ export default class DirectStore {
         if(id === -1) 
             return;
         const response = await agent.Chats.createMessage(body, this.currentChat.id, this.replyMessage ? this.replyMessage.id : -1);
-        this.updateLocalMessage(response, id);
-        this.replyMessage = null;
+        runInAction(() => {
+            this.updateLocalMessage(response, id);
+            this.replyMessage = null;
+        });
         this.handleDateMessages();
     }
 
@@ -733,15 +737,14 @@ export default class DirectStore {
 
         try {
             await agent.Chats.forwardMessages(chatIds, messageIds, this.currentChat.id, body, showSender);
-            const chats = this.chats;
-            chats.forEach(x => {
-                if(chatIds.find(y => y === x.id) && x.lastMessage && x.lastMessage.createdAt.getTime() < new Date().getTime()) {
-                    x.lastMessage = {...lastForwardedMsg, createdAt: new Date()};
-                    x.lastMessageSeen = false;
-                }
-            });
             runInAction(() => {
-                this.chats = chats;
+                const chats = this.chats;
+                chats.forEach(x => {
+                    if(chatIds.find(y => y === x.id) && x.lastMessage && x.lastMessage.createdAt.getTime() < new Date().getTime()) {
+                        x.lastMessage = {...lastForwardedMsg, createdAt: new Date()};
+                        x.lastMessageSeen = false;
+                    }
+                });
                 this.forwarding = false;
             });
         } catch(error) {
@@ -759,7 +762,7 @@ export default class DirectStore {
         const lastForwardedMsg = sorted[sorted.length-1];
 
         try {
-            await agent.Chats.forwardMessages([this.currentChat.id], messageIds, this.currentChat.id, body, this.showSenderName);
+            await agent.Chats.forwardMessages([this.currentChat.id], messageIds, this.srcChatId, body, this.showSenderName);
             const chats = this.chats;
             const currentChatId = this.currentChat.id;
             const x = chats.find(x => x.id === currentChatId);
@@ -771,6 +774,7 @@ export default class DirectStore {
             runInAction(() => {
                 this.forwarding = false;
             });
+            this.getChatDetails(this.currentChat);
         } catch(error) {
             console.log(error);
         }
@@ -789,5 +793,10 @@ export default class DirectStore {
 
     setShowSenderName = (value: boolean) => {
         this.showSenderName = value;
+    }
+
+    clearForwardingSingle = () => {
+        this.forwardingSingle = false;
+        this.forwardedMessages = [];
     }
 }

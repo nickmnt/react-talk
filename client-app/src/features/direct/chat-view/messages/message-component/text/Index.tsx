@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,type,attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage}: Props) {
-    const {directStore: {getMessageById}} = useStore()
+    const {directStore: {getMessageById}, chatStore: {addProfileDetailsToStack} } = useStore()
     const replyTo = getMessageById(message.replyToId);
 
     return (
@@ -48,6 +48,21 @@ export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,
                     {replyTo.username}
                     </Typography>
                     <Typography fontSize="1.4rem">{replyTo.body}</Typography>
+                </Stack>
+            </div>}
+            {message.forwardUsername && 
+            <div style={{height: '3.5rem', display: 'flex', marginTop: '1rem', opacity: '.8', color: "#007FFF"}}> 
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    sx={{ margin: "0 1gfrem", fontSize: "1rem", height: "100%" }}
+                >
+                    <Typography
+                        fontSize="1.4rem"
+                    >
+                    Forwarded message
+                    </Typography>
+                    <Typography fontSize="1.4rem">From <span onClick={() => addProfileDetailsToStack(message.forwardUsername)} style={{fontWeight: 600, cursor: 'pointer'}}>{message.forwardUsername}</span></Typography>
                 </Stack>
             </div>}
             {type === 1 && <img onClick={() => console.log('open lightbox with image index')} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt='Attachment' className='text__attachedImg' />}
