@@ -19,6 +19,7 @@ export interface ChatDto {
     lastMessageSeen: boolean;
     notSeenCount: number;
     pins: Pin[];
+    participantUsername: string;
 }
 
 export interface SearchChatDto {
@@ -127,9 +128,9 @@ export interface GroupMemberPermissions {
     changeChatInfo: boolean;
 }
 
-export const createLocalChat = (username: string, displayName: string, image: string) => {
+export const createLocalChat = (username: string, displayName: string, image?: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);
     const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: []} as ChatDto;
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: [], participantUsername: username} as ChatDto;
 }

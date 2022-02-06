@@ -39,7 +39,7 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack}, directStore: {removeMember} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack}, directStore: {removeMember, getChatDetails, chats, setLocalChat} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
     const [open, setOpen] = useState<GroupMember | null>(null);
     const handleOpen = (profile: GroupMember) => setOpen(profile);
@@ -60,6 +60,25 @@ export default observer(function ChatDetails({chatPage}: Props) {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
+
+    const goToChat = () => {
+        switch(chatPage.type) {
+            case 0:
+                //Personal account
+                const searchResult = chats.find(x => x.participantUsername === chatPage.accountData!.username);
+                searchResult ? getChatDetails(searchResult)
+                : setLocalChat(chatPage.accountData!.username, chatPage.accountData!.displayName, chatPage.accountData!.image);
+                break;
+            case 1:
+                //Group
+                getChatDetails(chatPage.groupData!);
+                break;
+            case 2: 
+                //Channel
+                getChatDetails(chatPage.channelData!);
+                break;
+        }
+    }
 
     if(!accountData && !groupData && !channelData)
         return <LoadingComponent />
@@ -95,7 +114,8 @@ export default observer(function ChatDetails({chatPage}: Props) {
                             {groupData && groupData.displayName}
                             {channelData && channelData.displayName}
                         </Typography>
-                        <Button variant="contained" sx={{borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40}}>
+                        <Button variant="contained" sx={{borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40}}
+                        onClick={goToChat} >
                             <ChatIcon sx={{height: 40, width: 40}}></ChatIcon>
                         </Button>
                     </Stack>

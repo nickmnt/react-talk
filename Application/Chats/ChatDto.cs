@@ -16,7 +16,7 @@ namespace Application.Chats
         public MessageDto LastMessage { get; set; }
         public bool LastMessageSeen { get; set; }
         public int NotSeenCount { get; set; }
-        [JsonIgnore] public string ParticipantUsername { get; set; }
+        public string ParticipantUsername { get; set; }
         public ICollection<PinDto> Pins { get; set; } = new List<PinDto>();
     }
 }

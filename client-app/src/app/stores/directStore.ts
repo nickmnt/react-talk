@@ -127,7 +127,7 @@ export default class DirectStore {
         this.chats.push(chat);
     }
 
-    setLocalChat = (username: string, displayName: string, image: string) => {
+    setLocalChat = (username: string, displayName: string, image?: string) => {
         this.currentChat = createLocalChat(username, displayName, image);
     }
 
