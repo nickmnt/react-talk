@@ -1,6 +1,5 @@
 import Actions from "./Actions";
 import { useEffect, useState } from "react";
-import Chat from "./chat/Index";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import SearchResult from "./SearchResult";
@@ -9,10 +8,12 @@ import GroupFinalization from "./home-sidebar/GroupFinalization";
 import Channelnitial from "./home-sidebar/Channelnitial";
 import List from '@mui/material/List';
 import Paper from "@mui/material/Paper/Paper";
+import ChatSkeleton from "./home-sidebar/ChatSkeleton";
+import Chat from "./chat/Index";
 
 export default observer(function HomeSidebar() {
 
-    const {directStore: {searchChats, searchResults, chats}, groupStore: {editing, phase,type}} = useStore();
+    const {directStore: {searchChats, searchResults, chats, loadingChats}, groupStore: {editing, phase,type}} = useStore();
     const [searchVal, setSearchVal] = useState("");
 
     useEffect(() => {
@@ -43,11 +44,11 @@ export default observer(function HomeSidebar() {
             <div className="homeSidebar__chats"> 
                 {!searchVal ? 
                 <List disablePadding>
-                {
-                    chats.map((chat) => 
-                    <Chat chat={chat} key={chat.id}/>
-                    )
-                }
+                    {loadingChats ? [0,0,0,0,0,0,0,0,0,0,0,0,0,0].map(() => <ChatSkeleton />) :
+                        chats.map((chat) => 
+                            <Chat chat={chat} key={chat.id}/>
+                        )
+                    }
                 </List >
                 :
                 <List>

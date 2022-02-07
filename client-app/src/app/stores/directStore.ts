@@ -26,6 +26,7 @@ export default class DirectStore {
     srcChatId = '';
     menuMsg: Message | null = null;
     showSenderName = false;
+    loadingChats = true;
 
     constructor() {
         makeAutoObservable(this);        
@@ -50,6 +51,7 @@ export default class DirectStore {
                             x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt)
                     })
                     this.chats = chats;
+                    this.loadingChats = false;
                 })
             });
 
