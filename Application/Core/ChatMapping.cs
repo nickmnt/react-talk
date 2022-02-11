@@ -21,7 +21,8 @@ namespace Application.Core
                 DisplayName = userChat.Chat.ChannelChat.Name,
                 Type = (int)ChatType.Channel,
                 ParticipantUsername = null,
-                Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins)
+                Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins),
+                MembershipType = (int)userChat.MembershipType
             };
         }
         
@@ -34,7 +35,8 @@ namespace Application.Core
                 DisplayName = userChat.Chat.GroupChat.Name,
                 Type = (int)ChatType.Group,
                 ParticipantUsername = null,
-                Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins)
+                Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins),
+                MembershipType = (int)userChat.MembershipType
             };
         }
     }

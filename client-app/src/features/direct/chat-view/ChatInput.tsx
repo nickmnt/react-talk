@@ -85,7 +85,6 @@ export default observer(function ChatInput({selectedCount}: Props) {
 
     const isChannelSubscriber = currentChat.type === 2 && currentChat.membershipType === 0;
 
-    console.log(currentChat.type);
 
     if(isChannelSubscriber) {
         return (
