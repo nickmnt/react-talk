@@ -274,7 +274,7 @@ export default observer(function ChatDetails({chatPage}: Props) {
                             {value === 1 && (
                                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem'}}>
                                     {imagesDesc.map((img) => (
-                                        <div style={{position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue'}}>
+                                        <div style={{position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue'}} key={img.id}>
                                             <img src={img.src} alt={img.caption} style={{display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0}} />
                                         </div>
                                     ))}

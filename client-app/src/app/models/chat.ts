@@ -9,7 +9,6 @@ export interface Pin {
 export interface ChatDto {
     id: string;
     type: number;
-    privateChatId: string;
     displayName: string;
     image: string;
     privateChat?: PrivateChat | null;
@@ -19,7 +18,7 @@ export interface ChatDto {
     lastMessageSeen: boolean;
     notSeenCount: number;
     pins: Pin[];
-    participantUsername: string;
+    participantUsername: string | null;
 }
 
 export interface SearchChatDto {

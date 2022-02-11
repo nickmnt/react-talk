@@ -290,8 +290,8 @@ export default observer(function Messages({selected, toggleSelected, openPinOpti
             <Typography fontSize="1.4rem">{getMessageById(currentChat.pins[selectedPin].messageId)?.body}</Typography>
           </Stack>
         </div>
-        <IconButton style={{ width: 48, height: 48, margin: "auto 0" }}>
-          <CloseIcon onClick={() => !removingPin && removePin(currentChat.id, currentChat.pins[selectedPin].id)} sx={{ opacity: removingPin ? 0.25 : 1 }}/>
+        <IconButton style={{ width: 48, height: 48, margin: "auto 0" }} onClick={() => !removingPin && removePin(currentChat.id, currentChat.pins[selectedPin].id)} sx={{ opacity: removingPin ? 0.25 : 1 }}>
+          <CloseIcon />
         </IconButton>
       </Paper>}
       <Menu

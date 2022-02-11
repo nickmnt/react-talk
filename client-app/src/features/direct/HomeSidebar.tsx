@@ -44,7 +44,7 @@ export default observer(function HomeSidebar() {
             <div className="homeSidebar__chats"> 
                 {!searchVal ? 
                 <List disablePadding>
-                    {loadingChats ? [0,0,0,0,0,0,0,0,0,0,0,0,0,0].map(() => <ChatSkeleton />) :
+                    {loadingChats ? [0,0,0,0,0,0,0,0,0,0,0,0,0,0].map((_,i) => <ChatSkeleton key={i}/>) :
                         chats.map((chat) => 
                             <Chat chat={chat} key={chat.id}/>
                         )
@@ -54,7 +54,7 @@ export default observer(function HomeSidebar() {
                 <List>
                     {
                         searchResults.map((result) => (
-                            <SearchResult searchResult={result} key={result.username}/>
+                            <SearchResult searchResult={result} key={result.username} setSearchVal={setSearchVal} />
                         ))
                     }
                 </List>

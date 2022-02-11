@@ -58,7 +58,7 @@ export default observer(function Header() {
                 <div className="chatHeader__status">
                     {currentChat.type === 1 && `${currentChat.groupChat?.memberCount} ${currentChat.groupChat?.memberCount === 1 ? 'member' : 'members'}`}
                     {currentChat.type === 2 && `${currentChat.channelChat?.memberCount} ${currentChat.channelChat?.memberCount === 1 ? 'subscriber' : 'subscribers'}`}
-                    {currentChat.type === 0 && 'online'}
+                    {(currentChat.type === 0 || currentChat.type === -10) && 'online'}
                 </div>
             </div>
             <div className="chatHeader__right">

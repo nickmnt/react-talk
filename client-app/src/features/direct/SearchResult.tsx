@@ -7,23 +7,35 @@ import Avatar from "@mui/material/Avatar";
 
 interface Props {
   searchResult: SearchChatDto;
+  setSearchVal: (value: string) => void;
 }
 
-export default observer(function SearchResult({ searchResult }: Props) {
+export default observer(function SearchResult({ searchResult, setSearchVal }: Props) {
   const {
-    directStore: { setLocalChat },
+    directStore: { setLocalChat, chats, getChatDetails, clearSearchResults },
   } = useStore();
+
+  const goToChat = () => {
+    //Personal account
+    const result = chats.find(
+      (x) => x.participantUsername === searchResult.username
+    );
+    chats.forEach(x => console.log(x.participantUsername))
+    result
+      ? getChatDetails(result)
+      : setLocalChat(
+          searchResult.username,
+          searchResult.displayName,
+          searchResult.image
+        );
+    clearSearchResults();
+    setSearchVal('');
+  };
 
   return (
     <ListItemButton
       className={`chat__container`}
-      onClick={() =>
-        setLocalChat(
-          searchResult.username,
-          searchResult.displayName,
-          searchResult.image
-        )
-      }
+      onClick={goToChat}
     >
       <ListItemAvatar>
         <Avatar

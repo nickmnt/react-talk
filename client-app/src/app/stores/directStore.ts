@@ -440,12 +440,8 @@ export default class DirectStore {
 
     createPrivateChat = async (username: string, body: string, file: FileRecord | null) => {
         try {
-            console.log('yup')
-
             if(!this.currentChat)
                 return;
-
-            console.log('yupi')
 
             const response = await agent.Chats.createPrivateChat(username);
             this.setChat(response);
@@ -460,6 +456,7 @@ export default class DirectStore {
                     }
                 }
             });
+            this.getChatDetails(response);
         } catch(error) {
             console.log(error);
         }
@@ -800,5 +797,9 @@ export default class DirectStore {
     clearForwardingSingle = () => {
         this.forwardingSingle = false;
         this.forwardedMessages = [];
+    }
+
+    clearSearchResults = () => {
+        this.searchResults = [];
     }
 }
