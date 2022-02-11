@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
@@ -41,6 +42,18 @@ namespace Application.Chats
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
                 var target = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == request.TargetUsername, cancellationToken);
+
+                var available = await _context.UserChats.Include(x => x.Chat)
+                    .ThenInclude(x => x.Users).ThenInclude(x => x.AppUser)
+                    .FirstOrDefaultAsync(x =>
+                    !(x.Chat.Users
+                          .Select(y => y.AppUser.UserName).Contains(user.UserName) &&
+                      x.Chat.Users
+                          .Select(y => y.AppUser.UserName).Contains(user.UserName)
+                      && x.Chat.Type == ChatType.PrivateChat), cancellationToken);
+                
+                if(available != null)
+                    return Result<ChatDto>.Failure("Private chat already exists");
 
                 if (user == null || target == null)
                     return null;

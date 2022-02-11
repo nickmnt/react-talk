@@ -9,8 +9,6 @@ namespace Application.Chats
     {
         public Guid Id { get; set; }
         public int Type { get; set; }
-        //Private Chat
-        public int PrivateChatId { get; set; }
         public string DisplayName { get; set; }
         public string Image { get; set; }
         public MessageDto LastMessage { get; set; }
