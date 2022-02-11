@@ -15,6 +15,7 @@ namespace Application.Chats
         public bool LastMessageSeen { get; set; }
         public int NotSeenCount { get; set; }
         public string ParticipantUsername { get; set; }
+        public int MembershipType { get; set; }
         public ICollection<PinDto> Pins { get; set; } = new List<PinDto>();
     }
 }

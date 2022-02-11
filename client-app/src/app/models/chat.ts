@@ -19,6 +19,7 @@ export interface ChatDto {
     notSeenCount: number;
     pins: Pin[];
     participantUsername: string | null;
+    membershipType: number;
 }
 
 export interface SearchChatDto {
@@ -131,5 +132,5 @@ export const createLocalChat = (username: string, displayName: string, image?: s
     var date = new Date();
     date.setDate(date.getDate() - 1);
     const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: [], participantUsername: username} as ChatDto;
+    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: [], participantUsername: username, membershipType: 0} as ChatDto;
 }
