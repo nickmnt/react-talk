@@ -1,30 +1,29 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { useStore } from '../../app/stores/store';
-import ChatView from './chat-view/Index'
-import HomeSidebar from './HomeSidebar'
+import ChatView from './chat-view/Index';
+import HomeSidebar from './HomeSidebar';
 
 export default observer(function Inbox() {
-
     const expanded = false;
 
-    const {directStore: {createHubConnection,clearChats, chats, currentChat}} = useStore();
+    const {
+        directStore: { createHubConnection, clearChats, chats, currentChat }
+    } = useStore();
 
-    useEffect(() => {
-        
-    }, [chats]);
+    useEffect(() => {}, [chats]);
 
     useEffect(() => {
         createHubConnection();
-    
+
         return () => {
-          clearChats();
+            clearChats();
         };
-      }, [createHubConnection, clearChats]);
+    }, [createHubConnection, clearChats]);
 
     return (
         <div className="home">
-            <div className={`home__container ${expanded && "home__container--expanded"}`}>
+            <div className={`home__container ${expanded && 'home__container--expanded'}`}>
                 <div className={`home__main ${currentChat && 'home__main--active'}`}>
                     <ChatView />
                 </div>
@@ -33,5 +32,5 @@ export default observer(function Inbox() {
                 </div>
             </div>
         </div>
-    )
+    );
 });

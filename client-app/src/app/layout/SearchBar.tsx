@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Comment, Search, SearchProps, SearchResultData, SearchResultProps } from 'semantic-ui-react'
+import { Comment, Search, SearchProps, SearchResultData, SearchResultProps } from 'semantic-ui-react';
 import agent from '../api/agent';
 import { SearchResult } from '../models/search';
 
@@ -10,15 +10,18 @@ export default function SearchBar() {
     const [results, setResults] = useState<SearchResult[]>([]);
 
     useEffect(() => {
-        if(value) {
+        if (value) {
             const fetchData = async (term: string) => {
                 return await agent.Search.search(term);
-            }
-            
-            setLoading(true);
-            fetchData(value).then(results => { setResults(results); setLoading(false); }).catch(() => setLoading(false));
+            };
 
-            
+            setLoading(true);
+            fetchData(value)
+                .then((results) => {
+                    setResults(results);
+                    setLoading(false);
+                })
+                .catch(() => setLoading(false));
         } else {
             setResults([]);
         }
@@ -26,14 +29,13 @@ export default function SearchBar() {
 
     const onResultSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, data: SearchResultData) => {
         setValue('');
-    }
-    
+    };
+
     const handleSearchChange = (event: React.MouseEvent<HTMLElement, MouseEvent>, data: SearchProps) => {
         setValue(data.value);
-    }
+    };
 
-    const resultRenderer = ({image, displayName, username}: SearchResultProps) => {
-    
+    const resultRenderer = ({ image, displayName, username }: SearchResultProps) => {
         return (
             <Comment.Group as={Link} to={`/profiles/${username}`}>
                 <Comment>
@@ -44,17 +46,8 @@ export default function SearchBar() {
                     </Comment.Content>
                 </Comment>
             </Comment.Group>
-    )}
+        );
+    };
 
-    return (
-        <Search
-            loading={loading}
-            onResultSelect={onResultSelect}
-            onSearchChange={handleSearchChange}
-            resultRenderer={resultRenderer}
-            results={results}
-            value={value}
-        />
-        
-    )
+    return <Search loading={loading} onResultSelect={onResultSelect} onSearchChange={handleSearchChange} resultRenderer={resultRenderer} results={results} value={value} />;
 }

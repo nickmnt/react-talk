@@ -6,7 +6,9 @@
     display: flex;
     align-items: center;
 
-    &__emoji, &__attachment, &__microphone {
+    &__emoji,
+    &__attachment,
+    &__microphone {
         width: 2.5rem;
         height: 2.5rem;
         fill: $color-grey-dark-1;
@@ -14,7 +16,7 @@
 
     &__emoji {
         margin-left: 1rem;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
     }
 
     &__microphone {
@@ -34,8 +36,6 @@
         border: none;
 
         caret-color: $color-blue;
-        
-
 
         &:focus {
             outline-width: 0;

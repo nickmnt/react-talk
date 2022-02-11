@@ -1,8 +1,8 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import { history } from "../..";
-import agent from "../api/agent";
-import { User, UserFormValues } from "../models/user";
-import { store } from "./store";
+import { makeAutoObservable, runInAction } from 'mobx';
+import { history } from '../..';
+import agent from '../api/agent';
+import { User, UserFormValues } from '../models/user';
+import { store } from './store';
 
 export default class UserStore {
     user: User | null = null;
@@ -19,51 +19,50 @@ export default class UserStore {
         try {
             const user = await agent.Account.login(creds);
             store.commonStore.setToken(user.token);
-            runInAction(() => this.user = user);
+            runInAction(() => (this.user = user));
             history.push('/activities');
             store.modalStore.closeModal();
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
-    }
+    };
 
     logout = () => {
         store.commonStore.setToken(null);
         window.localStorage.removeItem('jwt');
         this.user = null;
         history.push('/');
-    }
+    };
 
     getUser = async () => {
         try {
             const user = await agent.Account.current();
             console.log('logginedINUser', user);
-            runInAction(() => this.user = user);
-        } catch(error) {
+            runInAction(() => (this.user = user));
+        } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     register = async (creds: UserFormValues) => {
         try {
             const user = await agent.Account.register(creds);
             store.commonStore.setToken(user.token);
-            runInAction(() => this.user = user);
+            runInAction(() => (this.user = user));
             history.push('/activities');
             store.modalStore.closeModal();
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
-    }
+    };
 
     setImage = (image: string) => {
-        if(this.user)
-            this.user.image = image;
-    }
+        if (this.user) this.user.image = image;
+    };
 
     setDisplayName = (displayName: string) => {
-        if(this.user) {
+        if (this.user) {
             this.user.displayName = displayName;
         }
-    }
+    };
 }

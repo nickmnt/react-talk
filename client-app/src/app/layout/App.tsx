@@ -19,55 +19,53 @@ import ProfilePage from '../../features/profiles/ProfilePage';
 import Inbox from '../../features/direct/Inbox';
 
 function App() {
-  const location = useLocation();
-  const {commonStore, userStore} = useStore();
+    const location = useLocation();
+    const { commonStore, userStore } = useStore();
 
-  useEffect(() => {
-    if(commonStore.token) {
-      userStore.getUser().finally(() => {
-        commonStore.setAppLoaded();
-      }); 
-    } else {
-      commonStore.setAppLoaded();
-    }
-  }, [commonStore, userStore]);
-
-  if(!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
-
-  return (
-    <div className="baseSettings">
-      <ToastContainer position='bottom-right' hideProgressBar />
-      <ModalContainer />
-      <Route path='/' component={HomePage} exact/>
-      <Route 
-        path='/(.+)'
-        render={() =>
-          <>
-            
-              <Switch> 
-                <Route path='/direct/inbox' exact component={Inbox} /> 
-                <>
-                  <Container className="activitiesContainer">
-                    <NavBar />
-                    <Switch>
-                      <Route path='/activities' component={ActivityDashboard} exact />
-                      <Route path='/activities/:id' component={ActivityDetails} />
-                      <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
-                      <Route path='/profiles/:username' component={ProfilePage} />
-                      <Route path='/errors' component={TestErrors} />
-                      <Route path='/server-error' component={ServerError} />
-                      <Route path='/login' component={LoginForm} />
-                      <Route component={NotFound} />
-                    </Switch>
-                  </Container>
-                </>
-              </Switch>
-              
-          </>
+    useEffect(() => {
+        if (commonStore.token) {
+            userStore.getUser().finally(() => {
+                commonStore.setAppLoaded();
+            });
+        } else {
+            commonStore.setAppLoaded();
         }
-      />
-    </ div>
-  );
+    }, [commonStore, userStore]);
+
+    if (!commonStore.appLoaded) return <LoadingComponent content="Loading app..." />;
+
+    return (
+        <div className="baseSettings">
+            <ToastContainer position="bottom-right" hideProgressBar />
+            <ModalContainer />
+            <Route path="/" component={HomePage} exact />
+            <Route
+                path="/(.+)"
+                render={() => (
+                    <>
+                        <Switch>
+                            <Route path="/direct/inbox" exact component={Inbox} />
+                            <>
+                                <Container className="activitiesContainer">
+                                    <NavBar />
+                                    <Switch>
+                                        <Route path="/activities" component={ActivityDashboard} exact />
+                                        <Route path="/activities/:id" component={ActivityDetails} />
+                                        <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+                                        <Route path="/profiles/:username" component={ProfilePage} />
+                                        <Route path="/errors" component={TestErrors} />
+                                        <Route path="/server-error" component={ServerError} />
+                                        <Route path="/login" component={LoginForm} />
+                                        <Route component={NotFound} />
+                                    </Switch>
+                                </Container>
+                            </>
+                        </Switch>
+                    </>
+                )}
+            />
+        </div>
+    );
 }
 
 export default observer(App);

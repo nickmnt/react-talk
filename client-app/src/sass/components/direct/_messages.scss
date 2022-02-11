@@ -7,13 +7,13 @@
     flex-direction: column;
 
     &__message {
-      margin-top: 1rem;
-      width: 100%;
-      display: flex;
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
 
-      &--me {
-        flex-direction: row-reverse;
-      }
+        &--me {
+            flex-direction: row-reverse;
+        }
     }
 
     & > *:last-child {
@@ -22,14 +22,14 @@
 
     &::-webkit-scrollbar,
     &::-webkit-scrollbar-thumb {
-      width: 26px;
-      border-radius: 13px;
-      background-clip: padding-box;
-      border: 10px solid transparent;
-      color: rgba($color-grey-light, 0.8);
+        width: 26px;
+        border-radius: 13px;
+        background-clip: padding-box;
+        border: 10px solid transparent;
+        color: rgba($color-grey-light, 0.8);
     }
 
     &::-webkit-scrollbar-thumb {
-      box-shadow: inset 0 0 0 10px;
+        box-shadow: inset 0 0 0 10px;
     }
 }

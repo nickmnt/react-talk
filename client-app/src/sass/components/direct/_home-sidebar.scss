@@ -1,26 +1,26 @@
 .homeSidebar {
-  height: 100%;
-
-  &__chats {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: hidden;
 
-    &:hover {
-      overflow-y: auto;
-    }
+    &__chats {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
 
-    &::-webkit-scrollbar,
-    &::-webkit-scrollbar-thumb {
-      width: 26px;
-      border-radius: 13px;
-      background-clip: padding-box;
-      border: 10px solid transparent;
-      color: rgba($color-grey-light, 0.8);
-    }
+        &:hover {
+            overflow-y: auto;
+        }
 
-    &::-webkit-scrollbar-thumb {
-      box-shadow: inset 0 0 0 10px;
+        &::-webkit-scrollbar,
+        &::-webkit-scrollbar-thumb {
+            width: 26px;
+            border-radius: 13px;
+            background-clip: padding-box;
+            border: 10px solid transparent;
+            color: rgba($color-grey-light, 0.8);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            box-shadow: inset 0 0 0 10px;
+        }
     }
-  }
 }

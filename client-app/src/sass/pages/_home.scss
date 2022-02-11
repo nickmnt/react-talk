@@ -28,7 +28,7 @@
         // border-right: 1px solid $color-grey-light;
         // background-color: royalblue;
         position: relative;
-        
+
         @media (max-width: $medium) {
             width: 40%;
         }
@@ -78,11 +78,11 @@
         width: 1.5rem;
         height: 1.5rem;
         position: absolute;
-        top: .3rem;
-        right: .3rem;
+        top: 0.3rem;
+        right: 0.3rem;
         fill: $color-white;
 
-        transition: .2s transform;
+        transition: 0.2s transform;
 
         /*&:hover {
             transform: scale(1.2);
@@ -107,8 +107,7 @@
         }
 
         &:active * {
-            opacity: .5;
+            opacity: 0.5;
         }
     }
-
 }

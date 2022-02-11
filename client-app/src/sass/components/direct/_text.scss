@@ -1,14 +1,14 @@
 .text {
-
-    &--me, &--other {
+    &--me,
+    &--other {
         // flex: 1 0 0;
         max-width: 60%;
         // height: 100%;
         margin: 0 1rem;
         border-radius: 1.5rem;
         // padding: .5rem .5rem;
-        box-shadow: 0 0 1px rgba(0,0,0,0.1);
-        
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+
         display: flex;
         flex-direction: column;
 
@@ -37,26 +37,27 @@
         font-size: 1.5rem;
         flex: 1 0 0;
         min-width: 0;
-        white-space: pre-wrap;      /* Webkit */    
-        white-space: -moz-pre-wrap; /* Firefox */     
-        white-space: -pre-wrap;     /* Opera <7 */    
-        white-space: -o-pre-wrap;   /* Opera 7 */     
-        word-wrap: break-word;      /* IE */ 
+        white-space: pre-wrap; /* Webkit */
+        white-space: -moz-pre-wrap; /* Firefox */
+        white-space: -pre-wrap; /* Opera <7 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* IE */
     }
 
     &__info {
         display: flex;
         margin-left: auto;
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         //margin-right: .5rem;
         //margin-bottom: .5rem;
         fill: $color-green-dark;
     }
 
     &__date {
-        &--me,&--other {
+        &--me,
+        &--other {
             flex: 0 0 auto;
-            margin-right: .5rem;
+            margin-right: 0.5rem;
         }
 
         &--me {
@@ -82,23 +83,24 @@
         margin-left: auto;
     }
 
-    &--other::after, &--me::after {
+    &--other::after,
+    &--me::after {
         content: '';
         position: absolute;
-        bottom: -.04rem;
+        bottom: -0.04rem;
         width: 1rem;
         height: 1rem;
     }
 
     &--other::after {
         background-color: $color-white;
-        left: -.95rem;
-        clip-path: polygon(0% 100%, 20% 96%, 37% 91%, 50% 85%, 62% 77%, 72% 65%, 81% 50%, 89% 32%, 96% 15%, 100% 0%, 100% 100%);        
+        left: -0.95rem;
+        clip-path: polygon(0% 100%, 20% 96%, 37% 91%, 50% 85%, 62% 77%, 72% 65%, 81% 50%, 89% 32%, 96% 15%, 100% 0%, 100% 100%);
     }
 
     &--me::after {
         background-color: $color-green;
-        right: -.95rem;
+        right: -0.95rem;
         clip-path: polygon(100% 100%, 80% 96%, 63% 91%, 50% 85%, 38% 77%, 28% 65%, 19% 50%, 11% 32%, 4% 15%, 0% 0%, 0 100%);
     }
 

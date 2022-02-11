@@ -13,24 +13,23 @@
 
 //Direct
 
+@import './pages/home';
 
-@import "./pages/home";
+@import './components/direct/loader';
+@import './components/direct/chat';
+@import './components/direct/home-sidebar';
+@import './components/direct/actions';
+@import './components/direct/chatHeader';
+@import './components/direct/chat-view';
+@import './components/direct/messages';
+@import './components/direct/chat-input';
+@import './components/direct/message';
+@import './components/direct/text';
+@import './components/direct/tick';
+@import './components/direct/double-tick';
+@import './components/direct/user-menu/user-menu';
+@import './components/direct/user-menu/main-menu';
 
-@import "./components/direct/loader";
-@import "./components/direct/chat";
-@import "./components/direct/home-sidebar";
-@import "./components/direct/actions";
-@import "./components/direct/chatHeader";
-@import "./components/direct/chat-view";
-@import "./components/direct/messages";
-@import "./components/direct/chat-input";
-@import "./components/direct/message";
-@import "./components/direct/text";
-@import "./components/direct/tick";
-@import "./components/direct/double-tick";
-@import "./components/direct/user-menu/user-menu";
-@import "./components/direct/user-menu/main-menu";
-
-@import "./utility/mirror";
+@import './utility/mirror';
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');

@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable, reaction } from 'mobx';
 
 export default class CommonStore {
     error: string | null = null;
@@ -11,27 +11,27 @@ export default class CommonStore {
         //Doesn't run when initialized
         reaction(
             () => this.token,
-            token => {
-                if(token) {
+            (token) => {
+                if (token) {
                     window.localStorage.setItem('jwt', token);
                 } else {
                     window.localStorage.removeItem('jwt');
                 }
             }
-        )
+        );
     }
 
     setServerError = (error: string) => {
         this.error = error;
-    }
+    };
 
     setToken = (token: string | null) => {
-        if(token) {
+        if (token) {
             this.token = token;
         }
-    }
+    };
 
     setAppLoaded = () => {
         this.appLoaded = true;
-    }
+    };
 }

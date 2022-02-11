@@ -1,4 +1,4 @@
-import { Profile } from "./profile";
+import { Profile } from './profile';
 
 export interface Pin {
     id: number;
@@ -102,10 +102,10 @@ export interface ChatPage {
     index: number;
 }
 
-export interface ImageElem{
-    id: number
-    src: string,
-    caption: string
+export interface ImageElem {
+    id: number;
+    src: string;
+    caption: string;
 }
 
 export interface UpdatedSeenDto {
@@ -131,6 +131,19 @@ export interface GroupMemberPermissions {
 export const createLocalChat = (username: string, displayName: string, image?: string) => {
     var date = new Date();
     date.setDate(date.getDate() - 1);
-    const privateChat = {messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username};
-    return { id: '', type: -10, privateChatId: '', displayName, image, privateChat, lastMessage: null, lastMessageSeen: false, notSeenCount: 0, pins: [], participantUsername: username, membershipType: 0} as ChatDto;
-}
+    const privateChat = { messages: [], myLastSeen: date, otherLastSeen: date, otherUserId: '', otherUsername: username };
+    return {
+        id: '',
+        type: -10,
+        privateChatId: '',
+        displayName,
+        image,
+        privateChat,
+        lastMessage: null,
+        lastMessageSeen: false,
+        notSeenCount: 0,
+        pins: [],
+        participantUsername: username,
+        membershipType: 0
+    } as ChatDto;
+};

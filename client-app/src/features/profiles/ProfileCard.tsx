@@ -9,21 +9,19 @@ interface Props {
     profile: Profile;
 }
 
-export default observer(function ProfileCard({profile}: Props) {
+export default observer(function ProfileCard({ profile }: Props) {
     return (
         <Card as={Link} to={`/profiles/${profile.username}`}>
             <Image src={profile.image || '/assets/user.png'} />
             <Card.Content>
-                <Card.Header>
-                    {profile.displayName}
-                </Card.Header>
-                <Card.Description>{profile.bio ? profile.bio.length > 40 ? profile.bio?.substring(0,37) + "..." :profile.bio : null}</Card.Description>
+                <Card.Header>{profile.displayName}</Card.Header>
+                <Card.Description>{profile.bio ? (profile.bio.length > 40 ? profile.bio?.substring(0, 37) + '...' : profile.bio) : null}</Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Icon name='user' />
+                <Icon name="user" />
                 {profile.followersCount} followers
             </Card.Content>
             <FollowButton profile={profile} />
         </Card>
-    )
+    );
 });

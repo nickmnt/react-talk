@@ -1,4 +1,4 @@
-import { Profile } from "./profile";
+import { Profile } from './profile';
 
 export interface AppUser {
     id: string;
@@ -53,14 +53,14 @@ export class ActivityFormValues {
     venue: string = '';
 
     constructor(activity?: ActivityFormValues) {
-        if(activity) {
+        if (activity) {
             this.id = activity.id;
             this.title = activity.title;
             this.category = activity.category;
             this.description = activity.description;
             this.date = activity.date;
             this.city = activity.city;
-            this.venue = activity.venue; 
+            this.venue = activity.venue;
         }
     }
 }

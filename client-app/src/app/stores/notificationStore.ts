@@ -1,7 +1,7 @@
-import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { makeAutoObservable, runInAction } from "mobx";
-import { CommentNotification, FollowNotification, JoinNotification, NotificationsDto } from "../models/notification";
-import { store } from "./store";
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { CommentNotification, FollowNotification, JoinNotification, NotificationsDto } from '../models/notification';
+import { store } from './store';
 
 export default class NotificationStore {
     joinNotifications: JoinNotification[] = [];
@@ -10,11 +10,11 @@ export default class NotificationStore {
     hubConnection: HubConnection | null = null;
 
     constructor() {
-        makeAutoObservable(this);        
+        makeAutoObservable(this);
     }
 
     createHubConnection = () => {
-        if(store.userStore.user?.token) {
+        if (store.userStore.user?.token) {
             this.hubConnection = new HubConnectionBuilder()
                 .withUrl('http://localhost:5000/notification', {
                     accessTokenFactory: () => store.userStore.user?.token!
@@ -23,20 +23,20 @@ export default class NotificationStore {
                 .configureLogging(LogLevel.Information)
                 .build();
 
-            this.hubConnection.start().catch(error => console.log('Error establishing the connection'));
+            this.hubConnection.start().catch((error) => console.log('Error establishing the connection'));
 
             this.hubConnection.on('LoadNotifications', (notifications: NotificationsDto) => {
                 runInAction(() => {
                     console.log('notificationsDto', notifications);
-                    notifications.joinNotifications.forEach(notification => {
+                    notifications.joinNotifications.forEach((notification) => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
                         notification.type = 'join';
                     });
-                    notifications.commentNotifications.forEach(notification => {
+                    notifications.commentNotifications.forEach((notification) => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
                         notification.type = 'comment';
                     });
-                    notifications.followNotifications.forEach(notification => {
+                    notifications.followNotifications.forEach((notification) => {
                         notification.createdAt = new Date(notification.createdAt + 'Z');
                         notification.type = 'follow';
                     });
@@ -44,33 +44,32 @@ export default class NotificationStore {
                     this.joinNotifications = notifications.joinNotifications;
                     this.commentNotifications = notifications.commentNotifications;
                     this.followNotifications = notifications.followNotifications;
-                })
+                });
             });
 
             this.hubConnection.on('ReceiveCommentNotif', (comment: CommentNotification) => {
                 runInAction(() => {
                     comment.createdAt = new Date(comment.createdAt);
-                    this.commentNotifications.unshift(comment)
+                    this.commentNotifications.unshift(comment);
                 });
             });
         }
-    }
+    };
 
     stopHubConnection = () => {
-        this.hubConnection?.stop().catch(error => console.log('Error stopping connection: ', error));
-    }
+        this.hubConnection?.stop().catch((error) => console.log('Error stopping connection: ', error));
+    };
 
     clearNotifications = () => {
         this.commentNotifications = [];
         this.joinNotifications = [];
         this.followNotifications = [];
-        
+
         this.stopHubConnection();
-    }
+    };
 
     updateFollowing = (username: string) => {
-        const x = this.followNotifications.find(x => x.username === username);
-        if(x)
-            x.following = !x.following;
-    }
+        const x = this.followNotifications.find((x) => x.username === username);
+        if (x) x.following = !x.following;
+    };
 }
