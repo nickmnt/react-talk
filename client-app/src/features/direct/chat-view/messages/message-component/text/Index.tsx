@@ -55,7 +55,7 @@ export default observer(function Text({isMe,name,text,date,isDoubleTick,showImg,
                 <Stack
                     direction="column"
                     justifyContent="center"
-                    sx={{ margin: "0 1gfrem", fontSize: "1rem", height: "100%" }}
+                    sx={{ margin: "0 1rem", fontSize: "1rem", height: "100%" }}
                 >
                     <Typography
                         fontSize="1.4rem"

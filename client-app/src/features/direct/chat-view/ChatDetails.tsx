@@ -39,11 +39,12 @@ export interface Props {
 
 export default observer(function ChatDetails({chatPage}: Props) {
     const [value, setValue] = useState(0);
-    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack}, directStore: {removeMember, getChatDetails, chats, setLocalChat} } = useStore();
+    const { chatStore: {removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack}, directStore: {removeMember, getChatDetails, chats, setLocalChat, images} } = useStore();
     const {accountData, groupData, channelData} = chatPage;
     const [open, setOpen] = useState<GroupMember | null>(null);
     const handleOpen = (profile: GroupMember) => setOpen(profile);
     const handleClose = () => setOpen(null);
+    const imagesDesc = images.slice().reverse();
 
     const style = {
         position: 'absolute' as 'absolute',
@@ -270,6 +271,15 @@ export default observer(function ChatDetails({chatPage}: Props) {
                                     </>
                                 )
                             }
+                            {value === 1 && (
+                                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem'}}>
+                                    {imagesDesc.map((img) => (
+                                        <div style={{position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue'}}>
+                                            <img src={img.src} alt={img.caption} style={{display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0}} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </Box>
                     </Stack>
                 </Paper>
