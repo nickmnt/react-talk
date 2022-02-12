@@ -31,7 +31,7 @@ export default observer(function MessageComponent({ message, onRightClick, goToM
         }, 500);
     });
     const ref = useRef<any>(null);
-    const inViewport = useIntersection(ref, 1);
+    const inViewport = useIntersection(ref, 0.01);
     const [doubleTick, setDoubleTick] = useState(false);
 
     const {
@@ -138,6 +138,7 @@ export default observer(function MessageComponent({ message, onRightClick, goToM
                     type={message.type}
                     message={message}
                     goToMessage={goToMessage}
+                    inViewport={inViewport}
                 />
                 {isSelected && <div className="message__mask"></div>}
             </div>

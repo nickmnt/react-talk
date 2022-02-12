@@ -41,7 +41,7 @@ export default observer(function HomeSidebar() {
     }
 
     return (
-        <Paper square className="homeSidebar" elevation={2}>
+        <Paper square className="homeSidebar" elevation={0}>
             <Actions searchVal={searchVal} setSearchVal={setSearchVal} />
             <div className="homeSidebar__chats">
                 {!searchVal ? (

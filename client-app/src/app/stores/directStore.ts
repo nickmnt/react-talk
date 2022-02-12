@@ -148,7 +148,6 @@ export default class DirectStore {
             });
             chat.privateChat.myLastSeen = new Date(chat.privateChat.myLastSeen + 'Z');
             chat.privateChat.otherLastSeen = new Date(chat.privateChat.otherLastSeen + 'Z');
-            this.currentChat = chat;
             this.updateMessages();
         });
     };
@@ -168,7 +167,6 @@ export default class DirectStore {
             });
             chat.groupChat!.memberCount = chat.groupChat.members.length;
             chat.groupChat!.me = chat.groupChat.members.find((x) => x.username === store.userStore.user?.username);
-            this.currentChat = chat;
             this.updateMessages();
         });
     };
@@ -188,7 +186,6 @@ export default class DirectStore {
             });
             chat.channelChat!.memberCount = chat.channelChat.members.length;
             chat.channelChat!.me = chat.channelChat.members.find((x) => x.username === store.userStore.user?.username);
-            this.currentChat = chat;
             this.updateMessages();
         });
     };
@@ -197,6 +194,7 @@ export default class DirectStore {
         store.chatStore.clearStack();
         this.replyMessage = null;
         this.loadingChatDetails = true;
+        this.currentChat = chat;
         switch (chat.type) {
             case 0:
                 await this.getPrivateChatDetails(chat);

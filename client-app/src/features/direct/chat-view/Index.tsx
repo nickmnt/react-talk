@@ -8,7 +8,6 @@ import AddMember from './AddMember';
 import MemberPermissions from './MemberPermissions';
 import GroupEdit from './GroupEdit';
 import MemberPermissionsAll from './MemberPermissionsAll';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import Paper from '@mui/material/Paper/Paper';
 import ChatIcon from '@mui/icons-material/Chat';
 import { Message } from '../../../app/models/chat';
@@ -19,6 +18,7 @@ import { useState } from 'react';
 import PinDialog from './PinDialog';
 import FoOptionsDialog from './FoOptionsDialog';
 import AdminIndividual from './AdminIndividual';
+import ChatViewSkeleton from './ChatViewSkeleton';
 
 export default observer(function ChatView() {
     const [pinOpen, setPinOpen] = useState(false);
@@ -61,7 +61,7 @@ export default observer(function ChatView() {
             {currentChat ? (
                 <>
                     {loadingChatDetails ? (
-                        <LoadingComponent />
+                        <ChatViewSkeleton />
                     ) : (
                         <>
                             {selected.length === 0 ? <Header /> : <SelectHeader count={selected.length} clearSelected={clearSelected} copyMessages={copyMessages} />}

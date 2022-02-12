@@ -1,6 +1,6 @@
 .homeSidebar {
     height: 100%;
-
+    border-right: 3px solid rgba($color-grey-light, 0.8);
     &__chats {
         height: 100%;
         overflow-x: hidden;
