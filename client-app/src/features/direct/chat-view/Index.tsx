@@ -18,6 +18,7 @@ import ForwardDialog from './ForwardDialog';
 import { useState } from 'react';
 import PinDialog from './PinDialog';
 import FoOptionsDialog from './FoOptionsDialog';
+import AdminIndividual from './AdminIndividual';
 
 export default observer(function ChatView() {
     const [pinOpen, setPinOpen] = useState(false);
@@ -79,6 +80,7 @@ export default observer(function ChatView() {
                                 {elem.type === 30 && <MemberPermissions chatPage={elem} member={elem.member!} />}
                                 {elem.type === 40 && <GroupEdit chatPage={elem} chat={elem.groupData!} />}
                                 {elem.type === 50 && <MemberPermissionsAll chatPage={elem} chat={elem.groupData!} />}
+                                {elem.type === 60 && <AdminIndividual chatPage={elem} member={elem.member!} />}
                             </div>
                         ))}
                     </div>

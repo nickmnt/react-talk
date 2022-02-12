@@ -40,7 +40,7 @@ export interface Props {
 export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
-        chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack },
+        chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
         directStore: { removeMember, getChatDetails, chats, setLocalChat, images }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
@@ -224,7 +224,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                     <Modal open={open !== null} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                                         <Box sx={style}>
                                             <MenuList onClick={handleClose}>
-                                                <MenuItem>
+                                                <MenuItem onClick={() => addAdminPermissionsToStack(open!)}>
                                                     <ListItemIcon>
                                                         <LocalPoliceOutlinedIcon fontSize="large" />
                                                     </ListItemIcon>

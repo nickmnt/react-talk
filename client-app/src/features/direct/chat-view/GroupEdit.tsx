@@ -52,7 +52,8 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                     width: '100%',
                     height: '100%',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    alignItems: 'center'
                 }}
             >
                 <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
@@ -66,95 +67,102 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                     </Toolbar>
                 </AppBar>
 
-                <Paper square sx={{ marginBottom: '1rem' }}>
-                    <Stack
-                        direction="column"
-                        spacing={2}
-                        sx={{
-                            width: '100%',
-                            marginTop: '2rem',
-                            marginBottom: '2rem',
-                            position: 'relative'
-                        }}
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={chat.image} />
-                            <Input
-                                defaultValue={chat.displayName}
-                                sx={{
-                                    fontSize: '1.6rem',
-                                    padding: 1.5,
-                                    paddingLeft: 3.5,
-                                    height: '4rem'
-                                }}
-                            />
+                <div style={{ width: '50%', margin: 'auto 0', border: '1px solid' }}>
+                    <Paper square sx={{ marginBottom: '1rem' }}>
+                        <Stack
+                            direction="column"
+                            spacing={2}
+                            sx={{
+                                width: '100%',
+                                marginTop: '2rem',
+                                marginBottom: '2rem',
+                                position: 'relative',
+                                paddingBottom: '2rem'
+                            }}
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '1rem', border: '1px solid' }}>
+                                <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={chat.image} />
+                                <Input
+                                    defaultValue={chat.displayName}
+                                    sx={{
+                                        fontSize: '1.6rem',
+                                        padding: 1.5,
+                                        paddingLeft: 3.5,
+                                        height: '4rem'
+                                    }}
+                                />
+                            </Stack>
+                            <Input placeholder="Description (optional)" sx={{ width: '90%' }} />
                         </Stack>
-                        <Input placeholder="Description (optional)" sx={{ width: '40%' }} />
-                    </Stack>
-                </Paper>
+                    </Paper>
 
-                <Paper
-                    square
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginBottom: '1rem'
-                    }}
-                >
-                    <List>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Group Type</FormLabel>
-                            <RadioGroup aria-label="Group Type" name="controlled-radio-buttons-group" value={'private'}>
-                                <FormControlLabel value="private" control={<Radio />} label="Private" />
-                                <FormControlLabel value="public" control={<Radio />} label="Public" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Chat History for new members</FormLabel>
-                            <RadioGroup aria-label="Chat History" name="controlled-radio-buttons-group" value={'hidden'}>
-                                <FormControlLabel value="hidden" control={<Radio />} label="Hidden" />
-                                <FormControlLabel value="visible" control={<Radio />} label="Visible" />
-                            </RadioGroup>
-                        </FormControl>
-                    </List>
-                </Paper>
-                <Paper
-                    square
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginBottom: '1rem'
-                    }}
-                >
-                    <MenuList>
-                        <MenuItem onClick={() => addPermissionsAllToStack(chat)}>
-                            <ListItemIcon>
-                                <LockIcon fontSize="large" />
-                            </ListItemIcon>
-                            <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Permissions</ListItemText>
-                        </MenuItem>
-                        <MenuItem>
-                            <ListItemIcon>
-                                <LocalPoliceOutlinedIcon fontSize="large" />
-                            </ListItemIcon>
-                            <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Administrators</ListItemText>
-                        </MenuItem>
-                    </MenuList>
-                </Paper>
-                <Paper
-                    square
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <List>
-                        <ListItemButton sx={{ color: '#ff2800', fontSize: '1.6rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
-                    </List>
-                </Paper>
+                    <Paper
+                        square
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginBottom: '1rem',
+                            paddingBottom: '1rem',
+                            width: '100%'
+                        }}
+                    >
+                        <Stack justifyContent="space-around" sx={{ width: '100%' }} direction={{ sm: 'column', md: 'row' }}>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Group Type</FormLabel>
+                                <RadioGroup aria-label="Group Type" name="controlled-radio-buttons-group" value={'private'}>
+                                    <FormControlLabel value="private" control={<Radio />} label="Private" />
+                                    <FormControlLabel value="public" control={<Radio />} label="Public" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Chat History for new members</FormLabel>
+                                <RadioGroup aria-label="Chat History" name="controlled-radio-buttons-group" value={'hidden'}>
+                                    <FormControlLabel value="hidden" control={<Radio />} label="Hidden" />
+                                    <FormControlLabel value="visible" control={<Radio />} label="Visible" />
+                                </RadioGroup>
+                            </FormControl>
+                        </Stack>
+                    </Paper>
+                    <Paper
+                        square
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginBottom: '1rem',
+                            paddingBottom: '1rem'
+                        }}
+                    >
+                        <MenuList sx={{ width: '100%' }}>
+                            <MenuItem onClick={() => addPermissionsAllToStack(chat)}>
+                                <ListItemIcon>
+                                    <LockIcon fontSize="large" />
+                                </ListItemIcon>
+                                <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Permissions</ListItemText>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon>
+                                    <LocalPoliceOutlinedIcon fontSize="large" />
+                                </ListItemIcon>
+                                <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Administrators</ListItemText>
+                            </MenuItem>
+                        </MenuList>
+                    </Paper>
+                    <Paper
+                        square
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            paddingBottom: '1rem',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <List sx={{ width: '100%' }}>
+                            <ListItemButton sx={{ color: '#ff2800', fontSize: '1.8rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
+                        </List>
+                    </Paper>
+                </div>
             </Box>
         </div>
     );
