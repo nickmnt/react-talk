@@ -46,11 +46,9 @@ namespace Application.Chats.GroupChats
             {
                 var userChat = await _context.UserChats
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.ForwardedFrom)
                     .FirstOrDefaultAsync(x => x.ChatId == request.ChatId 
@@ -71,7 +69,7 @@ namespace Application.Chats.GroupChats
                                     .Where(x => x.ChatId == request.ChatId)
                                     .ToListAsync(cancellationToken);
 
-                var result = _mapper.Map<GroupDetailsDto>(userChat.Chat.GroupChat);
+                var result = _mapper.Map<GroupDetailsDto>(userChat.Chat);
                 result.Members = members;
 
                 return Result<GroupDetailsDto>.Success(result);

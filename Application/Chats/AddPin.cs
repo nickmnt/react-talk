@@ -44,17 +44,9 @@ namespace Application
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Pins)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
                     .Where(x => x.AppUser.UserName == _accessor.GetUsername() && x.ChatId == request.ChatId)
                     .FirstOrDefaultAsync(cancellationToken);
 
@@ -63,22 +55,8 @@ namespace Application
                     return Result<PinDto>.Failure("Chat does not exist, or user is not a member.");
                 }
 
-                Message message = null;
-                switch (userChat.Chat.Type)
-                {
-                    case ChatType.PrivateChat:
-                        message = userChat.Chat.PrivateChat.Messages
-                            .FirstOrDefault(x => x.Id == request.MessageId);
-                        break;
-                    case ChatType.Group:
-                        message = userChat.Chat.GroupChat.Messages
-                            .FirstOrDefault(x => x.Id == request.MessageId);
-                        break;
-                    case ChatType.Channel:
-                        message = userChat.Chat.ChannelChat.Messages
-                            .FirstOrDefault(x => x.Id == request.MessageId);
-                        break;
-                }
+                Message message = userChat.Chat.Messages
+                    .FirstOrDefault(x => x.Id == request.MessageId);;
 
                 if (message == null)
                 {

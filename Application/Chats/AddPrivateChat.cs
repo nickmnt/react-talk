@@ -33,30 +33,26 @@ namespace Application.Chats
 
             public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var privateChat = new PrivateChat();
-                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = privateChat };
-
-                _context.Add(chat);
-
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
                 var target = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == request.TargetUsername, cancellationToken);
-
-                var available = await _context.UserChats.Include(x => x.Chat)
-                    .ThenInclude(x => x.Users).ThenInclude(x => x.AppUser)
-                    .FirstOrDefaultAsync(x =>
-                    !(x.Chat.Users
-                          .Select(y => y.AppUser.UserName).Contains(user.UserName) &&
-                      x.Chat.Users
-                          .Select(y => y.AppUser.UserName).Contains(user.UserName)
-                      && x.Chat.Type == ChatType.PrivateChat), cancellationToken);
                 
-                if(available != null)
-                    return Result<ChatDto>.Failure("Private chat already exists");
-
                 if (user == null || target == null)
                     return null;
+                
+                var count = _context.UserChats
+                    .Include(x => x.AppUser)
+                    .Include(x =>
+                        x.Chat)
+                    .Count(x => x.AppUser.UserName == request.TargetUsername && x.AppUser.UserName == _accessor.GetUsername()
+                                                                             && x.Chat.Type == ChatType.PrivateChat);
+                if(count == 2)
+                    return Result<ChatDto>.Failure("Private chat already exists");
+
+                var chat = new Chat { Type = ChatType.PrivateChat };
+
+                _context.Add(chat);
                 
                 var userChat = new UserChat { Chat = chat, AppUser = user };
                 var targetChat = new UserChat { Chat = chat, AppUser = target };

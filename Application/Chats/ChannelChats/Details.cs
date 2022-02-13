@@ -46,11 +46,9 @@ namespace Application.Chats.ChannelChats
             {
                 var userChat = await _context.UserChats
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.ForwardedFrom)
                     .FirstOrDefaultAsync(x => x.ChatId == request.ChatId
@@ -71,7 +69,7 @@ namespace Application.Chats.ChannelChats
                     .Where(x => x.ChatId == request.ChatId)
                     .ToListAsync(cancellationToken);
 
-                var result = _mapper.Map<ChannelDetailsDto>(userChat.Chat.ChannelChat);
+                var result = _mapper.Map<ChannelDetailsDto>(userChat.Chat);
                 result.Members = members;
 
                 return Result<ChannelDetailsDto>.Success(result);

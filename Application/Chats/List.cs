@@ -47,22 +47,13 @@ namespace Application.Chats
                 var chats = await _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.Users)
-                    .ThenInclude(x => x.AppUser)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Pins)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.Users)
+                    .ThenInclude(x => x.AppUser)
                     .Where(x => x.AppUser.UserName == user.UserName)
                     .ToListAsync(cancellationToken);
 
@@ -84,24 +75,9 @@ namespace Application.Chats
                             break;
                     }
 
-                    Message lastMessage = null;
+                    Message lastMessage = userChat.Chat.Messages.OrderByDescending
+                        (x => x.CreatedAt).FirstOrDefault();;
                     
-                    switch (chat.Type)
-                    {
-                        case ChatType.Channel:
-                            lastMessage = userChat.Chat.ChannelChat.Messages.OrderByDescending
-                                (x => x.CreatedAt).FirstOrDefault();
-                            break;
-                        case ChatType.Group:
-                            lastMessage = userChat.Chat.GroupChat.Messages.OrderByDescending
-                                (x => x.CreatedAt).FirstOrDefault();
-                            break;
-                        case ChatType.PrivateChat:
-                            lastMessage = userChat.Chat.PrivateChat.Messages.OrderByDescending
-                                (x => x.CreatedAt).FirstOrDefault();
-                            break;
-                    }
-
                     var beenSeen = false;
                     if (lastMessage?.Sender.UserName == _accessor.GetUsername())
                     {
@@ -115,23 +91,9 @@ namespace Application.Chats
                     mapped!.LastMessage = _mapper.Map<MessageDto>(lastMessage);
                     mapped.LastMessageSeen = beenSeen;
 
-                    int notSeenCount = 0;
-                    switch (chat.Type)
-                    {
-                        case ChatType.Channel:
-                            notSeenCount = userChat.Chat.ChannelChat.Messages
-                                .Count(x => x.CreatedAt > userChat.LastSeen);
-                            break;
-                        case ChatType.Group:
-                            notSeenCount = userChat.Chat.GroupChat.Messages
-                                .Count(x => x.CreatedAt > userChat.LastSeen);
-                            break;
-                        case ChatType.PrivateChat:
-                            notSeenCount = userChat.Chat.PrivateChat.Messages
-                                .Count(x => x.CreatedAt > userChat.LastSeen);
-                            break;
-                    }
-
+                    int notSeenCount = userChat.Chat.Messages
+                        .Count(x => x.CreatedAt > userChat.LastSeen);;
+                    
                     mapped.NotSeenCount = notSeenCount;
                     
                     result.Add(mapped);

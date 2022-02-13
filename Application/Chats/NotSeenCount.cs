@@ -32,13 +32,6 @@ namespace Application.Chats
             {
                 var userChat = await _context.UserChats
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
-                    .ThenInclude(x => x.Messages)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
-                    .ThenInclude(x => x.Messages)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .Where(x => x.AppUserId == request.TargetUserId
                                 && x.ChatId == request.ChatId)
@@ -49,16 +42,7 @@ namespace Application.Chats
                     return Result<int>.Failure("User membership in chat, or the chat itself does not exist.");
                 }
 
-                var notSeenCount = userChat.Chat.Type switch
-                {
-                    ChatType.Channel => userChat.Chat.ChannelChat.Messages.Count(x => x.CreatedAt > userChat.LastSeen),
-                    ChatType.Group => userChat.Chat.GroupChat.Messages.Count(x => x.CreatedAt > userChat.LastSeen),
-                    ChatType.PrivateChat => userChat.Chat.PrivateChat.Messages.Count(x =>
-                        x.CreatedAt > userChat.LastSeen),
-                    _ => 0
-                };
-                
-                
+                var notSeenCount = userChat.Chat.Messages.Count(x => x.CreatedAt > userChat.LastSeen);
 
                 return Result<int>.Success(notSeenCount);
             }

@@ -18,7 +18,7 @@ namespace Application.Core
             {
                 Id = userChat.ChatId,
                 Image = "",
-                DisplayName = userChat.Chat.ChannelChat.Name,
+                DisplayName = userChat.Chat.Name,
                 Type = (int)ChatType.Channel,
                 ParticipantUsername = null,
                 Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins),
@@ -32,7 +32,7 @@ namespace Application.Core
             {
                 Id = userChat.ChatId,
                 Image = "",
-                DisplayName = userChat.Chat.GroupChat.Name,
+                DisplayName = userChat.Chat.Name,
                 Type = (int)ChatType.Group,
                 ParticipantUsername = null,
                 Pins = mapper.Map<ICollection<Pin>, ICollection<PinDto>>(userChat.Chat.Pins),

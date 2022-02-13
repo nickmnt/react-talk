@@ -31,8 +31,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var mapper = config.CreateMapper();
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat();
-                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
+                var chat = new Chat { Type = ChatType.Channel };
                 var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 
@@ -71,7 +70,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfiles()); });
                 var mapper = config.CreateMapper();
 
-                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = new PrivateChat() };
+                var chat = new Chat { Type = ChatType.PrivateChat };
                 
                 var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == "bob");
                 var tom = await context.Users.FirstOrDefaultAsync(x => x.UserName == "tom");
@@ -121,8 +120,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var mapper = config.CreateMapper();
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat {  };
-                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
+                var chat = new Chat { Type = ChatType.Channel };
                 var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 

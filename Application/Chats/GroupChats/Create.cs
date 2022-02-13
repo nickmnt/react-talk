@@ -45,8 +45,7 @@ namespace Application.Chats.GroupChats
             
             public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var groupChat = new GroupChat {Name = request.Name, Description = null };
-                var chat = new Chat { Type = ChatType.Group, GroupChat = groupChat };
+                var chat = new Chat { Type = ChatType.Group, Name = request.Name, Description = null };
 
                 var members = request.Members.Distinct();
                 

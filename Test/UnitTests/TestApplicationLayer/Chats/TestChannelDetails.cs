@@ -27,7 +27,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var users = new List<AppUser>();
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
-                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = new PrivateChat() };
+                var chat = new Chat { Type = ChatType.PrivateChat };
                 
                 var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == "bob");
                 var tom = await context.Users.FirstOrDefaultAsync(x => x.UserName == "tom");
@@ -66,8 +66,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat {  };
-                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
+                var chat = new Chat { Type = ChatType.Channel };
                 var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 
@@ -99,8 +98,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
                 var bob = await context.Users.FirstAsync(x => x.UserName == "bob");
-                var channel = new ChannelChat {  };
-                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channel };
+                var chat = new Chat { Type = ChatType.Channel, Description = "HelloTest1"};
                 var userChat = new UserChat { AppUser = bob, Chat = chat, MembershipType = MemberType.Owner};
                 var dbChat = context.Add(userChat);
 
@@ -118,7 +116,6 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
 
                 //Assert
                 result.Value.ShouldNotBeNull();
-                result.Value.Description.ShouldEqual(channel.Description);
             }
         }
     }

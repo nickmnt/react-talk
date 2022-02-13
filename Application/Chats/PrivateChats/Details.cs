@@ -38,11 +38,9 @@ namespace Application.Chats.PrivateChats
                     .UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.ForwardedFrom)
                     .Where(x => x.ChatId == request.ChatId)
@@ -69,10 +67,10 @@ namespace Application.Chats.PrivateChats
                 if (other == null)
                     return Result<PrivateChatDto>.Failure("You are the only participant in this chat");
 
-                if (mine.Chat.PrivateChat == null)
+                if (mine.Chat.Type != ChatType.PrivateChat)
                     return null;
 
-                var result = _mapper.Map<PrivateChatDto>(mine.Chat.PrivateChat);
+                var result = _mapper.Map<PrivateChatDto>(mine.Chat);
                 result.MyLastSeen = mine.LastSeen;
                 result.OtherLastSeen = other.LastSeen;
                 result.OtherUserId = other.AppUserId;

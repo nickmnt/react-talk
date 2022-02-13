@@ -41,17 +41,9 @@ namespace Application.Chats
                 var userChats = await _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.PrivateChat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
-                    .ThenInclude(x => x.GroupChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
-                    .Include(x => x.Chat)
-                    .ThenInclude(x => x.ChannelChat)
-                    .ThenInclude(x => x.Messages)
-                    .ThenInclude(x => x.Sender)
                     .Where(x => x.AppUser.UserName == _accessor.GetUsername()
                                 && (x.ChatId == request.SrcChatId || request.ChatIds.Contains(x.ChatId)))
                     .ToListAsync(cancellationToken);
@@ -71,38 +63,12 @@ namespace Application.Chats
                     return Result<bool>.Failure("Some of the target chats can be accessed");
                 }
                 
-                ICollection<Message> messages = null;
-                switch (srcChat.Type)
-                {
-                    case ChatType.PrivateChat:
-                        messages = srcChat.PrivateChat.Messages.Where(x => request.MessageIds.Contains(x.Id))
-                            .ToList();
-                        break;
-                    case ChatType.Group:
-                        messages = srcChat.GroupChat.Messages.Where(x => request.MessageIds.Contains(x.Id))
-                            .ToList();
-                        break;
-                    case ChatType.Channel:
-                        messages = srcChat.ChannelChat.Messages.Where(x => request.MessageIds.Contains(x.Id))
-                            .ToList();
-                        break;
-                }
+                ICollection<Message> messages = srcChat.Messages.Where(x => request.MessageIds.Contains(x.Id))
+                    .ToList();;
 
                 foreach (var chat in others)
                 {
-                    ICollection<Message> targetMessages = null;
-                    switch (chat.Type)
-                    {
-                        case ChatType.PrivateChat:
-                            targetMessages = chat.PrivateChat.Messages;
-                            break;
-                        case ChatType.Group:
-                            targetMessages = chat.GroupChat.Messages;
-                            break;
-                        case ChatType.Channel:
-                            targetMessages = chat.ChannelChat.Messages;
-                            break;
-                    }
+                    ICollection<Message> targetMessages = chat.Messages;
 
                     if (request.Body.Trim() != "")
                     {

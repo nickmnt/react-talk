@@ -53,11 +53,6 @@ namespace Application.Messages.Images
                     .UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .Include(x => x.Chat.PrivateChat)
-                    .ThenInclude(x => x.Messages)
-                    .Include(x => x.Chat.GroupChat)
-                    .ThenInclude(x => x.Messages)
-                    .Include(x => x.Chat.ChannelChat)
                     .ThenInclude(x => x.Messages)
                     .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
@@ -68,34 +63,16 @@ namespace Application.Messages.Images
                         .UserChats
                         .Include(x => x.AppUser)
                         .Include(x => x.Chat)
-                        .Include(x => x.Chat.PrivateChat)
-                        .Include(x => x.Chat.GroupChat)
-                        .Include(x => x.Chat.ChannelChat)
                         .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                    x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
                 }
                 if (userChat == null)
                     return null;
 
-                Message replyTo = null;
+                Message replyTo = userChat.Chat.Messages.FirstOrDefault(x =>
+                    x.Id == request.ReplyToMessageId);
                 if (request.ReplyToMessageId != -1)
                 {
-                    switch (userChat.Chat.Type)
-                    {
-                        case ChatType.PrivateChat:
-                            replyTo = userChat.Chat.PrivateChat.Messages.FirstOrDefault(x =>
-                                x.Id == request.ReplyToMessageId);
-                            break;
-                        case ChatType.Group:
-                            replyTo = userChat.Chat.GroupChat.Messages.FirstOrDefault(x =>
-                                x.Id == request.ReplyToMessageId);
-                            break;
-                        case ChatType.Channel:
-                            replyTo = userChat.Chat.ChannelChat.Messages.FirstOrDefault(x =>
-                                x.Id == request.ReplyToMessageId);
-                            break;
-                    }
-
                     if (replyTo == null)
                     {
                         return Result<MessageDto>.Failure(
@@ -115,18 +92,8 @@ namespace Application.Messages.Images
                     ReplyTo = replyTo
                 };
                 
-                switch (userChat.Chat.Type)
-                {
-                    case ChatType.PrivateChat:
-                        userChat.Chat.PrivateChat.Messages.Add(message);
-                        break;
-                    case ChatType.Group:
-                        userChat.Chat.GroupChat.Messages.Add(message);
-                        break;
-                    case ChatType.Channel:
-                        userChat.Chat.ChannelChat.Messages.Add(message);
-                        break;
-                }
+                userChat.Chat.Messages.Add(message);
+
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (result)

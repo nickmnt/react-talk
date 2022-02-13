@@ -43,8 +43,7 @@ namespace Application.Chats.ChannelChats
             
             public async Task<Result<ChatDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var channelChat = new ChannelChat { Name = request.Name, Description = request.Description };
-                var chat = new Chat { Type = ChatType.Channel, ChannelChat = channelChat };
+                var chat = new Chat { Type = ChatType.Channel, Name = request.Name, Description = request.Description };
 
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);

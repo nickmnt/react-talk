@@ -59,7 +59,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 var users = new List<AppUser>();
                 await Seed.SeedData(context, MockUserManager.Create(users).Object);
 
-                var chat = new Chat { Type = ChatType.PrivateChat, PrivateChat = new PrivateChat() };
+                var chat = new Chat { Type = ChatType.PrivateChat };
                 
                 var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == "bob");
                 var tom = await context.Users.FirstOrDefaultAsync(x => x.UserName == "tom");

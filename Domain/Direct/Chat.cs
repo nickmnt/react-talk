@@ -7,9 +7,11 @@ namespace Domain.Direct
     {
         public Guid Id { get; set; }
         public ChatType Type { get; set; }
-        public PrivateChat PrivateChat { get; set; }
-        public GroupChat GroupChat { get; set; }
-        public ChannelChat ChannelChat { get; set; }
+        // For group chat && channel chat
+        public string Name { get; set; }
+        public string Description { get; set; }
+        // For all chats
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
         public ICollection<UserChat> Users { get; set; }
         // Member permissions
         public bool SendMessages { get; set; } = true;

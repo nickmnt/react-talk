@@ -86,9 +86,9 @@ namespace Application.Core
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(d => d.ForwardUsername, o => o.MapFrom(s => s.ForwardedFrom.UserName))
                 .ForMember(d => d.ForwardDisplayName, o => o.MapFrom(s => s.ForwardedFrom.DisplayName));
-            CreateMap<PrivateChat, PrivateChatDto>();
-            CreateMap<ChannelChat, ChannelDetailsDto>();
-            CreateMap<GroupChat, GroupDetailsDto>();
+            CreateMap<Chat, PrivateChatDto>();
+            CreateMap<Chat, ChannelDetailsDto>();
+            CreateMap<Chat, GroupDetailsDto>();
             CreateMap<UserChat, GroupMember>()
                 .ForMember(d => d.MemberType, o => o.MapFrom(s => s.MembershipType))
                 .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))
