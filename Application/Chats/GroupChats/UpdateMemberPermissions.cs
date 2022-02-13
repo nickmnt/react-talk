@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
-using Domain;
 using Domain.Direct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ using Persistence;
 
 namespace Application.Chats.GroupChats
 {
-    public class UpdateMembersPermissions
+    public class UpdateMemberPermissions
     {
         public class Command : IRequest<Result<MemberPermissionsDto>>
         {
@@ -22,7 +21,7 @@ namespace Application.Chats.GroupChats
             public bool PinMessages { get; set; }
             public bool ChangeChatInfo { get; set; }
         }
-
+        
         public class Handler : IRequestHandler<Command, Result<MemberPermissionsDto>>
         {
             private readonly DataContext _context;
@@ -33,15 +32,13 @@ namespace Application.Chats.GroupChats
                 _context = context;
                 _accessor = accessor;
             }
-
+            
             public async Task<Result<MemberPermissionsDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                
                 var userChat = await _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .FirstOrDefaultAsync(x => x.AppUser.UserName == _accessor.GetUsername()
-                                              && x.ChatId == request.ChatId, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.AppUser.UserName == _accessor.GetUsername(), cancellationToken);
 
                 if (userChat == null)
                 {
@@ -56,25 +53,23 @@ namespace Application.Chats.GroupChats
                     return Result<MemberPermissionsDto>.Failure("User is not the owner or an admin of the group.");
                 }
 
-                var chat = userChat.Chat;
-
-                chat.SendMessages = request.SendMessages;
-                chat.SendMedia = request.SendMedia;
-                chat.AddUsers = request.AddUsers;
-                chat.PinMessages = request.PinMessages;
-                chat.ChangeChatInfo = request.ChangeChatInfo;
-                                
+                userChat.SendMessages = request.SendMessages;
+                userChat.SendMedia = request.SendMedia;
+                userChat.AddUsers = request.AddUsers;
+                userChat.PinMessages = request.PinMessages;
+                userChat.ChangeChatInfo = request.ChangeChatInfo;
+                
                 var result = await _context.SaveChangesAsync(cancellationToken);
 
                 if (result > 0)
                 {
                     var dto = new MemberPermissionsDto
                     {
-                        SendMessages = chat.SendMessages,
-                        SendMedia = chat.SendMedia,
-                        AddUsers = chat.AddUsers,
-                        PinMessages = chat.PinMessages,
-                        ChangeChatInfo = chat.ChangeChatInfo
+                        SendMessages = userChat.SendMessages,
+                        SendMedia = userChat.SendMedia,
+                        AddUsers = userChat.AddUsers,
+                        PinMessages = userChat.PinMessages,
+                        ChangeChatInfo = userChat.ChangeChatInfo
                     };
                     return Result<MemberPermissionsDto>.Success(dto);
                 }

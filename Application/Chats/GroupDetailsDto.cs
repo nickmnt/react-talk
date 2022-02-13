@@ -11,6 +11,5 @@ namespace Application.Chats
         public List<GroupMember> Members { get; set; }
         
         public ICollection<MessageDto> Messages { get; set; } = new List<MessageDto>();
-        public GroupMemberPermissions MemberPermissions { get; set; } = new ();
     }
 }

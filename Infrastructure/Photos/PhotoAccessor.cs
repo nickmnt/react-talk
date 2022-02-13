@@ -12,7 +12,6 @@ namespace Infrastructure.Photos
 {
     public class PhotoAccessor : IPhotoAccessor
     {
-        private readonly ILogger _logger;
         private readonly Cloudinary _cloudinary;
 
         public PhotoAccessor(IOptions<CloudinarySettings> config)

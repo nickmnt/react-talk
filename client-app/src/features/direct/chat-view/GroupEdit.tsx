@@ -67,7 +67,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                     </Toolbar>
                 </AppBar>
 
-                <div style={{ width: '50%', margin: 'auto 0', border: '1px solid' }}>
+                <div style={{ width: '60%', margin: 'auto 0', border: '1px solid' }}>
                     <Paper square sx={{ marginBottom: '1rem' }}>
                         <Stack
                             direction="column"
