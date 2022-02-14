@@ -31,7 +31,8 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Props) {
     const {
         userStore: { user },
-        groupStore: { startCreateChannel, startCreateGroup }
+        groupStore: { startCreateChannel, startCreateGroup },
+        directStore: { setSettingsOpen }
     } = useStore();
 
     const onCreateGroup = () => {
@@ -93,7 +94,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                         </ListItemIcon>
                         <ListItemText primary="Saved Messages" primaryTypographyProps={{ fontSize: menuFontSize }} />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={() => setSettingsOpen(true)}>
                         <ListItemIcon>
                             <SettingsOutlinedIcon fontSize="large" sx={{ fill: 'url(#linearColors)' }} />
                         </ListItemIcon>

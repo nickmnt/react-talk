@@ -147,3 +147,7 @@ export const createLocalChat = (username: string, displayName: string, image?: s
         membershipType: 0
     } as ChatDto;
 };
+
+export interface PhotoType extends File {
+    preview: string;
+}

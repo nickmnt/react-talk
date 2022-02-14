@@ -3,12 +3,15 @@ import { useEffect } from 'react';
 import { useStore } from '../../app/stores/store';
 import ChatView from './chat-view/Index';
 import HomeSidebar from './HomeSidebar';
+import PhotoDialog from './settings/PhotoDialog';
+import SettingsDialog from './settings/SettingsDialog';
 
 export default observer(function Inbox() {
     const expanded = false;
 
     const {
-        directStore: { createHubConnection, clearChats, chats, currentChat }
+        directStore: { createHubConnection, clearChats, chats, currentChat, settingsOpen, setSettingsOpen },
+        photoStore: { photoOpen, setPhotoOpen }
     } = useStore();
 
     useEffect(() => {}, [chats]);
@@ -31,6 +34,8 @@ export default observer(function Inbox() {
                     <HomeSidebar />
                 </div>
             </div>
+            <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+            <PhotoDialog open={photoOpen} onClose={() => setPhotoOpen(false)} />
         </div>
     );
 });

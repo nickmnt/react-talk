@@ -7,7 +7,9 @@ import DirectStore from './directStore';
 import GroupStore from './groupStore';
 import ModalStore from './modalStore';
 import NotificationStore from './notificationStore';
+import PhotoStore from './photoStore';
 import ProfileStore from './profileStore';
+import SettingsStore from './settingsStore';
 import UserStore from './userStore';
 
 interface Store {
@@ -21,6 +23,8 @@ interface Store {
     directStore: DirectStore;
     groupStore: GroupStore;
     chatStore: ChatStore;
+    settingsStore: SettingsStore;
+    photoStore: PhotoStore;
 }
 
 export const store: Store = {
@@ -33,7 +37,9 @@ export const store: Store = {
     notificationStore: new NotificationStore(),
     directStore: new DirectStore(),
     groupStore: new GroupStore(),
-    chatStore: new ChatStore()
+    chatStore: new ChatStore(),
+    settingsStore: new SettingsStore(),
+    photoStore: new PhotoStore()
 };
 
 export const StoreContext = createContext(store);

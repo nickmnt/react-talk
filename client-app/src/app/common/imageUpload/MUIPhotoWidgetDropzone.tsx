@@ -1,20 +1,25 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Header, Icon } from 'semantic-ui-react';
+import UploadIcon from '@mui/icons-material/Upload';
+import Typography from '@mui/material/Typography/Typography';
 import { PhotoType } from '../../models/chat';
 
 interface Props {
-    setFiles: (files: PhotoType) => void;
+    setFiles: (files: PhotoType[]) => void;
 }
 
-export default function PhotoWidgetDropzone({ setFiles }: Props) {
+export default function MUIPhotoWidgetDropzone({ setFiles }: Props) {
     const dzStyles = {
         border: 'dashed 3px #eee',
         borderColor: '#eee',
         borderRadius: '5px',
         paddingTop: '30px',
         textAlign: 'center' as 'center',
-        height: 200
+        height: 200,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column' as 'column'
     };
 
     const dzActive = {
@@ -38,8 +43,10 @@ export default function PhotoWidgetDropzone({ setFiles }: Props) {
     return (
         <div {...getRootProps()} style={isDragActive ? { ...dzStyles, ...dzActive } : dzStyles}>
             <input {...getInputProps()} />
-            <Icon name="upload" size="huge" />
-            <Header content="Drop image here" />
+            <div>
+                <UploadIcon />
+                <Typography>Drop image here</Typography>
+            </div>
         </div>
     );
 }

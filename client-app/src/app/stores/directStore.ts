@@ -27,6 +27,7 @@ export default class DirectStore {
     menuMsg: Message | null = null;
     showSenderName = false;
     loadingChats = true;
+    settingsOpen = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -777,5 +778,9 @@ export default class DirectStore {
 
     clearSearchResults = () => {
         this.searchResults = [];
+    };
+
+    setSettingsOpen = (value: boolean) => {
+        this.settingsOpen = value;
     };
 }
