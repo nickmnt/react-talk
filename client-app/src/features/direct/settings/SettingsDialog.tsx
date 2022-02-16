@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Typography from '@mui/material/Typography/Typography';
 import Avatar from '@mui/material/Avatar/Avatar';
-import { truncateBasic } from '../../../app/common/utility';
+import { truncate, truncateBasic } from '../../../app/common/utility';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import Menu from '@mui/material/Menu/Menu';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
@@ -23,6 +23,11 @@ import ListItemText from '@mui/material/ListItemText/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import List from '@mui/material/List/List';
+import ListItem from '@mui/material/ListItem/ListItem';
+import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
+import Skeleton from '@mui/material/Skeleton/Skeleton';
+import { toast } from 'react-toastify';
 
 export interface Props {
     open: boolean;
@@ -40,8 +45,10 @@ const Transition = React.forwardRef(function Transition(
 
 export default observer(function SettingsDialog({ open, onClose }: Props) {
     const {
-        settingsStore: { loadProfile, profile },
-        photoStore: { setPhotoOpen }
+        directStore: { setNameOpen, setBioOpen, openCopy },
+        settingsStore: { loadProfile, profile, loadingName, loadingBio },
+        photoStore: { setPhotoOpen },
+        userStore: { logout }
     } = useStore();
 
     useEffect(() => {
@@ -82,13 +89,13 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                <Paper>
+                <Paper sx={{ width: '100%' }}>
                     <Stack sx={{ padding: '2rem', minWidth: '25rem' }} direction="row" alignItems="center">
                         <Avatar src={profile.image} alt={profile.displayName} sx={{ width: 60, height: 60 }}>
                             {truncateBasic(profile.displayName, 2)}
                         </Avatar>
                         <Stack sx={{ marginLeft: '1.5rem' }} justifyContent="center">
-                            <Typography>{profile.displayName}</Typography>
+                            <Typography>{loadingName ? <Skeleton width="30" height="16" /> : profile.displayName}</Typography>
                             <Typography>online</Typography>
                         </Stack>
                         <div style={{ flexGrow: 1 }} />
@@ -96,6 +103,58 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                             <AddAPhotoIcon sx={{ width: 36, height: 36, color: '#007FFF' }} />
                         </IconButton>
                     </Stack>
+                    <Typography variant="h6" sx={{ color: '#007FFF', marginLeft: '2rem' }}>
+                        Account
+                    </Typography>
+                    <List sx={{ width: '100%' }}>
+                        <ListItem
+                            disablePadding
+                            onContextMenu={(e) => {
+                                e.preventDefault();
+                                openCopy(() => {
+                                    navigator.clipboard.writeText(profile.username);
+                                    toast('Username successfully copied to clipboard', { type: 'success' });
+                                });
+                            }}
+                        >
+                            <ListItemButton>
+                                <Stack sx={{ width: '100%', height: '100%' }}>
+                                    <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: '.5rem' }}>
+                                        {profile.username}
+                                    </Typography>
+                                    <Typography variant="h6" sx={{ color: '#595959', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
+                                        Username
+                                    </Typography>
+                                </Stack>
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem
+                            disablePadding
+                            onClick={() => setBioOpen(true)}
+                            onContextMenu={(e) => {
+                                if (profile.bio) {
+                                    e.preventDefault();
+                                    openCopy(() => {
+                                        if (profile.bio) {
+                                            navigator.clipboard.writeText(profile.bio);
+                                            toast('Bio successfully copied to clipboard', { type: 'success' });
+                                        }
+                                    });
+                                }
+                            }}
+                        >
+                            <ListItemButton>
+                                <Stack sx={{ width: '100%', height: '100%' }}>
+                                    <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: '.5rem' }}>
+                                        {loadingBio ? <Skeleton width="30" height="16" /> : profile.bio ? truncate(profile.bio, 20) : 'Bio'}
+                                    </Typography>
+                                    <Typography variant="h6" sx={{ color: '#595959', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
+                                        {profile.bio ? 'Bio' : 'Add a few words about yourself'}
+                                    </Typography>
+                                </Stack>
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
                 </Paper>
                 <Menu
                     id="basic-menu"
@@ -114,19 +173,29 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         horizontal: 'right'
                     }}
                 >
-                    <MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            setNameOpen(true);
+                            handleMenuClose();
+                        }}
+                    >
                         <ListItemIcon>
                             <EditOutlinedIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Edit name</ListItemText>
                     </MenuItem>
-                    <MenuItem onClick={() => setPhotoOpen(true)}>
+                    <MenuItem
+                        onClick={() => {
+                            setPhotoOpen(true);
+                            handleMenuClose();
+                        }}
+                    >
                         <ListItemIcon>
                             <AddAPhotoOutlinedIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Set new photo</ListItemText>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={logout}>
                         <ListItemIcon>
                             <LogoutIcon fontSize="small" />
                         </ListItemIcon>

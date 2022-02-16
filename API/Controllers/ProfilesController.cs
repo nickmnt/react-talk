@@ -17,6 +17,18 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+        
+        [HttpPut("editName")]
+        public async Task<IActionResult> EditName(EditName.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+        
+        [HttpPut("editBio")]
+        public async Task<IActionResult> EditBio(EditBio.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
 
         [HttpGet("{username}/activities")]
         public async Task<IActionResult> GetUserActivities(string username, [FromQuery] string predicate)

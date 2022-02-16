@@ -108,7 +108,9 @@ const Profiles = {
     updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
     listFollowings: (username: string, predicate: string) => requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
     updateProfile: (profile: Partial<Profile>) => requests.put('/profiles', profile),
-    getActivities: (username: string, predicate: string) => requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
+    getActivities: (username: string, predicate: string) => requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`),
+    editName: (displayName: string) => requests.put('/profiles/editName', { displayName }),
+    editBio: (bio: string) => requests.put('/profiles/editBio', { bio })
 };
 
 const Search = {

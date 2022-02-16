@@ -86,7 +86,7 @@ export default observer(function PhotoDialog({ open, onClose }: Props) {
                     )}
                 </Toolbar>
             </AppBar>
-            <Paper sx={{ minWidth: '30vw' }}>
+            <Paper sx={{ minWidth: '30rem' }}>
                 <div style={{ padding: '1rem' }}>
                     {step === 0 && <MUIPhotoWidgetDropzone setFiles={handleFiles} />}
                     {step === 1 && <PhotoWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />}

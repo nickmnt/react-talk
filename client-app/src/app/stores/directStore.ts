@@ -1,4 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { valueToPercent } from '@mui/base';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
@@ -28,6 +29,10 @@ export default class DirectStore {
     showSenderName = false;
     loadingChats = true;
     settingsOpen = false;
+    nameOpen = false;
+    bioOpen = false;
+    copyOpen = false;
+    copyFunc: (() => void) | undefined;
 
     constructor() {
         makeAutoObservable(this);
@@ -782,5 +787,22 @@ export default class DirectStore {
 
     setSettingsOpen = (value: boolean) => {
         this.settingsOpen = value;
+    };
+
+    setNameOpen = (value: boolean) => {
+        this.nameOpen = value;
+    };
+
+    setBioOpen = (value: boolean) => {
+        this.bioOpen = value;
+    };
+
+    setCopyOpen = (value: boolean) => {
+        this.copyOpen = value;
+    };
+
+    openCopy = (func: () => void) => {
+        this.copyOpen = true;
+        this.copyFunc = func;
     };
 }
