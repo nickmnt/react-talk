@@ -11,20 +11,15 @@ using Persistence;
 
 namespace Application.Chats.GroupChats
 {
-    public class UpdateAdminPermissions
+    public class DismissAdmin
     {
-        public class Command : IRequest<Result<AdminPermissionsDto>>
+        public class Command : IRequest<Result<Unit>>
         {
             public Guid ChatId { get; set; }
             public string TargetUsername { get; set; }
-            public bool DeleteMessages { get; set; } = true;
-            public bool BanUsers { get; set; } = true;
-            public bool AddNewAdmins { get; set; } = true;
-            public bool RemainAnonymous { get; set; } = true;
-            public string CustomTitle { get; set; }
         }
         
-        public class Handler : IRequestHandler<Command, Result<AdminPermissionsDto>>
+        public class Handler: IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _accessor;
@@ -35,7 +30,7 @@ namespace Application.Chats.GroupChats
                 _accessor = accessor;
             }
             
-            public async Task<Result<AdminPermissionsDto>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var userChats = await _context.UserChats
                     .Include(x => x.AppUser)
@@ -59,44 +54,36 @@ namespace Application.Chats.GroupChats
 
                 if (userChat == null || targetUChat == null)
                 {
-                    return Result<AdminPermissionsDto>.Failure("Chat does not exist or you or the target are not members");
+                    return Result<Unit>.Failure("Chat does not exist or you or the target are not members");
                 }
                 if (userChat.Chat.Type != ChatType.Group)
                 {
-                    return Result<AdminPermissionsDto>.Failure("Chat is not a group");
+                    return Result<Unit>.Failure("Chat is not a group");
                 }
                 if (userChat.MembershipType != MemberType.Owner && 
                     (userChat.MembershipType != MemberType.Admin || userChat.AddNewAdmins))
                 {
-                    return Result<AdminPermissionsDto>.Failure("User is not the owner or an admin with the permission 'AddNewAdmins'.");
+                    return Result<Unit>.Failure("User is not the owner or an admin with the permission 'AddNewAdmins'.");
                 }
 
-                if (targetUChat.MembershipType == MemberType.Normal)
+                if (targetUChat.MembershipType == MemberType.Admin)
                 {
-                    targetUChat.MembershipType = MemberType.Admin;
+                    targetUChat.MembershipType = MemberType.Normal;
                 }
                 
-                targetUChat.DeleteMessages = request.DeleteMessages;
-                targetUChat.BanUsers = request.BanUsers;
-                targetUChat.AddNewAdmins = request.AddNewAdmins;
-                targetUChat.RemainAnonymous = request.RemainAnonymous;
-                targetUChat.CustomTitle = request.CustomTitle;
+                targetUChat.DeleteMessages = true;
+                targetUChat.BanUsers = true;
+                targetUChat.AddNewAdmins = true;
+                targetUChat.RemainAnonymous = true;
+                targetUChat.CustomTitle = "";
 
                 var result = await _context.SaveChangesAsync(cancellationToken);
 
                 if (result > 0)
                 {
-                    var dto = new AdminPermissionsDto
-                    {
-                        DeleteMessages = userChat.DeleteMessages,
-                        BanUsers = userChat.BanUsers,
-                        AddNewAdmins = userChat.AddNewAdmins,
-                        RemainAnonymous = userChat.RemainAnonymous,
-                        CustomTitle = userChat.CustomTitle
-                    };
-                    return Result<AdminPermissionsDto>.Success(dto);
+                    return Result<Unit>.Success(Unit.Value);
                 }
-                return Result<AdminPermissionsDto>.Failure("Couldn't save changes to database.");
+                return Result<Unit>.Failure("Couldn't save changes to database.");
             }
         }
     }

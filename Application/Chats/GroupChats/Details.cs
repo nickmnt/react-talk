@@ -69,7 +69,7 @@ namespace Application.Chats.GroupChats
                                     .Where(x => x.ChatId == request.ChatId)
                                     .ToListAsync(cancellationToken);
 
-                var result = _mapper.Map<GroupDetailsDto>(userChat.Chat);
+                var result = _mapper.Map<GroupDetailsDto>(userChat);
                 result.Members = members;
 
                 return Result<GroupDetailsDto>.Success(result);

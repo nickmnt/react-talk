@@ -20,8 +20,20 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { ChatId = id }));
         }
         
-        [HttpPost("updateMembersPermissions")]
+        [HttpPut("updateMembersPermissions")]
         public async Task<IActionResult> UpdateAllMembersPermissions(UpdateMembersPermissions.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));;
+        }
+        
+        [HttpPut("updateAdminPermissions")]
+        public async Task<IActionResult> UpdateAdminPermissions(UpdateAdminPermissions.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));;
+        }
+
+        [HttpPut("dismissAdmin")]
+        public async Task<IActionResult> DismissAdmin(DismissAdmin.Command command)
         {
             return HandleResult(await Mediator.Send(command));;
         }

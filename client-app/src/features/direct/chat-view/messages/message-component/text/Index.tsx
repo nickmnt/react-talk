@@ -37,7 +37,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
 
     return (
         <Zoom in={inViewport} timeout={250}>
-            <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? '#f0ffde' : 'white' }} square elevation={6}>
+            <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? '#f0ffde' : 'white', opacity: message.beingDeleted ? '0.5' : '1' }} square elevation={6}>
                 {replyTo && (
                     <div style={{ width: '100%', height: '3.5rem', display: 'flex', margin: '.75rem 0', opacity: '.8', cursor: 'pointer' }} onClick={() => goToMessage(replyTo.id)}>
                         <div style={{ width: '.3rem', height: '100%', backgroundColor: '#007fff', marginRight: '1rem' }} />

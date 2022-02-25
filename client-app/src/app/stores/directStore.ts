@@ -1,9 +1,8 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { valueToPercent } from '@mui/base';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
-import { ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from '../models/chat';
+import { AdminPermissions, ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from '../models/chat';
 import { Profile } from '../models/profile';
 import { store } from './store';
 
@@ -33,6 +32,7 @@ export default class DirectStore {
     bioOpen = false;
     copyOpen = false;
     copyFunc: (() => void) | undefined;
+    loadingAdminPermissions = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -475,7 +475,7 @@ export default class DirectStore {
             const response = await agent.Chats.createGroup(name, members);
 
             this.setChat(response);
-            runInAction(() => (this.currentChat = response));
+            runInAction(() => this.getChatDetails(response));
         } catch (error) {
             console.log(error);
         }
@@ -597,7 +597,7 @@ export default class DirectStore {
             runInAction(() => {
                 if (this.currentChat && this.currentChat.type === 1) {
                     const groupChat = this.currentChat.groupChat!;
-                    groupChat.memberPermissions = permissions;
+                    this.currentChat.groupChat! = { ...groupChat, ...permissions };
                     this.currentChat = { ...this.currentChat, groupChat };
                     store.chatStore.removeFromStack(chatPage);
                     this.updatingPermissionsAll = false;
@@ -804,5 +804,102 @@ export default class DirectStore {
     openCopy = (func: () => void) => {
         this.copyOpen = true;
         this.copyFunc = func;
+    };
+
+    updateAdminPermissions = async (chatId: string, targetUsername: string, permissions: AdminPermissions, chatPage: ChatPage) => {
+        this.loadingAdminPermissions = true;
+        try {
+            const response = await agent.Chats.updateAdminPermissions(chatId, targetUsername, permissions);
+            runInAction(() => {
+                const chat = this.chats.find((x) => x.id === chatId);
+                if (chat && chat.groupChat) {
+                    const target = chat.groupChat.members.find((x) => x.username === targetUsername);
+                    if (target) {
+                        target.deleteMessages = response.deleteMessages;
+                        target.banUsers = response.banUsers;
+                        target.addNewAdmins = response.addNewAdmins;
+                        target.remainAnonymous = response.remainAnonymous;
+                        target.customTitle = response.customTitle;
+                        target.memberType = 1;
+                    }
+                }
+                this.loadingAdminPermissions = false;
+                store.chatStore.removeFromStack(chatPage);
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loadingAdminPermissions = false;
+            });
+        }
+    };
+
+    dismissAdmin = async (chatId: string, targetUsername: string, chatPage: ChatPage) => {
+        this.loadingAdminPermissions = true;
+        try {
+            await agent.Chats.dismissAdmin(chatId, targetUsername);
+            runInAction(() => {
+                const chat = this.chats.find((x) => x.id === chatId);
+                if (chat && chat.groupChat) {
+                    const target = chat.groupChat.members.find((x) => x.username === targetUsername);
+                    if (target) {
+                        target.memberType = 0;
+                    }
+                }
+                this.loadingAdminPermissions = false;
+                store.chatStore.removeFromStack(chatPage);
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loadingAdminPermissions = false;
+            });
+        }
+    };
+
+    deleteMessage = async (chatId: string, messageId: number) => {
+        try {
+            if (this.currentChat && this.currentChat.id === chatId) {
+                switch (this.currentChat.type) {
+                    case 0:
+                        const target1 = this.currentChat.privateChat!.messages.find((x) => x.id === messageId);
+                        if (target1) {
+                            target1.beingDeleted = true;
+                        }
+                        break;
+                    case 1:
+                        const target2 = this.currentChat.groupChat!.messages.find((x) => x.id !== messageId);
+                        if (target2) {
+                            target2.beingDeleted = true;
+                        }
+                        break;
+                    case 2:
+                        const target3 = this.currentChat.channelChat!.messages.find((x) => x.id === messageId);
+                        if (target3) {
+                            target3.beingDeleted = true;
+                        }
+                        break;
+                }
+            }
+            await agent.Chats.deleteMessage(chatId, messageId);
+            runInAction(() => {
+                if (this.currentChat && this.currentChat.id === chatId) {
+                    switch (this.currentChat.type) {
+                        case 0:
+                            this.currentChat.privateChat!.messages = this.currentChat.privateChat!.messages.filter((x) => x.id !== messageId);
+                            break;
+                        case 1:
+                            this.currentChat.groupChat!.messages = this.currentChat.groupChat!.messages.filter((x) => x.id !== messageId);
+                            break;
+                        case 2:
+                            this.currentChat.channelChat!.messages = this.currentChat.channelChat!.messages.filter((x) => x.id !== messageId);
+                            break;
+                    }
+                }
+            });
+            this.handleDateMessages();
+        } catch (error) {
+            console.log(error);
+        }
     };
 }

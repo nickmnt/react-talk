@@ -20,6 +20,7 @@ namespace Domain.Direct
         public bool BanUsers { get; set; }  = true;
         public bool AddNewAdmins { get; set; } = true;
         public bool RemainAnonymous { get; set; } = true;
+        public string CustomTitle { get; set; }
         public string AppUserId { get; set; }
         public DateTime LastSeen { get; set; } = DateTime.UtcNow.AddDays(-1);
         // public GroupMemberPermissions MemberPermissions { get; set; }

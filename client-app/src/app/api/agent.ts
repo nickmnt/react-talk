@@ -7,7 +7,7 @@ import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
 import { SearchResult } from '../models/search';
-import { ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat } from '../models/chat';
+import { AdminPermissions, ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -151,11 +151,15 @@ const Chats = {
     getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
     updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, { chatId, newLastSeen }),
     removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember/`, { chatId, username }),
-    updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions) => requests.post<boolean>(`group/updateMembersPermissions`, { chatId, ...permissions }),
+    updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions) => requests.put<boolean>(`group/updateMembersPermissions`, { chatId, ...permissions }),
     addPin: (chatId: string, messageId: number, isMutual: boolean) => requests.post<Pin>('direct/addPin', { chatId, messageId, isMutual }),
     removePin: (chatId: string, pinId: number) => requests.post<boolean>('direct/removePin', { chatId, pinId }),
     forwardMessages: (chatIds: string[], messageIds: number[], srcChatId: string, body: string, showSender: boolean) =>
-        requests.post<boolean>('direct/forward', { chatIds, messageIds, srcChatId, body, showSender })
+        requests.post<boolean>('direct/forward', { chatIds, messageIds, srcChatId, body, showSender }),
+    updateAdminPermissions: (chatId: string, targetUsername: string, permissions: AdminPermissions) =>
+        requests.put<AdminPermissions>('group/updateAdminPermissions', { chatId, targetUsername, ...permissions }),
+    dismissAdmin: (chatId: string, targetUsername: string) => requests.put<void>('group/dismissAdmin', { chatId, targetUsername }),
+    deleteMessage: (chatId: string, messageId: number) => requests.put<void>('direct/deleteMessage', { chatId, messageId })
 };
 
 const agent = {

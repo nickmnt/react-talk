@@ -100,11 +100,11 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                         <Formik
                             onSubmit={(values, { resetForm }) => {}}
                             initialValues={{
-                                sendMessages: false,
-                                sendMedia: false,
-                                addUsers: false,
-                                pinMessages: false,
-                                changeChatInfo: false
+                                sendMessages: true,
+                                sendMedia: true,
+                                addUsers: true,
+                                pinMessages: true,
+                                changeChatInfo: true
                             }}
                             innerRef={formRef}
                         >

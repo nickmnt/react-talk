@@ -21,6 +21,7 @@ import { Message } from '../../../../app/models/chat';
 import DateMessage from './DateMessage';
 import { toast } from 'react-toastify';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import DeleteDialog from '../DeleteDialog';
 
 export interface Props {
     selected: Message[];
@@ -34,6 +35,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const [menuLeft, setMenuLeft] = useState(0);
     const messagesRef = useRef<(HTMLElement | null)[]>([]);
     const [selectedPin, setSelectedPin] = useState(0);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const {
         directStore: {
@@ -122,8 +124,13 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
         return str.length > n ? str.substring(0, n - 1) + '...' : str;
     };
 
-    if (!currentChat) return null;
+    if (!currentChat || !user) return null;
 
+    // Message menu items enable booleans
+    const canPin = currentChat.type !== 1 || (currentChat.groupChat!.pinMessagesAll && currentChat.groupChat!.pinMessages);
+    const canDelete =
+        menuMsg &&
+        (menuMsg.username === user.username || (currentChat.type === 1 && ((currentChat.membershipType === 1 && currentChat.groupChat!.deleteMessages) || currentChat.membershipType === 2)));
     return (
         <div
             style={{
@@ -326,19 +333,24 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </ListItemIcon>
                     <ListItemText>Forward</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={openPinOptions}>
-                    <ListItemIcon>
-                        <PushPinIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Pin</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <DeleteOutlineIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Delete</ListItemText>
-                </MenuItem>
+                {canPin && (
+                    <MenuItem onClick={openPinOptions}>
+                        <ListItemIcon>
+                            <PushPinIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Pin</ListItemText>
+                    </MenuItem>
+                )}
+                {canDelete && (
+                    <MenuItem onClick={() => setDeleteOpen(true)}>
+                        <ListItemIcon>
+                            <DeleteOutlineIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Delete</ListItemText>
+                    </MenuItem>
+                )}
             </Menu>
+            {menuMsg && <DeleteDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} chatId={currentChat.id} messageId={menuMsg.id} />}
         </div>
     );
 });

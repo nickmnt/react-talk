@@ -14,19 +14,22 @@ import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 import Done from '@mui/icons-material/Done';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack/Stack';
-import { Formik, FormikProps } from 'formik';
+import { Field, FieldProps, Formik, FormikProps } from 'formik';
 import { ToggleField } from './ToggleField';
 import Input from '@mui/material/Input/Input';
 import DoneIcon from '@mui/icons-material/Done';
+import Button from '@mui/material/Button/Button';
+import { observer } from 'mobx-react-lite';
 
 export interface Props {
     chatPage: ChatPage;
     member: GroupMember;
 }
 
-export default function AdminIndividual({ chatPage, member }: Props) {
+export default observer(function AdminIndividual({ chatPage, member }: Props) {
     const {
-        chatStore: { removeFromStack }
+        chatStore: { removeFromStack },
+        directStore: { updateAdminPermissions, dismissAdmin, loadingAdminPermissions }
     } = useStore();
 
     const formRef = useRef<FormikProps<any> | null>(null);
@@ -35,13 +38,11 @@ export default function AdminIndividual({ chatPage, member }: Props) {
         <Formik
             onSubmit={(values, { resetForm }) => {}}
             initialValues={{
-                changeChatInfo: false,
-                deleteMessages: false,
-                banUsers: false,
-                inviteUsers: false,
-                pinMessages: false,
-                addNewAdmins: false,
-                remainAnonymous: false
+                deleteMessages: member.deleteMessages,
+                banUsers: member.banUsers,
+                addNewAdmins: member.addNewAdmins,
+                remainAnonymous: member.remainAnonymous,
+                customTitle: member.customTitle
             }}
             innerRef={formRef}
         >
@@ -74,9 +75,11 @@ export default function AdminIndividual({ chatPage, member }: Props) {
                                     <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontWeight: '500', fontSize: '2rem' }}>
                                         Change Permissions
                                     </Typography>
-                                    <IconButton size="large">
-                                        <DoneIcon fontSize="large" />
-                                    </IconButton>
+                                    {(dirty || member.memberType === 0) && !loadingAdminPermissions && (
+                                        <IconButton size="large" onClick={() => updateAdminPermissions(chatPage.groupData!.id, member.username, values, chatPage)}>
+                                            <DoneIcon fontSize="large" />
+                                        </IconButton>
+                                    )}
                                 </Toolbar>
                             </AppBar>
 
@@ -144,24 +147,40 @@ export default function AdminIndividual({ chatPage, member }: Props) {
                                     <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
                                         Custom title
                                     </Typography>
-                                    <Input
-                                        defaultValue="Admin"
-                                        sx={{
-                                            fontSize: '1.6rem',
-                                            padding: 1.5,
-                                            paddingLeft: 3.5,
-                                            height: '4rem',
-                                            width: '60%'
-                                        }}
-                                    />
-                                    <Typography sx={{ fontSize: '1.6rem' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
+                                    <Field name="body">
+                                        {(props: FieldProps) => (
+                                            <Input
+                                                placeholder="Admin"
+                                                {...props.field}
+                                                sx={{
+                                                    fontSize: '1.6rem',
+                                                    padding: 1.5,
+                                                    height: '4rem',
+                                                    width: '55%'
+                                                }}
+                                            />
+                                        )}
+                                    </Field>
+                                    <Typography sx={{ fontSize: '1.6rem', color: '#8e8e8e' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
+                                    {member.memberType === 1 && !loadingAdminPermissions && (
+                                        <Button onClick={() => dismissAdmin(chatPage.groupData!.id, member.username, chatPage)} sx={{ width: '55%', color: '#ff2800' }}>
+                                            Dismiss Admin
+                                        </Button>
+                                    )}
                                 </Stack>
                             </Paper>
                         </Box>
                     </div>
-                    {dirty && <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 16, right: 16 }} icon={<Done />} onClick={() => {}} />}
+                    {(dirty || member.memberType === 0) && !loadingAdminPermissions && (
+                        <SpeedDial
+                            ariaLabel="SpeedDial basic example"
+                            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                            icon={<Done />}
+                            onClick={() => updateAdminPermissions(chatPage.groupData!.id, member.username, values, chatPage)}
+                        />
+                    )}
                 </>
             )}
         </Formik>
     );
-}
+});

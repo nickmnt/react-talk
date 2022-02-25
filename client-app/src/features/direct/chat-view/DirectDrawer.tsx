@@ -9,7 +9,7 @@ import React from 'react';
 import deepPurple from '@mui/material/colors/deepPurple';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
-import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+// import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer/SwipeableDrawer';
 import Card from '@mui/material/Card/Card';
 import CardContent from '@mui/material/CardContent/CardContent';
@@ -31,7 +31,8 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Props) {
     const {
         userStore: { user },
-        groupStore: { startCreateChannel, startCreateGroup },
+        // groupStore: { startCreateChannel, startCreateGroup },
+        groupStore: { startCreateGroup },
         directStore: { setSettingsOpen }
     } = useStore();
 
@@ -39,9 +40,9 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
         startCreateGroup();
     };
 
-    const onCreateChannel = () => {
-        startCreateChannel();
-    };
+    // const onCreateChannel = () => {
+    // startCreateChannel();
+    // };
 
     return (
         <SwipeableDrawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)} disableBackdropTransition={!iOS} disableDiscovery={iOS}>
@@ -76,12 +77,12 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                         </ListItemIcon>
                         <ListItemText primary="New Group" primaryTypographyProps={{ fontSize: menuFontSize }} />
                     </ListItem>
-                    <ListItem button onClick={onCreateChannel}>
+                    {/* <ListItem button onClick={onCreateChannel}>
                         <ListItemIcon>
                             <CampaignOutlinedIcon fontSize="large" sx={{ fill: 'url(#linearColors)' }} />
                         </ListItemIcon>
                         <ListItemText primary="New Channel" primaryTypographyProps={{ fontSize: menuFontSize }} />
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem button>
                         <ListItemIcon>
                             <PersonOutlinedIcon fontSize="large" sx={{ fill: 'url(#linearColors)' }} />

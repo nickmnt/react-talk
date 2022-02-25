@@ -194,10 +194,13 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                     <Avatar alt={`${x.displayName}`} src={x.image} sx={{ width: 48, height: 48 }} />
                                                 </ListItemAvatar>
                                                 <ListItemText primaryTypographyProps={{ fontSize: '1.6rem' }} primary={x.displayName} />
+                                                <div style={{ flex: 1 }} />
+                                                {x.memberType === 1 && <Typography style={{ color: '#0080FF' }}>Admin</Typography>}
+                                                {x.memberType === 2 && <Typography style={{ color: '#0080FF' }}>Owner</Typography>}
                                             </ListItemButton>
                                         </ListItem>
                                     ))}
-                                    {channelData?.channelChat?.members && (
+                                    {/* {channelData?.channelChat?.members && (
                                         <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{ width: '100%' }} onClick={() => addAddMembersToStack(channelData)}>
                                             Add Member
                                         </Button>
@@ -220,27 +223,29 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                 <ListItemText primaryTypographyProps={{ fontSize: '1.6rem' }} primary={x.displayName} />
                                             </ListItemButton>
                                         </ListItem>
-                                    ))}
+                                    ))} */}
                                     <Modal open={open !== null} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                                         <Box sx={style}>
                                             <MenuList onClick={handleClose}>
-                                                <MenuItem onClick={() => addAdminPermissionsToStack(open!)}>
+                                                <MenuItem onClick={() => addAdminPermissionsToStack(chatPage.groupData!, open!)}>
                                                     <ListItemIcon>
                                                         <LocalPoliceOutlinedIcon fontSize="large" />
                                                     </ListItemIcon>
-                                                    <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Promote to admin</ListItemText>
+                                                    <ListItemText primaryTypographyProps={{ marginLeft: '1rem', fontSize: 14 }}>
+                                                        {open?.memberType === 0 ? 'Promote to admin' : 'Edit admin rights'}
+                                                    </ListItemText>
                                                 </MenuItem>
                                                 <MenuItem onClick={() => addPermissionsToStack(open!)}>
                                                     <ListItemIcon>
                                                         <LockIcon fontSize="large" />
                                                     </ListItemIcon>
-                                                    <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Change Permissions</ListItemText>
+                                                    <ListItemText primaryTypographyProps={{ marginLeft: '1rem', fontSize: 14 }}>Restrict Permissions</ListItemText>
                                                 </MenuItem>
                                                 <MenuItem sx={{ color: '#ff2800' }} onClick={() => removeMember(open!.username)}>
                                                     <ListItemIcon>
                                                         <RemoveCircleOutlineOutlinedIcon sx={{ color: '#ff2800' }} fontSize="large" />
                                                     </ListItemIcon>
-                                                    <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Remove from group</ListItemText>
+                                                    <ListItemText primaryTypographyProps={{ marginLeft: '1rem', fontSize: 14 }}>Remove from group</ListItemText>
                                                 </MenuItem>
                                             </MenuList>
                                         </Box>

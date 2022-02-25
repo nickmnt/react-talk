@@ -80,7 +80,13 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
                             onSubmit={(values, { resetForm }) => {
                                 updatePermissions(chat, values, chatPage);
                             }}
-                            initialValues={chat.groupChat!.memberPermissions}
+                            initialValues={{
+                                sendMessages: chat.groupChat!.sendMessagesAll,
+                                sendMedia: chat.groupChat!.sendMedia,
+                                addUsers: chat.groupChat!.addUsersAll,
+                                pinMessages: chat.groupChat!.pinMessagesAll,
+                                changeChatInfo: chat.groupChat!.changeChatInfoAll
+                            }}
                         >
                             {({ isSubmitting, isValid, handleSubmit, dirty, setFieldValue, values, touched }) => (
                                 <>

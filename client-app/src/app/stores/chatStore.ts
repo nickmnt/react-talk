@@ -101,8 +101,8 @@ export default class ChatStore {
         this.i = 0;
     };
 
-    addAdminPermissionsToStack = (member: GroupMember) => {
-        this.stack = [...this.stack, { type: 60, index: this.i, member }];
+    addAdminPermissionsToStack = (groupData: ChatDto, member: GroupMember) => {
+        this.stack = [...this.stack, { type: 60, index: this.i, groupData, member }];
         this.i += 1;
     };
 }

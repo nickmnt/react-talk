@@ -52,6 +52,7 @@ export interface Message {
     replyToId: number;
     forwardUsername: string;
     forwardDisplayName: string;
+    beingDeleted?: boolean;
 }
 
 export interface ChannelDetailsDto {
@@ -59,7 +60,7 @@ export interface ChannelDetailsDto {
     members: ChannelMember[];
     memberCount?: number;
     messages: Message[];
-    me?: GroupMember;
+    me?: ChannelMember;
 }
 
 export interface GroupDetailsDto {
@@ -68,7 +69,24 @@ export interface GroupDetailsDto {
     memberCount?: number;
     messages: Message[];
     me?: GroupMember;
-    memberPermissions: GroupMemberPermissions;
+    // All members permissions
+    sendMessagesAll: boolean;
+    sendMediaAll: boolean;
+    addUsersAll: boolean;
+    pinMessagesAll: boolean;
+    changeChatInfoAll: boolean;
+    // Specific member permissions
+    sendMessages: boolean;
+    sendMedia: boolean;
+    addUsers: boolean;
+    pinMessages: boolean;
+    changeChatInfo: boolean;
+    // Admin permissions
+    deleteMessages: boolean;
+    banUsers: boolean;
+    addNewAdmins: boolean;
+    remainAnonymous: boolean;
+    customTitle: string;
 }
 
 export interface GroupMember {
@@ -77,6 +95,18 @@ export interface GroupMember {
     username: string;
     image: string;
     lastSeen: Date;
+    // Member permissions
+    sendMessages: boolean;
+    sendMedia: boolean;
+    addUsers: boolean;
+    pinMessages: boolean;
+    changeChatInfo: boolean;
+    // Admin permissions
+    deleteMessages: boolean;
+    banUsers: boolean;
+    addNewAdmins: boolean;
+    remainAnonymous: boolean;
+    customTitle: string;
 }
 
 export interface ChannelMember {
@@ -126,6 +156,14 @@ export interface GroupMemberPermissions {
     addUsers: boolean;
     pinMessages: boolean;
     changeChatInfo: boolean;
+}
+
+export interface AdminPermissions {
+    deleteMessages: boolean;
+    banUsers: boolean;
+    addNewAdmins: boolean;
+    remainAnonymous: boolean;
+    customTitle: string;
 }
 
 export const createLocalChat = (username: string, displayName: string, image?: string) => {

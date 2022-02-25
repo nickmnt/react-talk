@@ -161,5 +161,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+        
+        [HttpPut("deleteMessage")]
+        public async Task<IActionResult> DeleteMessage(DeleteMessage.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
     }
 }

@@ -63,6 +63,8 @@ export default observer(function ChatInput({ selectedCount }: Props) {
 
     if (!currentChat) return <></>;
 
+    const canWrite = currentChat.type !== 1 || currentChat.membershipType !== 0 || (currentChat.groupChat!.sendMessages && currentChat.groupChat!.sendMessagesAll);
+
     if (selectedCount > 0) {
         return (
             <Paper square className="chatInput" elevation={3} sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -90,6 +92,16 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                 <Button variant="text" sx={{ width: '100%', height: '100%' }}>
                     Mute
                 </Button>
+            </Paper>
+        );
+    }
+
+    if (!canWrite) {
+        return (
+            <Paper square className="chatInput" elevation={3}>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography>Writing messages is disabled in this group</Typography>
+                </div>
             </Paper>
         );
     }

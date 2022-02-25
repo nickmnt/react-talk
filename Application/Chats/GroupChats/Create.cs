@@ -64,7 +64,7 @@ namespace Application.Chats.GroupChats
                 
                 foreach(var target in targets)
                 {
-                    var targetChat = new UserChat { Chat = chat, AppUser = target };
+                    var targetChat = new UserChat { Chat = chat, AppUser = target, MembershipType = MemberType.Normal};
                     _context.UserChats.Add(targetChat);
                 }
                 

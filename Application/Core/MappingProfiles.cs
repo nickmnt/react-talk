@@ -88,7 +88,14 @@ namespace Application.Core
                 .ForMember(d => d.ForwardDisplayName, o => o.MapFrom(s => s.ForwardedFrom.DisplayName));
             CreateMap<Chat, PrivateChatDto>();
             CreateMap<Chat, ChannelDetailsDto>();
-            CreateMap<Chat, GroupDetailsDto>();
+            CreateMap<UserChat, GroupDetailsDto>()
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Chat.Description))
+                .ForMember(d => d.Messages, o => o.MapFrom(s => s.Chat.Messages))
+                .ForMember(d => d.SendMessagesAll, o => o.MapFrom(s => s.Chat.SendMessages))
+                .ForMember(d => d.SendMediaAll, o => o.MapFrom(s => s.Chat.SendMedia))
+                .ForMember(d => d.AddUsersAll, o => o.MapFrom(s => s.Chat.AddUsers))
+                .ForMember(d => d.PinMessagesAll, o => o.MapFrom(s => s.Chat.PinMessages))
+                .ForMember(d => d.ChangeChatInfoAll, o => o.MapFrom(s => s.Chat.ChangeChatInfo));
             CreateMap<UserChat, GroupMember>()
                 .ForMember(d => d.MemberType, o => o.MapFrom(s => s.MembershipType))
                 .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))
