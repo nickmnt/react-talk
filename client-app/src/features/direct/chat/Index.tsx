@@ -71,9 +71,9 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
                 <div className="chat__rightTop">
                     <div className="chat__name">{chat.displayName}</div>
 
-                    <div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         {chat.lastMessage?.username === user!.username && (chat.lastMessageSeen ? <DoubleTick /> : <Tick />)}
-                        {chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                        <div style={{ marginLeft: '.5rem' }}>{chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
                     </div>
                 </div>
                 <div className="chat__rightBottom">

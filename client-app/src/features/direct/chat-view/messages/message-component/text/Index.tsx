@@ -30,14 +30,49 @@ interface Props {
 
 export default observer(function Text({ isMe, name, text, date, isDoubleTick, showImg, type, attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage, inViewport }: Props) {
     const {
-        directStore: { getMessageById },
+        directStore: { currentChat, getMessageById },
         chatStore: { addProfileDetailsToStack }
     } = useStore();
     const replyTo = getMessageById(message.replyToId);
 
+    if (!currentChat) {
+        return null;
+    }
+
+    let title = '';
+    if (currentChat.groupChat) {
+        const sender = currentChat.groupChat.members.find((x) => x.username === message.username);
+        if (sender) {
+            if (sender.customTitle) {
+                title = sender.customTitle;
+            } else {
+                switch (sender.memberType) {
+                    case 1:
+                        title = 'Admin';
+                        break;
+                    case 2:
+                        title = 'Owner';
+                        break;
+                }
+            }
+        }
+    }
+
     return (
         <Zoom in={inViewport} timeout={250}>
             <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? '#f0ffde' : 'white', opacity: message.beingDeleted ? '0.5' : '1' }} square elevation={6}>
+                {!isMe && (
+                    <Stack direction="row" justifyContent="space-between">
+                        <Typography fontSize="1.4rem" sx={{ color: '#007FFF', fontWeight: '500' }}>
+                            {message.displayName}
+                        </Typography>
+                        {title && (
+                            <Typography fontSize="1.4rem" sx={{ marginLeft: '1rem', color: '#8e8e8e' }}>
+                                {title}
+                            </Typography>
+                        )}
+                    </Stack>
+                )}
                 {replyTo && (
                     <div style={{ width: '100%', height: '3.5rem', display: 'flex', margin: '.75rem 0', opacity: '.8', cursor: 'pointer' }} onClick={() => goToMessage(replyTo.id)}>
                         <div style={{ width: '.3rem', height: '100%', backgroundColor: '#007fff', marginRight: '1rem' }} />
@@ -73,7 +108,9 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                         {text}
                     </p>
                     <div className="text__info">
-                        <div className={`text__date${isMe ? '--me' : '--other'}`}>{date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+                        <div className={`text__date${isMe ? '--me' : '--other'}`} style={{ marginRight: isMe ? '.5rem' : '0' }}>
+                            {date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                        </div>
                         {isMe && (isLocal ? <AccessTimeIcon sx={{ color: '#57b84c' }} /> : isDoubleTick ? <DoubleTick /> : <Tick />)}
                     </div>
                 </div>

@@ -42,7 +42,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                 banUsers: member.banUsers,
                 addNewAdmins: member.addNewAdmins,
                 remainAnonymous: member.remainAnonymous,
-                customTitle: member.customTitle
+                customTitle: member.customTitle || ''
             }}
             innerRef={formRef}
         >
@@ -147,7 +147,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                     <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
                                         Custom title
                                     </Typography>
-                                    <Field name="body">
+                                    <Field name="customTitle">
                                         {(props: FieldProps) => (
                                             <Input
                                                 placeholder="Admin"

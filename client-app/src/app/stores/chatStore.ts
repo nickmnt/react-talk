@@ -15,19 +15,11 @@ export default class ChatStore {
         if (val.type === 0) {
             this.addProfileDetailsToStack(val.privateChat!.otherUsername);
         } else if (val.type === 1) {
-            try {
-                this.stack = [...this.stack, { type: val.type, groupData: val, index: this.i }];
-                this.i += 1;
-            } catch (error) {
-                console.log('error', error);
-            }
+            this.stack = [...this.stack, { type: val.type, groupData: val, index: this.i }];
+            this.i += 1;
         } else if (val.type === 2) {
-            try {
-                this.stack = [...this.stack, { type: val.type, channelData: val, index: this.i }];
-                this.i += 1;
-            } catch (error) {
-                console.log('error', error);
-            }
+            this.stack = [...this.stack, { type: val.type, channelData: val, index: this.i }];
+            this.i += 1;
         }
     };
 
@@ -35,8 +27,10 @@ export default class ChatStore {
         this.stack = [...this.stack, { type: 0, index: this.i }];
         try {
             var response = await agent.Profiles.get(username);
-            this.stack = [...this.stack.filter((x) => x.index !== this.i), { type: 0, accountData: response, index: this.i }];
-            this.i += 1;
+            runInAction(() => {
+                this.stack = [...this.stack.filter((x) => x.index !== this.i), { type: 0, accountData: response, index: this.i }];
+                this.i += 1;
+            });
         } catch (error) {
             console.log('error', error);
         }

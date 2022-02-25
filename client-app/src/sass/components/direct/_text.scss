@@ -40,6 +40,7 @@
 
     &__info {
         display: flex;
+        align-items: center;
         margin-left: auto;
         //margin-right: .5rem;
         // margin-bottom: 0.5rem;
@@ -50,7 +51,6 @@
         &--me,
         &--other {
             flex: 0 0 auto;
-            margin-right: 0.5rem;
         }
 
         &--me {

@@ -85,6 +85,8 @@ export default observer(function ChatDetails({ chatPage }: Props) {
 
     if (!accountData && !groupData && !channelData) return <LoadingComponent />;
 
+    const canAddUsers = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.addUsers && chatPage.groupData.groupChat!.addUsersAll));
+    const canEdit = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.changeChatInfo && chatPage.groupData.groupChat!.changeChatInfoAll));
     return (
         <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue', overflow: 'hidden' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -94,7 +96,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                             <ArrowBackIcon fontSize="large" />
                         </IconButton>
                         <div style={{ flexGrow: 1 }}></div>
-                        {chatPage.groupData && (
+                        {canEdit && (
                             <IconButton onClick={() => addEditGroupToStack(chatPage.groupData!)}>
                                 <EditIcon sx={{ width: 24, height: 24 }} />
                             </IconButton>
@@ -168,12 +170,12 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                     <Tab label="Media" sx={{ fontSize: '1.4rem' }} />
                                     <Tab label="Links" sx={{ fontSize: '1.4rem' }} />
                                     <Tab label="Voice" sx={{ fontSize: '1.4rem' }} />
-                                    <Tab label="Groups" sx={{ fontSize: '1.4rem' }} />
+                                    {chatPage.accountData && <Tab label="Groups" sx={{ fontSize: '1.4rem' }} />}
                                 </Tabs>
                             </Box>
                             {value === 0 && (
                                 <>
-                                    {groupData?.groupChat?.members && (
+                                    {groupData?.groupChat?.members && canAddUsers && (
                                         <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{ width: '100%' }} onClick={() => addAddMembersToStack(groupData)}>
                                             Add Member
                                         </Button>

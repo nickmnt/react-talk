@@ -45,16 +45,24 @@ namespace Application.Chats.GroupChats
 
                 UserChat userChat = null;
                 UserChat targetUChat = null;
-                foreach (var uChat in userChats)
+                if (_accessor.GetUsername() == request.TargetUsername)
                 {
-                    if (uChat.AppUser.UserName == _accessor.GetUsername())
+                    userChat = userChats[0];
+                    targetUChat = userChat;
+                }
+                else
+                {
+                    foreach (var uChat in userChats)
                     {
-                        userChat = uChat;
-                    }
-                    else
-                    {
-                        targetUChat = uChat;
-                    }
+                        if (uChat.AppUser.UserName == _accessor.GetUsername())
+                        {
+                            userChat = uChat;
+                        }
+                        else
+                        {
+                            targetUChat = uChat;
+                        }
+                    }    
                 }
 
                 if (userChat == null || targetUChat == null)
@@ -66,7 +74,7 @@ namespace Application.Chats.GroupChats
                     return Result<AdminPermissionsDto>.Failure("Chat is not a group");
                 }
                 if (userChat.MembershipType != MemberType.Owner && 
-                    (userChat.MembershipType != MemberType.Admin || userChat.AddNewAdmins))
+                    !(userChat.MembershipType == MemberType.Admin && userChat.AddNewAdmins))
                 {
                     return Result<AdminPermissionsDto>.Failure("User is not the owner or an admin with the permission 'AddNewAdmins'.");
                 }

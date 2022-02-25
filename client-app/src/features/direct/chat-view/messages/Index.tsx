@@ -127,7 +127,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     if (!currentChat || !user) return null;
 
     // Message menu items enable booleans
-    const canPin = currentChat.type !== 1 || (currentChat.groupChat!.pinMessagesAll && currentChat.groupChat!.pinMessages);
+    const canPin = currentChat.type !== 1 || currentChat.membershipType !== 0 || (currentChat.groupChat!.pinMessagesAll && currentChat.groupChat!.pinMessages);
     const canDelete =
         menuMsg &&
         (menuMsg.username === user.username || (currentChat.type === 1 && ((currentChat.membershipType === 1 && currentChat.groupChat!.deleteMessages) || currentChat.membershipType === 2)));

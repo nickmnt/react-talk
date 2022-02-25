@@ -868,7 +868,7 @@ export default class DirectStore {
                         }
                         break;
                     case 1:
-                        const target2 = this.currentChat.groupChat!.messages.find((x) => x.id !== messageId);
+                        const target2 = this.currentChat.groupChat!.messages.find((x) => x.id === messageId);
                         if (target2) {
                             target2.beingDeleted = true;
                         }
