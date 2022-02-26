@@ -6,6 +6,7 @@ using Application;
 using Application.Chats;
 using Application.Chats.ChannelChats;
 using Application.Chats.UserChats;
+using Application.Core;
 using Application.Interfaces;
 using Domain.Direct;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,12 @@ namespace API.Controllers
         {
             _hubContext = hubContext;
             _accessor = accessor;
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetChats([FromQuery]PagingParams param)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Chats.List.Query {Params = param}));
         }
 
         [HttpPost()]

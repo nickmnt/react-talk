@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
 import { AdminPermissions, ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from '../models/chat';
+import { Pagination, PagingParams } from '../models/pagination';
 import { Profile } from '../models/profile';
 import { store } from './store';
 
@@ -33,6 +34,8 @@ export default class DirectStore {
     copyOpen = false;
     copyFunc: (() => void) | undefined;
     loadingAdminPermissions = false;
+    pagination: Pagination | null = null;
+    pagingParms = new PagingParams();
 
     constructor() {
         makeAutoObservable(this);
@@ -49,16 +52,6 @@ export default class DirectStore {
                 .build();
 
             this.hubConnection.start().catch((error) => console.log('Error establishing the connection'));
-
-            this.hubConnection.on('LoadChats', (chats: ChatDto[]) => {
-                runInAction(() => {
-                    chats.forEach((x) => {
-                        if (x.lastMessage) x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt);
-                    });
-                    this.chats = chats;
-                    this.loadingChats = false;
-                });
-            });
 
             this.hubConnection.on('ReceiveSearchResults', (results: SearchChatDto[]) => {
                 runInAction(() => {
@@ -78,6 +71,40 @@ export default class DirectStore {
 
     stopHubConnection = () => {
         this.hubConnection?.stop().catch((error) => console.log('Error stopping connection: ', error));
+    };
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParms.pageNumber.toString());
+        params.append('pageSize', this.pagingParms.pageSize.toString());
+        return params;
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    };
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParms = pagingParams;
+    };
+
+    loadChats = async () => {
+        try {
+            const result = await agent.Chats.list(this.axiosParams);
+            runInAction(() => {
+                const chats = result.data;
+                this.setPagination(result.pagination);
+                chats.forEach((x) => {
+                    if (x.lastMessage) x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt + 'Z');
+                });
+                this.chats = [...this.chats, ...chats];
+                this.updateMessages();
+                this.handleDateMessages();
+                this.loadingChats = false;
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     clearChats = () => {

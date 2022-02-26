@@ -17,12 +17,12 @@ namespace Application.Chats
 {
     public class List
     {
-        public class Query : IRequest<Result<List<ChatDto>>>
+        public class Query : IRequest<Result<PagedList<ChatDto>>>
         {
-            
+            public PagingParams Params { get; set; }
         }
         
-        public class Handler : IRequestHandler<Query, Result<List<ChatDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<ChatDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -35,7 +35,7 @@ namespace Application.Chats
                 _accessor = accessor;
             }
 
-            public async Task<Result<List<ChatDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<ChatDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
                     .FirstOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
@@ -44,7 +44,7 @@ namespace Application.Chats
 
                 var result = new List<ChatDto>();
                 
-                var chats = await _context.UserChats
+                var query = _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Messages)
@@ -54,8 +54,9 @@ namespace Application.Chats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Users)
                     .ThenInclude(x => x.AppUser)
-                    .Where(x => x.AppUser.UserName == user.UserName)
-                    .ToListAsync(cancellationToken);
+                    .Where(x => x.AppUser.UserName == user.UserName);
+
+                var chats = await PagedList<UserChat>.CreateAsync(query, request.Params.pageNumber, request.Params.PageSize);
 
                 foreach (var userChat in chats)
                 {
@@ -99,7 +100,8 @@ namespace Application.Chats
                     result.Add(mapped);
                 }
 
-                return Result<List<ChatDto>>.Success(result);
+                return Result<PagedList<ChatDto>>
+                    .Success(new PagedList<ChatDto>(result, chats.TotalCount, request.Params.pageNumber, request.Params.PageSize));
             }
         }
     }

@@ -118,6 +118,7 @@ const Search = {
 };
 
 const Chats = {
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<ChatDto[]>>('/direct/', { params }).then(responseBody),
     createPrivateChat: (targetUsername: string) => requests.post<ChatDto>(`/direct/`, { targetUsername }),
     getPrivateChatDetails: (chatId: string) => requests.get<PrivateChat>(`/direct/privateChatDetails/${chatId}`),
     createMessage: (body: string, chatId: string, replyToMessageId: number) => requests.post<Message>('/direct/messages', { body, chatId, replyToMessageId }),

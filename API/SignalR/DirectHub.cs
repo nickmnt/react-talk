@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Application.Chats;
+using Application.Core;
 using Application.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -17,12 +18,6 @@ namespace API.SignalR
             _mediator = mediator;
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            var result = await _mediator.Send(new List.Query());
-            await Clients.Caller.SendAsync("LoadChats", result.Value);
-        }
-        
         public async Task SearchChats(Application.SearchChats.List.Query query)
         {
             var comment = await _mediator.Send(query);
