@@ -15,7 +15,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default observer(function HomeSidebar() {
     const {
-        directStore: { searchChats, searchResults, chats, loadingChats, pagination, setPagingParams, loadChats },
+        directStore: { searchChats, searchResults, chats, loadingChats, pagination, pagingParams, setPagingParams, loadChats },
         groupStore: { editing, phase, type }
     } = useStore();
     const [searchVal, setSearchVal] = useState('');
@@ -23,7 +23,7 @@ export default observer(function HomeSidebar() {
 
     const handleGetNext = () => {
         setLoadingNext(true);
-        setPagingParams(new PagingParams(pagination!.currentPage + 1));
+        setPagingParams(new PagingParams(pagination!.currentPage + 1, pagingParams.pageSize));
         loadChats().then(() => {
             setLoadingNext(false);
         });
@@ -33,16 +33,17 @@ export default observer(function HomeSidebar() {
         searchChats(searchVal);
     }, [searchVal, searchChats]);
 
-    useEffect(() => {
-        loadChats();
-    }, [loadChats]);
-
     const container = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (container.current) {
+            setPagingParams(new PagingParams(1, Math.ceil(container.current.clientHeight / 70)));
+            loadChats();
+        }
+    }, [loadChats, container, setPagingParams]);
 
     const mustExpand =
         container.current && container.current.clientHeight >= chats.length * 70 && !searchVal && !loadingChats && !loadingNext && !!pagination && pagination.currentPage < pagination.totalPages;
-
-    // console.log(!!container.current && !!content.current && container.current.clie >= content.current.clientHeight);
 
     if (mustExpand) {
         handleGetNext();
@@ -65,8 +66,6 @@ export default observer(function HomeSidebar() {
             }
         }
     }
-
-    console.log(!searchVal && !loadingNext && !loadingChats && !!pagination && pagination.currentPage < pagination.totalPages);
 
     return (
         <Paper square className="homeSidebar" elevation={0}>

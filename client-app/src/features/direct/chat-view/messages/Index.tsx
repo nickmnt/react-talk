@@ -66,17 +66,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
 
     useEffect(() => {
         if (!currentChat) return;
-        switch (currentChat.type) {
-            case 0:
-                messagesRef.current = messagesRef.current.slice(0, currentChat.privateChat?.messages.length);
-                break;
-            case 1:
-                messagesRef.current = messagesRef.current.slice(0, currentChat.groupChat?.messages.length);
-                break;
-            case 2:
-                messagesRef.current = messagesRef.current.slice(0, currentChat.channelChat?.messages.length);
-                break;
-        }
+        messagesRef.current = messagesRef.current.slice(0, currentChat.messages?.length);
     }, [currentChat]);
 
     useEffect(() => {
@@ -219,29 +209,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             <ScrollableFeed className="messages">
                 {(currentChat?.type === 0 || currentChat?.type === -10) &&
                     user &&
-                    currentChat.privateChat?.messages.map((message, i) => (
-                        <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
-                            {message.type === 1000 ? (
-                                <DateMessage message={message} />
-                            ) : (
-                                <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected} />
-                            )}
-                        </div>
-                    ))}
-                {currentChat?.type === 1 &&
-                    user &&
-                    currentChat.groupChat?.messages.map((message, i) => (
-                        <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
-                            {message.type === 1000 ? (
-                                <DateMessage message={message} />
-                            ) : (
-                                <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected} />
-                            )}
-                        </div>
-                    ))}
-                {currentChat?.type === 2 &&
-                    user &&
-                    currentChat.channelChat?.messages.map((message, i) => (
+                    currentChat.messages?.map((message, i) => (
                         <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
                             {message.type === 1000 ? (
                                 <DateMessage message={message} />

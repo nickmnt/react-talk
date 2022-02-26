@@ -35,7 +35,7 @@ export default class DirectStore {
     copyFunc: (() => void) | undefined;
     loadingAdminPermissions = false;
     pagination: Pagination | null = null;
-    pagingParms = new PagingParams();
+    pagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this);
@@ -75,8 +75,8 @@ export default class DirectStore {
 
     get axiosParams() {
         const params = new URLSearchParams();
-        params.append('pageNumber', this.pagingParms.pageNumber.toString());
-        params.append('pageSize', this.pagingParms.pageSize.toString());
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
         return params;
     }
 
@@ -85,7 +85,7 @@ export default class DirectStore {
     };
 
     setPagingParams = (pagingParams: PagingParams) => {
-        this.pagingParms = pagingParams;
+        this.pagingParams = pagingParams;
     };
 
     loadChats = async () => {
@@ -140,10 +140,6 @@ export default class DirectStore {
                 if (curChat.groupChat!.members!.find((x) => x.username === result.username)!.lastSeen <= result.lastSeen)
                     curChat.groupChat!.members!.find((x) => x.username === result.username)!.lastSeen = result.lastSeen;
                 break;
-            case 2:
-                if (curChat.channelChat!.members!.find((x) => x.username === result.username)!.lastSeen <= result.lastSeen)
-                    curChat.channelChat!.members!.find((x) => x.username === result.username)!.lastSeen = result.lastSeen;
-                break;
         }
 
         this.currentChat = { ...curChat };
@@ -174,7 +170,8 @@ export default class DirectStore {
 
         runInAction(() => {
             chat.privateChat = response;
-            chat.privateChat.messages.forEach((x) => {
+            chat.messages = chat.privateChat.messages;
+            chat.messages.forEach((x) => {
                 x.local = false;
                 x.createdAt = new Date(x.createdAt + 'Z');
                 x.createdAt.setMilliseconds(999);
@@ -190,7 +187,8 @@ export default class DirectStore {
 
         runInAction(() => {
             chat.groupChat = response;
-            chat.groupChat!.messages.forEach((x) => {
+            chat.messages = chat.groupChat.messages;
+            chat.messages.forEach((x) => {
                 x.local = false;
                 x.createdAt = new Date(x.createdAt + 'Z');
                 x.createdAt.setMilliseconds(999);
@@ -204,24 +202,25 @@ export default class DirectStore {
         });
     };
 
-    getChannelChatDetails = async (chat: ChatDto) => {
-        const response = await agent.Chats.getChannelDetails(chat.id);
+    // getChannelChatDetails = async (chat: ChatDto) => {
+    //     const response = await agent.Chats.getChannelDetails(chat.id);
 
-        runInAction(() => {
-            chat.channelChat = response;
-            chat.channelChat!.messages.forEach((x) => {
-                x.local = false;
-                x.createdAt = new Date(x.createdAt + 'Z');
-                x.createdAt.setMilliseconds(999);
-            });
-            chat.channelChat!.members.forEach((x) => {
-                x.lastSeen = new Date(x.lastSeen + 'Z');
-            });
-            chat.channelChat!.memberCount = chat.channelChat.members.length;
-            chat.channelChat!.me = chat.channelChat.members.find((x) => x.username === store.userStore.user?.username);
-            this.updateMessages();
-        });
-    };
+    //     runInAction(() => {
+    //         chat.channelChat = response;
+    //         chat.messages = chat.channelChat.messages;
+    //         chat.channelChat!.messages.forEach((x) => {
+    //             x.local = false;
+    //             x.createdAt = new Date(x.createdAt + 'Z');
+    //             x.createdAt.setMilliseconds(999);
+    //         });
+    //         chat.channelChat!.members.forEach((x) => {
+    //             x.lastSeen = new Date(x.lastSeen + 'Z');
+    //         });
+    //         chat.channelChat!.memberCount = chat.channelChat.members.length;
+    //         chat.channelChat!.me = chat.channelChat.members.find((x) => x.username === store.userStore.user?.username);
+    //         this.updateMessages();
+    //     });
+    // };
 
     getChatDetails = async (chat: ChatDto) => {
         store.chatStore.clearStack();
@@ -235,9 +234,9 @@ export default class DirectStore {
             case 1:
                 await this.getGroupChatDetails(chat);
                 break;
-            case 2:
-                await this.getChannelChatDetails(chat);
-                break;
+            // case 2:
+            // await this.getChannelChatDetails(chat);
+            // break;
         }
         this.handleDateMessages();
         runInAction(() => {
@@ -250,7 +249,7 @@ export default class DirectStore {
     createLocalMessage = (body: string) => {
         if (!this.currentChat) return -1;
 
-        this.getCurrentMessages()?.push({
+        this.currentChat.messages?.push({
             body,
             createdAt: new Date(),
             displayName: store.userStore.user!.displayName,
@@ -387,7 +386,7 @@ export default class DirectStore {
     updateLocalMessage = (response: Message, id: number) => {
         if (this.currentChat) {
             const curChat = this.currentChat;
-            let msg = this.getCurrentMessages()?.find((x) => x.id === id);
+            let msg = this.currentChat.messages?.find((x) => x.id === id);
             if (!msg) {
                 return;
             }
@@ -511,11 +510,11 @@ export default class DirectStore {
     updateMessages = () => {
         if (!this.currentChat) return;
 
-        this.getCurrentMessages()?.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        this.currentChat.messages?.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
         this.images = [];
         this.videos = [];
-        this.getCurrentMessages()?.forEach((x) => {
+        this.currentChat.messages?.forEach((x) => {
             switch (x.type) {
                 case 1:
                     this.images.push({ src: x.url, caption: x.body ? x.body : 'No comment', id: x.id });
@@ -526,18 +525,18 @@ export default class DirectStore {
         });
     };
 
-    getCurrentMessages = () => {
-        if (!this.currentChat) return;
+    // getCurrentMessages = () => {
+    //     if (!this.currentChat) return;
 
-        switch (this.currentChat.type) {
-            case 0:
-                return this.currentChat.privateChat!.messages;
-            case 1:
-                return this.currentChat.groupChat!.messages;
-            case 2:
-                return this.currentChat.channelChat!.messages;
-        }
-    };
+    //     switch (this.currentChat.type) {
+    //         case 0:
+    //             return this.currentChat.privateChat!.messages;
+    //         case 1:
+    //             return this.currentChat.groupChat!.messages;
+    //         case 2:
+    //             return this.currentChat.channelChat!.messages;
+    //     }
+    // };
 
     getImageIndex = (id: number) => {
         return this.images.findIndex((x) => x.id === id);
@@ -640,11 +639,11 @@ export default class DirectStore {
     };
 
     getMessageById = (id: number) => {
-        return this.getCurrentMessages()?.find((x) => x.id === id);
+        return this.currentChat?.messages?.find((x) => x.id === id);
     };
 
     getMessageIndexById = (id: number) => {
-        return this.getCurrentMessages()?.findIndex((x) => x.id === id);
+        return this.currentChat?.messages?.findIndex((x) => x.id === id);
     };
 
     clearReply = () => {
@@ -653,7 +652,7 @@ export default class DirectStore {
 
     handleDateMessages = () => {
         if (!this.currentChat) return;
-        const withoutDates = this.getCurrentMessages()?.filter((x) => x.type !== 1000);
+        const withoutDates = this.currentChat.messages?.filter((x) => x.type !== 1000);
         const result: Message[] = [];
         let lastDate: Date | null = null;
         withoutDates?.forEach((x, i) => {
@@ -671,17 +670,7 @@ export default class DirectStore {
                 result.push(x);
             }
         });
-        switch (this.currentChat?.type) {
-            case 0:
-                this.currentChat.privateChat!.messages = result;
-                break;
-            case 1:
-                this.currentChat.groupChat!.messages = result;
-                break;
-            case 2:
-                this.currentChat.channelChat!.messages = result;
-                break;
-        }
+        this.currentChat.messages = result;
         this.currentChat = { ...this.currentChat };
     };
 

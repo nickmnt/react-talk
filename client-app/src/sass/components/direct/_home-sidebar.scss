@@ -8,7 +8,7 @@
         width: 100%;
         height: 100%;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         &::-webkit-scrollbar,
         &::-webkit-scrollbar-thumb {

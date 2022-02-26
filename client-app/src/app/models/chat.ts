@@ -20,6 +20,7 @@ export interface ChatDto {
     pins: Pin[];
     participantUsername: string | null;
     membershipType: number;
+    messages?: Message[];
 }
 
 export interface SearchChatDto {
