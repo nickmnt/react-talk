@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
-import LoginForm from '../../users/LoginForm';
-import RegisterForm from '../../users/RegisterForm';
 import ForumIcon from '@mui/icons-material/Forum';
 import Typography from '@mui/material/Typography/Typography';
 import Button from '@mui/material/Button/Button';
@@ -11,7 +9,7 @@ import LoginDialog from '../../users/LoginDialog';
 import RegisterDialog from '../../users/RegisterDialog';
 
 export default observer(function HomePage() {
-    const { userStore, modalStore } = useStore();
+    const { userStore } = useStore();
     const [loginOpen, setLoginOpen] = useState(false);
     const [registerOpen, setRegisterOpen] = useState(false);
 

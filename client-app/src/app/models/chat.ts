@@ -128,6 +128,7 @@ export interface ChatPage {
     followings?: Profile[];
     member?: GroupMember;
     index: number;
+    off?: boolean;
 }
 
 export interface ImageElem {

@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { TransitionProps } from '@mui/material/transitions';
 import Zoom from '@mui/material/Zoom/Zoom';
-import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
 export interface Props {

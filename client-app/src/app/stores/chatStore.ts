@@ -37,7 +37,10 @@ export default class ChatStore {
     };
 
     removeFromStack = (val: ChatPage) => {
-        this.stack = this.stack.filter((x) => x.index !== val.index);
+        val.off = true;
+        // setTimeout(() => {
+        // this.stack = this.stack.filter((x) => x.index !== val.index);
+        // }, 250);
     };
 
     addAddMembersToStack = async (val: ChatDto) => {

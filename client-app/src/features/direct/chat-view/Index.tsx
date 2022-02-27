@@ -19,6 +19,7 @@ import PinDialog from './PinDialog';
 import FoOptionsDialog from './FoOptionsDialog';
 import AdminIndividual from './AdminIndividual';
 import ChatViewSkeleton from './ChatViewSkeleton';
+import SlideDialog from '../../../app/common/dialog/SlideDialog';
 
 export default observer(function ChatView() {
     const [pinOpen, setPinOpen] = useState(false);
@@ -71,17 +72,19 @@ export default observer(function ChatView() {
                     )}
                     <div style={{ zIndex: 1000 }}>
                         {stack.map((elem, i) => (
-                            <div key={i}>
-                                {elem.type === 0 && <ChatDetails chatPage={elem} />}
-                                {elem.type === 1 && <ChatDetails chatPage={elem} />}
-                                {elem.type === 2 && <ChatDetails chatPage={elem} />}
-                                {elem.type === 20 && <AddMember chatPage={elem} />}
-                                {elem.type === 21 && <AddMember chatPage={elem} />}
-                                {elem.type === 30 && <MemberPermissions chatPage={elem} member={elem.member!} />}
-                                {elem.type === 40 && <GroupEdit chatPage={elem} chat={elem.groupData!} />}
-                                {elem.type === 50 && <MemberPermissionsAll chatPage={elem} chat={elem.groupData!} />}
-                                {elem.type === 60 && <AdminIndividual chatPage={elem} member={elem.member!} />}
-                            </div>
+                            <SlideDialog open={!elem.off}>
+                                <>
+                                    {elem.type === 0 && <ChatDetails chatPage={elem} />}
+                                    {elem.type === 1 && <ChatDetails chatPage={elem} />}
+                                    {elem.type === 2 && <ChatDetails chatPage={elem} />}
+                                    {elem.type === 20 && <AddMember chatPage={elem} />}
+                                    {elem.type === 21 && <AddMember chatPage={elem} />}
+                                    {elem.type === 30 && <MemberPermissions chatPage={elem} member={elem.member!} />}
+                                    {elem.type === 40 && <GroupEdit chatPage={elem} chat={elem.groupData!} />}
+                                    {elem.type === 50 && <MemberPermissionsAll chatPage={elem} chat={elem.groupData!} />}
+                                    {elem.type === 60 && <AdminIndividual chatPage={elem} member={elem.member!} />}
+                                </>
+                            </SlideDialog>
                         ))}
                     </div>
                 </>

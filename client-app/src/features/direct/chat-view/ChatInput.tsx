@@ -1,5 +1,5 @@
-import { TextareaAutosize } from '@mui/material';
-import { Field, FieldProps, Form, Formik } from 'formik';
+import { IconButton, TextareaAutosize } from '@mui/material';
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import * as Yup from 'yup';
@@ -10,6 +10,9 @@ import Stack from '@mui/material/Stack/Stack';
 import Typography from '@mui/material/Typography/Typography';
 import Button from '@mui/material/Button/Button';
 import ShortcutIcon from '@mui/icons-material/Shortcut';
+import Picker from 'emoji-picker-react';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import Menu from '@mui/material/Menu';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -60,6 +63,15 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             }
         }
     };
+    const formRef = useRef<FormikProps<{ body: string }>>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     if (!currentChat) return <></>;
 
@@ -107,12 +119,19 @@ export default observer(function ChatInput({ selectedCount }: Props) {
         );
     }
 
+    const onEmojiClick = (event: any, emojiObject: any) => {
+        if (formRef.current) {
+            formRef.current.setValues({ body: formRef.current.values.body + emojiObject.emoji });
+        }
+    };
+
     return (
         <Paper square className="chatInput" elevation={3}>
-            <svg className="chatInput__emoji" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1262 1075q-37 121-138 195t-228 74-228-74-138-195q-8-25 4-48.5t38-31.5q25-8 48.5 4t31.5 38q25 80 92.5 129.5t151.5 49.5 151.5-49.5 92.5-129.5q8-26 32-38t49-4 37 31.5 4 48.5zm-494-435q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm512 0q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm256 256q0-130-51-248.5t-136.5-204-204-136.5-248.5-51-248.5 51-204 136.5-136.5 204-51 248.5 51 248.5 136.5 204 204 136.5 248.5 51 248.5-51 204-136.5 136.5-204 51-248.5zm128 0q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z" />
-            </svg>
+            <IconButton onClick={handleClick}>
+                <SentimentSatisfiedAltIcon />
+            </IconButton>
             <Formik
+                innerRef={formRef}
                 onSubmit={(values, { resetForm }) => {
                     if (!currentChat.id) {
                         createPrivateChat(currentChat.privateChat!.otherUsername, values.body, file).then(() => {
@@ -180,6 +199,21 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             <svg className="chatInput__microphone" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1472 704v128q0 221-147.5 384.5t-364.5 187.5v132h256q26 0 45 19t19 45-19 45-45 19h-640q-26 0-45-19t-19-45 19-45 45-19h256v-132q-217-24-364.5-187.5t-147.5-384.5v-128q0-26 19-45t45-19 45 19 19 45v128q0 185 131.5 316.5t316.5 131.5 316.5-131.5 131.5-316.5v-128q0-26 19-45t45-19 45 19 19 45zm-256-384v512q0 132-94 226t-226 94-226-94-94-226v-512q0-132 94-226t226-94 226 94 94 226z" />
             </svg>
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left'
+                }}
+                transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left'
+                }}
+            >
+                <Picker onEmojiClick={onEmojiClick} />
+            </Menu>
         </Paper>
     );
 });
