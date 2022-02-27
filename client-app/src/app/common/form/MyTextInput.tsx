@@ -1,6 +1,8 @@
+import Input from '@mui/material/Input/Input';
+import TextField from '@mui/material/TextField/TextField';
+import Typography from '@mui/material/Typography/Typography';
 import { useField } from 'formik';
 import React from 'react';
-import { Form, Label } from 'semantic-ui-react';
 
 interface Props {
     placeholder: string;
@@ -13,14 +15,12 @@ export default function MyTextInput(props: Props) {
     const [field, meta] = useField(props.name);
 
     return (
-        <Form.Field error={meta.touched && !!meta.error}>
-            <label>{props.label}</label>
-            <input {...field} {...props} />
-            {meta.touched && meta.error ? (
-                <Label basic color="red">
-                    {meta.error}
-                </Label>
-            ) : null}
-        </Form.Field>
+        <div style={{ display: 'flex', flexDirection: 'column', color: 'white', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography sx={{ marginRight: '1rem', color: 'white' }}>{props.label}</Typography>
+                <Input {...field} sx={{ color: 'white', width: '100%', borderColor: 'white' }} error={meta.touched && !!meta.error} {...props} />
+            </div>
+            {meta.touched && meta.error ? <Typography color="red">{meta.error}</Typography> : null}
+        </div>
     );
 }

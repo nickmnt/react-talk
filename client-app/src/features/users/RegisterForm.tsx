@@ -1,10 +1,11 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { Button, Header } from 'semantic-ui-react';
 import MyTextInput from '../../app/common/form/MyTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
+import Typography from '@mui/material/Typography/Typography';
+import Button from '@mui/material/Button/Button';
 
 export default observer(function RegisterForm() {
     const { userStore } = useStore();
@@ -26,14 +27,18 @@ export default observer(function RegisterForm() {
             })}
         >
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
-                <Form className="ui form error" onSubmit={handleSubmit} autoComplete="off">
-                    <Header as="h2" content="Sign up to Reactivities" color="teal" textAlign="center" />
+                <Form className="login" onSubmit={handleSubmit} autoComplete="off">
+                    <Typography variant="h3" color="white" textAlign="center" sx={{ marginBottom: '1rem' }}>
+                        Sign up to ReactTalk
+                    </Typography>
                     <MyTextInput name="displayName" placeholder="Display Name" />
                     <MyTextInput name="username" placeholder="Username" />
                     <MyTextInput name="email" placeholder="Email" />
                     <MyTextInput name="password" placeholder="Password" type="password" />
                     <ErrorMessage name="error" render={() => <ValidationErrors errors={errors.error} />} />
-                    <Button disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content="Register" type="submit" fluid />
+                    <Button sx={{ width: '100%', marginTop: '1rem', color: 'white', borderColor: 'white' }} variant="outlined" disabled={!isValid || !dirty || isSubmitting} type="submit">
+                        Register
+                    </Button>
                 </Form>
             )}
         </Formik>
