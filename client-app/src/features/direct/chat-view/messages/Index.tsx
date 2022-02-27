@@ -7,7 +7,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ForwardIcon from '@mui/icons-material/Forward';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ScrollableFeed from 'react-scrollable-feed';
 import Menu from '@mui/material/Menu/Menu';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
@@ -22,6 +21,8 @@ import DateMessage from './DateMessage';
 import { toast } from 'react-toastify';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DeleteDialog from '../DeleteDialog';
+import { PagingParams } from '../../../../app/models/pagination';
+import ChatScroller from '../../../../app/common/utility/ChatScroller';
 
 export interface Props {
     selected: Message[];
@@ -36,6 +37,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const messagesRef = useRef<(HTMLElement | null)[]>([]);
     const [selectedPin, setSelectedPin] = useState(0);
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [loadingNext, setLoadingNext] = useState(false);
 
     const {
         directStore: {
@@ -52,10 +54,22 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             menuMsg,
             setMenuMsg,
             menuForward,
-            clearForwardingSingle
+            clearForwardingSingle,
+            paginationMessages,
+            setPagingParamsMessages,
+            loadMessages
         },
         userStore: { user }
     } = useStore();
+
+    const handleGetNext = () => {
+        if (!currentChat) {
+            return;
+        }
+        setLoadingNext(true);
+        setPagingParamsMessages(new PagingParams(paginationMessages!.currentPage + 1));
+        loadMessages(currentChat.id).then(() => setLoadingNext(false));
+    };
 
     const goToMessage = (id: number) => {
         const searchResult = getMessageIndexById(id);
@@ -115,6 +129,12 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     };
 
     if (!currentChat || !user) return null;
+
+    const onMoreUp = () => {
+        if (!loadingNext && !!paginationMessages && paginationMessages.currentPage < paginationMessages.totalPages) {
+            handleGetNext();
+        }
+    };
 
     // Message menu items enable booleans
     const canPin = currentChat.type !== 1 || currentChat.membershipType !== 0 || (currentChat.groupChat!.pinMessagesAll && currentChat.groupChat!.pinMessages);
@@ -206,9 +226,8 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </IconButton>
                 </Paper>
             )}
-            <ScrollableFeed className="messages">
-                {(currentChat?.type === 0 || currentChat?.type === -10) &&
-                    user &&
+            <ChatScroller className="messages" onMoreUp={onMoreUp}>
+                {user &&
                     currentChat.messages?.map((message, i) => (
                         <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
                             {message.type === 1000 ? (
@@ -218,7 +237,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                             )}
                         </div>
                     ))}
-            </ScrollableFeed>
+            </ChatScroller>
             {selected.length === 0 && currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && (
                 <Paper
                     square

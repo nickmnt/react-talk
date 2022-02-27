@@ -56,7 +56,7 @@ namespace Application.Chats
                     .ThenInclude(x => x.AppUser)
                     .Where(x => x.AppUser.UserName == user.UserName);
 
-                var chats = await PagedList<UserChat>.CreateAsync(query, request.Params.pageNumber, request.Params.PageSize);
+                var chats = await PagedList<UserChat>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize);
 
                 foreach (var userChat in chats)
                 {
@@ -101,7 +101,7 @@ namespace Application.Chats
                 }
 
                 return Result<PagedList<ChatDto>>
-                    .Success(new PagedList<ChatDto>(result, chats.TotalCount, request.Params.pageNumber, request.Params.PageSize));
+                    .Success(new PagedList<ChatDto>(result, chats.TotalCount, request.Params.PageNumber, request.Params.PageSize));
             }
         }
     }

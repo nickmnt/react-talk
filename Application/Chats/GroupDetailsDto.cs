@@ -27,6 +27,5 @@ namespace Application.Chats
         public bool AddNewAdmins { get; set; } = true;
         public bool RemainAnonymous { get; set; } = true;
         public string CustomTitle { get; set; }
-        public ICollection<MessageDto> Messages { get; set; } = new List<MessageDto>();
     }
 }

@@ -55,7 +55,7 @@ namespace Application.Activities
 
                 return Result<PagedList<ActivityDto>>.Success(
                     await PagedList<ActivityDto>
-                        .CreateAsync(query, request.Params.pageNumber
+                        .CreateAsync(query, request.Params.PageNumber
                             , request.Params.PageSize)
                     );
             }

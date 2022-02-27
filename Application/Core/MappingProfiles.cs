@@ -90,7 +90,6 @@ namespace Application.Core
             CreateMap<Chat, ChannelDetailsDto>();
             CreateMap<UserChat, GroupDetailsDto>()
                 .ForMember(d => d.Description, o => o.MapFrom(s => s.Chat.Description))
-                .ForMember(d => d.Messages, o => o.MapFrom(s => s.Chat.Messages))
                 .ForMember(d => d.SendMessagesAll, o => o.MapFrom(s => s.Chat.SendMessages))
                 .ForMember(d => d.SendMediaAll, o => o.MapFrom(s => s.Chat.SendMedia))
                 .ForMember(d => d.AddUsersAll, o => o.MapFrom(s => s.Chat.AddUsers))

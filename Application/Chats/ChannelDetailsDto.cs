@@ -9,6 +9,5 @@ namespace Application.Chats
     {
         public string Description { get; set; }
         public List<ChannelMember> Members { get; set; }
-        public ICollection<MessageDto> Messages { get; set; } = new List<MessageDto>();
     }
 }

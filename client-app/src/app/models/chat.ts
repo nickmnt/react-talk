@@ -30,7 +30,6 @@ export interface SearchChatDto {
 }
 
 export interface PrivateChat {
-    messages: Message[];
     myLastSeen: Date;
     otherLastSeen: Date;
     otherUserId: string;
@@ -60,7 +59,6 @@ export interface ChannelDetailsDto {
     description: string;
     members: ChannelMember[];
     memberCount?: number;
-    messages: Message[];
     me?: ChannelMember;
 }
 
@@ -68,7 +66,6 @@ export interface GroupDetailsDto {
     description: string;
     members: GroupMember[];
     memberCount?: number;
-    messages: Message[];
     me?: GroupMember;
     // All members permissions
     sendMessagesAll: boolean;

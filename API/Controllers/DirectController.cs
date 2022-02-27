@@ -29,9 +29,15 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetChats([FromQuery]PagingParams param)
+        public async Task<IActionResult> GetChats([FromQuery] PagingParams param)
         {
-            return HandlePagedResult(await Mediator.Send(new Application.Chats.List.Query {Params = param}));
+            return HandlePagedResult(await Mediator.Send(new Application.Chats.List.Query { Params = param }));
+        }
+
+        [HttpGet("messages")]
+        public async Task<IActionResult> GetMessages([FromQuery] PagingParams param, [FromQuery] Guid chatId)
+        {
+            return HandlePagedResult(await Mediator.Send(new ListMessages.Query {Params = param, ChatId = chatId}));
         }
 
         [HttpPost()]
