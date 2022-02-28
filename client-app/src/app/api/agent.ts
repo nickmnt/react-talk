@@ -146,6 +146,16 @@ const Chats = {
             ...config
         });
     },
+    createVoice: (file: Blob, chatId: string, config: any, replyToMessageId: number) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        formData.append('ChatId', chatId);
+        formData.append('ReplyToMessageId', replyToMessageId.toString());
+        return axios.post<Message>('/direct/voices', formData, {
+            headers: { 'Content-type': 'multipart/form-data' },
+            ...config
+        });
+    },
     createChannel: (name: string, description: string) => requests.post<ChatDto>('/channel/', { name, description }),
     getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
     addMembers: (id: string, members: string[]) => requests.post<boolean>('direct/addMember', { id, members }),

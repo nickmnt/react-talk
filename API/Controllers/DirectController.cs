@@ -123,6 +123,28 @@ namespace API.Controllers
             return HandleResult(result);
         }
         
+        [HttpPost("voices")]
+        public async Task<IActionResult> CreateMusic([FromForm] Application.Messages.Voice.Create.Command command)
+        {
+            var result = await Mediator.Send(command);
+            
+            if (result.IsSuccess)
+            {
+                var users = await Mediator
+                    .Send(new Application.Chats.UserChats.List.Query { ChatId = command.ChatId });
+                
+                foreach (var u in users.Value)
+                {
+                    await _hubContext.Clients.User(u).SendAsync("ReceiveNewMessage", new MessageNotifDto
+                    {
+                        Message = result.Value,
+                        ChatId = command.ChatId   
+                    });
+                }
+            }
+            return HandleResult(result);
+        }
+        
         [HttpPost("updateSeen")]
         public async Task<IActionResult> UpdateSeen(UpdateSeen.Command command)
         {

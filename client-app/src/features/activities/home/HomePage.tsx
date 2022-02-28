@@ -30,7 +30,7 @@ export default observer(function HomePage() {
                                     Welcome! Click below to enter
                                 </Typography>
                                 <Link to="/direct/inbox" style={{ textDecoration: 'none' }}>
-                                    <Button sx={{ fontSize: '2rem', marginTop: '1rem', color: 'white', borderColor: 'white', fontWeight: '500' }} variant="outlined">
+                                    <Button className="welcome__enter" sx={{ fontSize: '2rem', marginTop: '1rem', color: 'white', borderColor: 'white', fontWeight: '500' }} variant="outlined">
                                         Go to chats!
                                     </Button>
                                 </Link>

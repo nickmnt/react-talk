@@ -10,6 +10,9 @@ import Tick from '../chat-view/messages/message-component/text/Tick';
 import DoneIcon from '@mui/icons-material/Done';
 import { useState } from 'react';
 import { useLongPress } from 'use-long-press';
+import ImageIcon from '@mui/icons-material/Image';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 interface Props {
     chat: ChatDto;
@@ -51,6 +54,22 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
     };
 
     const isSelected = selected?.findIndex((x) => x.id === chat.id) !== -1;
+    let lastMsgText = 'No message yet';
+    if (chat.lastMessage && chat.lastMessage.body) {
+        lastMsgText = chat.lastMessage.body;
+    } else {
+        switch (chat.lastMessage?.type) {
+            case 1:
+                lastMsgText = 'Photo';
+                break;
+            case 2:
+                lastMsgText = 'Video';
+                break;
+            case 3:
+                lastMsgText = 'Voice';
+                break;
+        }
+    }
 
     return (
         <ListItemButton
@@ -77,7 +96,12 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
                     </div>
                 </div>
                 <div className="chat__rightBottom">
-                    <div className="last-msg">{chat.lastMessage ? chat.lastMessage.body.substring(0, 15) : 'No message yet'}</div>
+                    <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
+                        {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
+                        {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
+                        {chat.lastMessage && chat.lastMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
+                        {lastMsgText.substring(0, 15)}
+                    </div>
                     {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && (
                         <Paper sx={{ backgroundColor: '#0088CC', color: 'white' }} square className="chat__badge">
                             {chat.notSeenCount}

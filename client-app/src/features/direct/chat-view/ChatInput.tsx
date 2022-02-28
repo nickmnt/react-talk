@@ -1,18 +1,23 @@
-import { IconButton, TextareaAutosize } from '@mui/material';
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import * as Yup from 'yup';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import Paper from '@mui/material/Paper/Paper';
 import Stack from '@mui/material/Stack/Stack';
 import Typography from '@mui/material/Typography/Typography';
+import IconButton from '@mui/material/IconButton/IconButton';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Button from '@mui/material/Button/Button';
 import ShortcutIcon from '@mui/icons-material/Shortcut';
 import Picker from 'emoji-picker-react';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import Menu from '@mui/material/Menu';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import MicIcon from '@mui/icons-material/Mic';
+import { useStopwatch } from 'react-timer-hook';
+import MicRecorder from 'mic-recorder-to-mp3';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -29,17 +34,19 @@ export interface Props {
 
 export default observer(function ChatInput({ selectedCount }: Props) {
     const {
-        directStore: { currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding, forwardingSingle, forwardSingle }
+        directStore: { currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding, forwardingSingle, forwardSingle, createVoice }
     } = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [file, setFile] = useState<null | FileRecord>(null);
+    const [recording, setRecording] = useState(false);
+    const { seconds, minutes, hours, start, pause, reset } = useStopwatch({ autoStart: false });
+    const [recorder, setRecorder] = useState<any>();
 
     const onAttachmentClick = () => {
         inputFile.current!.click();
     };
 
-    const onAttachmentChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log('attachment changed');
+    const onAttachmentChange = () => {
         const f = inputFile.current!.files![0];
 
         if (f) {
@@ -66,6 +73,10 @@ export default observer(function ChatInput({ selectedCount }: Props) {
     const formRef = useRef<FormikProps<{ body: string }>>(null);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    useEffect(() => {
+        setRecorder(new MicRecorder({ bitRate: 128 }));
+    }, []);
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -125,6 +136,45 @@ export default observer(function ChatInput({ selectedCount }: Props) {
         }
     };
 
+    const startRecording = () => {
+        if (recorder) {
+            recorder.start().then(() => {
+                start();
+                setRecording(true);
+            });
+        }
+    };
+
+    const stopRecording = () => {
+        if (recorder) {
+            recorder
+                .stop()
+                .getMp3()
+                .then(([, blob]: any) => {
+                    pause();
+                    reset();
+                    setRecording(false);
+                    createVoice(blob);
+                })
+                .catch((e: any) => console.log(e));
+        }
+    };
+
+    if (recording) {
+        return (
+            <Paper square className="chatInput" elevation={3}>
+                <div className="chatInput__blink" />
+                <div style={{ fontSize: '1.6rem', marginRight: 'auto', display: 'flex', alignItems: 'center' }}>
+                    <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+                </div>
+                <div style={{ fontSize: '1.6rem', fontWeight: '600' }}>Recording...</div>
+                <Button color="warning" sx={{ marginLeft: 'auto', width: '7.5rem', height: '7.5rem' }} variant="contained" onClick={stopRecording}>
+                    <Typography variant="h6">STOP</Typography>
+                </Button>
+            </Paper>
+        );
+    }
+
     return (
         <Paper square className="chatInput" elevation={3}>
             <IconButton onClick={handleClick}>
@@ -165,7 +215,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                     body: Yup.string().required()
                 })}
             >
-                {({ isSubmitting, isValid, handleSubmit }) => (
+                {({ isValid, handleSubmit }) => (
                     <Form className="chatInput__form">
                         <Field name="body">
                             {(props: FieldProps) => (
@@ -192,13 +242,17 @@ export default observer(function ChatInput({ selectedCount }: Props) {
 
             <input type="file" ref={inputFile} style={{ display: 'none' }} onChange={onAttachmentChange} />
             {canSendMedia && (
-                <svg onClick={onAttachmentClick} className="chatInput__attachment" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1596 1385q0 117-79 196t-196 79q-135 0-235-100l-777-776q-113-115-113-271 0-159 110-270t269-111q158 0 273 113l605 606q10 10 10 22 0 16-30.5 46.5t-46.5 30.5q-13 0-23-10l-606-607q-79-77-181-77-106 0-179 75t-73 181q0 105 76 181l776 777q63 63 145 63 64 0 106-42t42-106q0-82-63-145l-581-581q-26-24-60-24-29 0-48 19t-19 48q0 32 25 59l410 410q10 10 10 22 0 16-31 47t-47 31q-12 0-22-10l-410-410q-63-61-63-149 0-82 57-139t139-57q88 0 149 63l581 581q100 98 100 235z" />
-                </svg>
+                <IconButton onClick={onAttachmentClick}>
+                    <AttachFileIcon />
+                </IconButton>
             )}
-            <svg className="chatInput__microphone" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1472 704v128q0 221-147.5 384.5t-364.5 187.5v132h256q26 0 45 19t19 45-19 45-45 19h-640q-26 0-45-19t-19-45 19-45 45-19h256v-132q-217-24-364.5-187.5t-147.5-384.5v-128q0-26 19-45t45-19 45 19 19 45v128q0 185 131.5 316.5t316.5 131.5 316.5-131.5 131.5-316.5v-128q0-26 19-45t45-19 45 19 19 45zm-256-384v512q0 132-94 226t-226 94-226-94-94-226v-512q0-132 94-226t226-94 226 94 94 226z" />
-            </svg>
+            <IconButton
+                onClick={(e) => {
+                    startRecording();
+                }}
+            >
+                <MicIcon />
+            </IconButton>
             <Menu
                 anchorEl={anchorEl}
                 open={open}

@@ -354,6 +354,30 @@ export default class DirectStore {
         return { id: id + 1, msg };
     };
 
+    createLocalVoice = (file: Blob) => {
+        if (!this.currentChat || !this.currentChat.messages) return { id: -1, msg: undefined };
+
+        const msg = {
+            body: '',
+            createdAt: new Date(),
+            displayName: store.userStore.user!.displayName,
+            username: store.userStore.user!.username,
+            local: true,
+            id: id,
+            type: 3,
+            image: '',
+            publicId: '',
+            url: '',
+            localBlob: file,
+            replyToId: this.replyMessage ? this.replyMessage.id : 0
+        } as Message;
+
+        this.currentChat.messages = [...this.currentChat.messages, msg];
+
+        id--;
+        return { id: id + 1, msg };
+    };
+
     addNewMessage = (response: MessageNotifDto) => {
         const chats = this.chats;
         const chat = this.chats.find((x) => x.id === response.chatId);
@@ -454,6 +478,25 @@ export default class DirectStore {
         // };
         let config = {};
         const response = await agent.Chats.createVideo(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
+        this.updateLocalMessage(response.data, id);
+        this.replyMessage = null;
+        this.handleDateMessages();
+    };
+
+    createVoice = async (file: Blob) => {
+        if (!this.currentChat) return;
+        const { id } = this.createLocalVoice(file);
+        if (id === -1) return;
+        // let config = {
+        //   onUploadProgress: (progressEvent: any) => {
+        // let percentCompleted = Math.floor(
+        //   (progressEvent.loaded * 100) / progressEvent.total
+        // );
+        // msg!.localProgress = percentCompleted;
+        //   },
+        // };
+        let config = {};
+        const response = await agent.Chats.createVoice(file, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
         this.replyMessage = null;
         this.handleDateMessages();

@@ -100,7 +100,7 @@ namespace Application.Messages.Videos
                 if (result)
                     return Result<MessageDto>.Success(_mapper.Map<MessageDto>(message));
                 else
-                    return Result<MessageDto>.Failure("Failed to add the message to the private chat");
+                    return Result<MessageDto>.Failure("Failed to add the message to the chat");
             }
         }
     }

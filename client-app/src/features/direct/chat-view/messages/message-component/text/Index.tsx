@@ -101,6 +101,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                     <img onClick={() => console.log('open lightbox with image index')} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />
                 )}
                 {type === 2 && <ReactPlayer controls={true} url={isLocal ? URL.createObjectURL(localBlob!) : attachedVideo} />}
+                {type === 3 && <audio src={isLocal ? URL.createObjectURL(localBlob!) : message.url} controls />}
                 <div className="text__container">
                     {!isMe && showImg && <div className="text__name">{name}</div>}
                     <p className="text__content">
