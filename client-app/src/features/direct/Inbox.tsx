@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import CopyDialog from '../../app/common/dialog/CopyDialog';
 import { useStore } from '../../app/stores/store';
+import ContactsDialog from '../contacts/ContactsDialog';
 import ChatView from './chat-view/Index';
 import HomeSidebar from './HomeSidebar';
 import BioDialog from './settings/BioDialog';
@@ -13,11 +14,30 @@ export default observer(function Inbox() {
     const expanded = false;
 
     const {
-        directStore: { createHubConnection, clearChats, chats, currentChat, settingsOpen, setSettingsOpen, nameOpen, setNameOpen, bioOpen, setBioOpen, copyOpen, setCopyOpen, copyFunc },
-        photoStore: { photoOpen, setPhotoOpen }
+        directStore: {
+            createHubConnection,
+            clearChats,
+            chats,
+            currentChat,
+            settingsOpen,
+            setSettingsOpen,
+            nameOpen,
+            setNameOpen,
+            bioOpen,
+            setBioOpen,
+            copyOpen,
+            setCopyOpen,
+            copyFunc,
+            contactsOpen,
+            setContactsOpen
+        },
+        photoStore: { photoOpen, setPhotoOpen },
+        contactsStore: { loadFollowings }
     } = useStore();
 
-    useEffect(() => {}, [chats]);
+    useEffect(() => {
+        loadFollowings();
+    }, [loadFollowings]);
 
     useEffect(() => {
         createHubConnection();
@@ -42,6 +62,7 @@ export default observer(function Inbox() {
             <NameDialog open={nameOpen} onClose={() => setNameOpen(false)} />
             <BioDialog open={bioOpen} onClose={() => setBioOpen(false)} />
             <CopyDialog open={copyOpen} onClose={() => setCopyOpen(false)} onCopy={copyFunc} />
+            <ContactsDialog open={contactsOpen} onClose={() => setContactsOpen(false)} />
         </div>
     );
 });

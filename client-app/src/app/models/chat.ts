@@ -188,3 +188,11 @@ export const createLocalChat = (username: string, displayName: string, image?: s
 export interface PhotoType extends File {
     preview: string;
 }
+
+export interface SearchResult {
+    displayName: string;
+    username: string;
+    image: string | undefined;
+    startIndexDisp: number;
+    startIndexUser: number;
+}

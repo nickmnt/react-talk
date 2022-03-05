@@ -12,10 +12,11 @@ import ChatSkeleton from './home-sidebar/ChatSkeleton';
 import Chat from './chat/Index';
 import { PagingParams } from '../../app/models/pagination';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
 
 export default observer(function HomeSidebar() {
     const {
-        directStore: { searchChats, searchResults, chats, loadingChats, pagination, pagingParams, setPagingParams, loadChats },
+        directStore: { localChatSearch, searchResults, chats, loadingChats, pagination, pagingParams, setPagingParams, loadChats, searchResultsGlobal },
         groupStore: { editing, phase, type }
     } = useStore();
     const [searchVal, setSearchVal] = useState('');
@@ -30,8 +31,8 @@ export default observer(function HomeSidebar() {
     };
 
     useEffect(() => {
-        searchChats(searchVal);
-    }, [searchVal, searchChats]);
+        localChatSearch(searchVal);
+    }, [searchVal, localChatSearch]);
 
     const container = useRef<HTMLDivElement | null>(null);
 
@@ -85,9 +86,17 @@ export default observer(function HomeSidebar() {
                         </InfiniteScroll>
                     ) : (
                         <List>
-                            {searchResults.map((result) => (
-                                <SearchResult searchResult={result} key={result.username} setSearchVal={setSearchVal} />
-                            ))}
+                            <>
+                                {searchResults.length > 0 && searchResults.map((x, i) => <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />)}
+                                {searchResultsGlobal.length > 0 && (
+                                    <>
+                                        <ListItemButton sx={{ backgroundColor: '#e3e3e3', fontWeight: 600 }}>Global Search Results</ListItemButton>
+                                        {searchResultsGlobal.map((x, i) => (
+                                            <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />
+                                        ))}
+                                    </>
+                                )}
+                            </>
                         </List>
                     )}
                 </div>

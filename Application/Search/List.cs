@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,8 +32,26 @@ namespace Application.Search
             
             public async Task<Result<List<SearchResult>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Users.Where(x => x.UserName.Contains(request.Term)).ProjectTo<SearchResult>(_mapper.ConfigurationProvider);
-                return Result<List<SearchResult>>.Success(await query.ToListAsync(cancellationToken));
+                var query = _context.Users
+                    .Include(x => x.Photos)
+                    .Select(x => new SearchResult
+                    {
+                        DisplayName = x.DisplayName,
+                        Username = x.UserName,
+                        Image = x.Photos.FirstOrDefault(p => p.IsMain).Url,
+                    })
+                    .Where(x => x.DisplayName.Contains(request.Term) || x.Username.Contains(request.Term))
+                    .OrderBy(x => x.DisplayName)
+                    .Take(10);
+
+                var result = await query.ToListAsync(cancellationToken);
+
+                foreach (var x in result)
+                {
+                    x.StartIndexDisp = x.DisplayName.IndexOf(request.Term, StringComparison.Ordinal);
+                    x.StartIndexUser = x.Username.IndexOf(request.Term, StringComparison.Ordinal);
+                }
+                return Result<List<SearchResult>>.Success(result);
             }
         }
     }

@@ -6,8 +6,7 @@ import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
-import { SearchResult } from '../models/search';
-import { AdminPermissions, ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat } from '../models/chat';
+import { AdminPermissions, ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat, SearchResult } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 

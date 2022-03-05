@@ -3,6 +3,7 @@ import ActivityStore from './activityStore';
 import ChatStore from './chatStore';
 import CommentStore from './commentStore';
 import CommonStore from './commonStore';
+import ContactsStore from './contactsStore';
 import DirectStore from './directStore';
 import GroupStore from './groupStore';
 import ModalStore from './modalStore';
@@ -25,6 +26,7 @@ interface Store {
     chatStore: ChatStore;
     settingsStore: SettingsStore;
     photoStore: PhotoStore;
+    contactsStore: ContactsStore;
 }
 
 export const store: Store = {
@@ -39,7 +41,8 @@ export const store: Store = {
     groupStore: new GroupStore(),
     chatStore: new ChatStore(),
     settingsStore: new SettingsStore(),
-    photoStore: new PhotoStore()
+    photoStore: new PhotoStore(),
+    contactsStore: new ContactsStore()
 };
 
 export const StoreContext = createContext(store);

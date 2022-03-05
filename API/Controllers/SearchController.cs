@@ -9,10 +9,16 @@ namespace API.Controllers
     public class SearchController : BaseApiController
     {
         [HttpGet("{term}")]
-        public async Task<ActionResult<List<SearchResult>>> Search(string term)
+        public async Task<ActionResult<List<SearchResult>>> SearchUsers(string term)
         {
             return HandleResult(await Mediator.Send(new List.Query { Term = term }));
         }
-
+        
+        // [HttpGet("chats/{term}")]
+        // public async Task<ActionResult<List<SearchResult>>> SearchChats(string term)
+        // {
+        //     // Implement later
+        //     return HandleResult(await Mediator.Send(new List.Query { Term = term }));
+        // }
     }
 }

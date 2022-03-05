@@ -33,7 +33,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
         userStore: { user },
         // groupStore: { startCreateChannel, startCreateGroup },
         groupStore: { startCreateGroup },
-        directStore: { setSettingsOpen }
+        directStore: { setSettingsOpen, setContactsOpen }
     } = useStore();
 
     const onCreateGroup = () => {
@@ -83,7 +83,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                         </ListItemIcon>
                         <ListItemText primary="New Channel" primaryTypographyProps={{ fontSize: menuFontSize }} />
                     </ListItem> */}
-                    <ListItem button>
+                    <ListItem button onClick={() => setContactsOpen(true)}>
                         <ListItemIcon>
                             <PersonOutlinedIcon fontSize="large" sx={{ fill: 'url(#linearColors)' }} />
                         </ListItemIcon>

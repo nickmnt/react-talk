@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Comment, Search, SearchProps, SearchResultData, SearchResultProps } from 'semantic-ui-react';
 import agent from '../api/agent';
-import { SearchResult } from '../models/search';
+import { SearchResult } from '../models/chat';
 
 export default function SearchBar() {
     const [loading, setLoading] = useState(false);

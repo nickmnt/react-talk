@@ -2,7 +2,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { makeAutoObservable, runInAction } from 'mobx';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
-import { AdminPermissions, ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchChatDto, UpdatedSeenDto } from '../models/chat';
+import { AdminPermissions, ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchResult, UpdatedSeenDto } from '../models/chat';
 import { Pagination, PagingParams } from '../models/pagination';
 import { Profile } from '../models/profile';
 import { store } from './store';
@@ -11,7 +11,10 @@ let id = -10;
 
 export default class DirectStore {
     chats: ChatDto[] = [];
-    searchResults: SearchChatDto[] = [];
+    searchResults: SearchResult[] = [];
+    searchResultsGlobal: SearchResult[] = [];
+    searchResultsContacts: SearchResult[] = [];
+    searchResultsContactsGlobal: SearchResult[] = [];
     hubConnection: HubConnection | null = null;
     currentChat: ChatDto | null = null;
     images: ImageElem[] = [];
@@ -38,6 +41,7 @@ export default class DirectStore {
     pagingParams = new PagingParams();
     paginationMessages: Pagination | null = null;
     pagingParamsMessages = new PagingParams();
+    contactsOpen = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -54,12 +58,6 @@ export default class DirectStore {
                 .build();
 
             this.hubConnection.start().catch((error) => console.log('Error establishing the connection'));
-
-            this.hubConnection.on('ReceiveSearchResults', (results: SearchChatDto[]) => {
-                runInAction(() => {
-                    this.searchResults = results;
-                });
-            });
 
             this.hubConnection.on('ReceiveNewMessage', (result: MessageNotifDto) => {
                 this.addNewMessage(result);
@@ -188,14 +186,6 @@ export default class DirectStore {
         }
 
         this.currentChat = { ...curChat };
-    };
-
-    searchChats = async (term: string) => {
-        try {
-            await this.hubConnection?.invoke('SearchChats', { term });
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     private setChat = (chat: ChatDto) => {
@@ -922,6 +912,120 @@ export default class DirectStore {
                 }
             });
             this.handleDateMessages();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    setContactsOpen = (value: boolean) => {
+        this.contactsOpen = value;
+    };
+
+    localChatSearch = async (substr: string) => {
+        if (!substr) {
+            this.searchResults = [];
+            return;
+        }
+        if (!store.contactsStore.followings) {
+            return;
+        }
+        const result: SearchResult[] = [];
+
+        store.contactsStore.followings.forEach((x) => {
+            const dispIndex = x.displayName.toLowerCase().indexOf(substr);
+            if (dispIndex !== -1) {
+                result.push({
+                    displayName: x.displayName,
+                    image: x.image,
+                    startIndexDisp: dispIndex,
+                    startIndexUser: -1,
+                    username: x.username
+                });
+            } else {
+                const userIndex = x.username.toLocaleLowerCase().indexOf(substr);
+
+                if (userIndex !== -1) {
+                    result.push({
+                        displayName: x.displayName,
+                        image: x.image,
+                        startIndexUser: userIndex,
+                        startIndexDisp: -1,
+                        username: x.username
+                    });
+                }
+            }
+        });
+
+        this.chats.forEach((x) => {
+            if (x.type === 1) {
+                const dispIndex = x.displayName.toLowerCase().indexOf(substr);
+                if (dispIndex !== -1) {
+                    result.push({
+                        displayName: x.displayName,
+                        image: x.image,
+                        startIndexDisp: dispIndex,
+                        startIndexUser: -1,
+                        username: ''
+                    });
+                }
+            }
+        });
+
+        this.searchResults = result;
+
+        try {
+            const response = await agent.Search.search(substr);
+            runInAction(() => {
+                this.searchResultsGlobal = response.filter((x) => this.searchResults.findIndex((y) => y.username === x.username) === -1);
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    contactsSearch = async (substr: string) => {
+        if (!substr) {
+            this.searchResults = [];
+            this.searchResultsGlobal = [];
+            return;
+        }
+        if (!store.contactsStore.followings) {
+            return;
+        }
+        const result: SearchResult[] = [];
+
+        store.contactsStore.followings.forEach((x) => {
+            const dispIndex = x.displayName.toLowerCase().indexOf(substr);
+            if (dispIndex !== -1) {
+                result.push({
+                    displayName: x.displayName,
+                    image: x.image,
+                    startIndexDisp: dispIndex,
+                    startIndexUser: -1,
+                    username: x.username
+                });
+            } else {
+                const userIndex = x.username.toLowerCase().indexOf(substr);
+
+                if (userIndex !== -1) {
+                    result.push({
+                        displayName: x.displayName,
+                        image: x.image,
+                        startIndexUser: userIndex,
+                        startIndexDisp: -1,
+                        username: x.username
+                    });
+                }
+            }
+        });
+
+        this.searchResultsContacts = result;
+
+        try {
+            const response = await agent.Search.search(substr);
+            runInAction(() => {
+                this.searchResultsContactsGlobal = response.filter((x) => this.searchResultsContacts.findIndex((y) => y.username === x.username) === -1);
+            });
         } catch (error) {
             console.log(error);
         }
