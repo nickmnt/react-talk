@@ -32,6 +32,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
+import { format } from 'date-fns';
 
 export interface Props {
     chatPage: ChatPage;
@@ -195,7 +196,14 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                 <ListItemAvatar>
                                                     <Avatar alt={`${x.displayName}`} src={x.image} sx={{ width: 48, height: 48 }} />
                                                 </ListItemAvatar>
-                                                <ListItemText primaryTypographyProps={{ fontSize: '1.6rem' }} primary={x.displayName} />
+                                                <Stack>
+                                                    <ListItemText primaryTypographyProps={{ fontSize: '1.6rem', fontWeight: 500 }} primary={x.displayName} />
+                                                    <ListItemText
+                                                        primaryTypographyProps={{ fontSize: '1.6rem' }}
+                                                        primary={x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeenOnline, 'yyyy-MM-dd HH:mm')}
+                                                        sx={{ color: x.isOnline ? '#0080FF' : 'inherit' }}
+                                                    />
+                                                </Stack>
                                                 <div style={{ flex: 1 }} />
                                                 {x.memberType === 1 && <Typography style={{ color: '#0080FF' }}>Admin</Typography>}
                                                 {x.memberType === 2 && <Typography style={{ color: '#0080FF' }}>Owner</Typography>}

@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Input from '@mui/material/Input';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchResult from '../direct/SearchResult';
+import { format } from 'date-fns';
 
 export interface Props {
     open: boolean;
@@ -114,10 +115,13 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
                                                     <Avatar alt={x.displayName} src={x.image} sx={{ width: 48, height: 48 }}></Avatar>
                                                 </ListItemAvatar>
                                                 <div className="chat__right">
-                                                    <div className="chat__rightTop">
+                                                    <div className="chat__rightTop" style={{ width: '100%' }}>
                                                         <div className="chat__name">{x.displayName}</div>
+                                                        <div>@{x.username}</div>
                                                     </div>
-                                                    <div className="chat__rightBottom">@{x.username}</div>
+                                                    <div className="chat__rightBottom" style={{ color: x.isOnline ? '#0080FF' : 'inherit' }}>
+                                                        {x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeen, 'yyyy-MM-dd HH:mm')}
+                                                    </div>
                                                 </div>
                                             </ListItemButton>
                                         ))}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Domain.Direct;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,5 +17,7 @@ namespace Domain
         public ICollection<FollowNotification> FollowNotifications { get; set; } = new List<FollowNotification>();
         public ICollection<JoinNotification> JoinNotifications { get; set; } = new List<JoinNotification>();
         public ICollection<UserChat> Chats { get; set; } = new List<UserChat>();
+        public DateTime LastSeen { get; set; }
+        public bool IsOnline { get; set; }
     }
 }

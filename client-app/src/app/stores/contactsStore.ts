@@ -16,6 +16,7 @@ export default class ContactsStore {
             try {
                 this.loadingFollowings = true;
                 const response = await agent.Profiles.listFollowings(store.userStore.user.username, 'following');
+                response.forEach((x) => (x.lastSeen = new Date(x.lastSeen + 'Z')));
                 runInAction(() => {
                     this.followings = response;
                     this.loadingFollowings = false;

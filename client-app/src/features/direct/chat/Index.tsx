@@ -85,6 +85,7 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
                         {isSelected && <DoneIcon sx={{ width: '1.75rem', height: '1.75rem', color: 'white' }} />}
                     </div>
                 )}
+                {!(selected && selected.length > 0) && chat.isOnline && <div className="chat__selectCircle chat__selectCircle--selected" />}
             </ListItemAvatar>
             <div className="chat__right">
                 <div className="chat__rightTop">

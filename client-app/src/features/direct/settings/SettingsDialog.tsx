@@ -95,8 +95,8 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                             {truncateBasic(profile.displayName, 2)}
                         </Avatar>
                         <Stack sx={{ marginLeft: '1.5rem' }} justifyContent="center">
-                            <Typography>{loadingName ? <Skeleton width="30" height="16" /> : profile.displayName}</Typography>
-                            <Typography>online</Typography>
+                            <Typography sx={{ fontWeight: 500 }}>{loadingName ? <Skeleton width="30" height="16" /> : profile.displayName}</Typography>
+                            <Typography sx={{ color: '#007FFF' }}>online</Typography>
                         </Stack>
                         <div style={{ flexGrow: 1 }} />
                         <IconButton sx={{ width: 48, height: 48 }} onClick={() => setPhotoOpen(true)}>

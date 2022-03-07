@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Application.Activities;
 using Application.Chats;
 using Application.Chats.PrivateChats;
@@ -75,11 +76,30 @@ namespace Application.Core
             CreateMap<UserChat, ChatDto>()
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Chat.Id))
                 .ForMember(d => d.Type, o => o.MapFrom(s => s.Chat.Type))
-                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.DisplayName: null))
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.Photos.FirstOrDefault(x => x.IsMain).Url : null))
-                .ForMember(d => d.ParticipantUsername, o => o.MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.UserName: null))
-                .ForMember(d => d.Pins, o => o.MapFrom(s => s.Chat.Pins.Where(x => x.IsMutual || x.AppUserId == s.AppUserId)))
-                .ForMember(d=>d.MembershipType, o => o.MapFrom(s => s.MembershipType));
+                .ForMember(d => d.DisplayName,
+                    o => o.MapFrom(s =>
+                        s.Chat.Type == ChatType.PrivateChat
+                            ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.DisplayName
+                            : null))
+                .ForMember(d => d.Image,
+                    o => o.MapFrom(s =>
+                        s.Chat.Type == ChatType.PrivateChat
+                            ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.Photos
+                                .FirstOrDefault(x => x.IsMain).Url
+                            : null))
+                .ForMember(d => d.ParticipantUsername,
+                    o => o.MapFrom(s =>
+                        s.Chat.Type == ChatType.PrivateChat
+                            ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.UserName
+                            : null))
+                .ForMember(d => d.Pins,
+                    o => o.MapFrom(s => s.Chat.Pins.Where(x => x.IsMutual || x.AppUserId == s.AppUserId)))
+                .ForMember(d => d.MembershipType, o => o.MapFrom(s => s.MembershipType))
+                .ForMember(d => d.IsOnline,
+                    o => o.MapFrom(s =>
+                        s.Chat.Type == ChatType.PrivateChat && s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.IsOnline))
+                .ForMember(d => d.LastSeen, o => o
+                    .MapFrom(s => s.Chat.Type == ChatType.PrivateChat ? s.Chat.Users.First(x => x.AppUser.UserName != s.AppUser.UserName).AppUser.LastSeen : DateTime.UtcNow));
             CreateMap<Message, MessageDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Sender.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Sender.DisplayName))
@@ -101,7 +121,9 @@ namespace Application.Core
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
-                .ForMember(d => d.ChatId, o => o.MapFrom(s => s.ChatId));
+                .ForMember(d => d.ChatId, o => o.MapFrom(s => s.ChatId))
+                .ForMember(d => d.LastSeenOnline, o => o.MapFrom(s => s.AppUser.LastSeen))
+                .ForMember(d => d.IsOnline, o => o.MapFrom(s => s.AppUser.IsOnline));
             CreateMap<UserChat, ChannelMember>()
                 .ForMember(d => d.MemberType, o => o.MapFrom(s => s.MembershipType))
                 .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))

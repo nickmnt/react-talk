@@ -1,6 +1,5 @@
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import React from 'react';
-import { Dimmer, Loader } from 'semantic-ui-react';
-
 interface Props {
     inverted?: boolean;
     content?: string;
@@ -8,8 +7,8 @@ interface Props {
 
 export default function LoadingComponent({ inverted = true, content = 'Loading...' }: Props) {
     return (
-        <Dimmer active={true} inverted={inverted}>
-            <Loader content={content} />
-        </Dimmer>
+        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress />
+        </div>
     );
 }

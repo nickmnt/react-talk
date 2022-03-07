@@ -9,6 +9,8 @@ export interface Profile {
     followingCount: number;
     following: boolean;
     photos?: Photo[];
+    isOnline: boolean;
+    lastSeen: Date;
 }
 
 export class Profile implements Profile {

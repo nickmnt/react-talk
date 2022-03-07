@@ -2,7 +2,20 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { makeAutoObservable, runInAction } from 'mobx';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
-import { AdminPermissions, ChatDto, ChatPage, createLocalChat, GroupMemberPermissions, ImageElem, Message, MessageNotifDto, SearchResult, UpdatedSeenDto } from '../models/chat';
+import {
+    AdminPermissions,
+    ChatDto,
+    ChatPage,
+    ConnectedDto,
+    createLocalChat,
+    DisconnectedDto,
+    GroupMemberPermissions,
+    ImageElem,
+    Message,
+    MessageNotifDto,
+    SearchResult,
+    UpdatedSeenDto
+} from '../models/chat';
 import { Pagination, PagingParams } from '../models/pagination';
 import { Profile } from '../models/profile';
 import { store } from './store';
@@ -66,6 +79,14 @@ export default class DirectStore {
             this.hubConnection.on('ReceiveNewSeen', (result: UpdatedSeenDto) => {
                 this.updateSeen(result);
             });
+
+            this.hubConnection.on('Connected', (result: ConnectedDto) => {
+                this.updateConnected(result);
+            });
+
+            this.hubConnection.on('Disconnected', (result: DisconnectedDto) => {
+                this.updateDisconnected(result);
+            });
         }
     };
 
@@ -111,6 +132,7 @@ export default class DirectStore {
                 this.setPagination(result.pagination);
                 chats.forEach((x) => {
                     if (x.lastMessage) x.lastMessage.createdAt = new Date(x.lastMessage?.createdAt + 'Z');
+                    x.lastSeen = new Date(x.lastSeen + 'Z');
                 });
                 this.chats = [...this.chats, ...chats];
                 this.loadingChats = false;
@@ -218,6 +240,7 @@ export default class DirectStore {
             chat.groupChat = response;
             chat.groupChat!.members.forEach((x) => {
                 x.lastSeen = new Date(x.lastSeen + 'Z');
+                x.lastSeenOnline = new Date(x.lastSeenOnline + 'Z');
             });
             chat.groupChat!.memberCount = chat.groupChat.members.length;
             chat.groupChat!.me = chat.groupChat.members.find((x) => x.username === store.userStore.user?.username);
@@ -1028,6 +1051,67 @@ export default class DirectStore {
             });
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    updateConnected = (dto: ConnectedDto) => {
+        //Update the contacts
+        if (!store.contactsStore.followings) return;
+        const contact = store.contactsStore.followings.find((x) => x.username === dto.username);
+        if (contact) {
+            store.contactsStore.followings.find((x) => x.username === dto.username)!.isOnline = true;
+        }
+        //Update the chat if private chat
+        if (!this.chats) return;
+
+        const chat = this.chats.find((x) => x.participantUsername === dto.username);
+        if (chat) {
+            this.chats.find((x) => x.participantUsername === dto.username)!.isOnline = true;
+        }
+        //Update the current chat if group
+        if (!this.currentChat) return;
+        if (this.currentChat.participantUsername === dto.username) {
+            this.currentChat.isOnline = true;
+        }
+        if (this.currentChat.type === 1) {
+            const member = this.currentChat.groupChat!.members.find((x) => x.username === dto.username);
+            if (member) {
+                this.currentChat.groupChat!.members.find((x) => x.username === dto.username)!.isOnline = true;
+            }
+        }
+    };
+
+    updateDisconnected = (dto: DisconnectedDto) => {
+        const lastSeen = new Date(dto.lastSeen);
+
+        //Update the contacts
+        if (!store.contactsStore.followings) return;
+        const contact = store.contactsStore.followings.find((x) => x.username === dto.username);
+        if (contact) {
+            store.contactsStore.followings.find((x) => x.username === dto.username)!.isOnline = false;
+            store.contactsStore.followings.find((x) => x.username === dto.username)!.lastSeen = lastSeen;
+        }
+        //Update the chat if private chat
+        if (!this.chats) return;
+
+        const chat = this.chats.find((x) => x.participantUsername === dto.username);
+        if (chat) {
+            // this.chats = [...this.chats.filter((x) => x.participantUsername !== dto.username), chat];
+            this.chats.find((x) => x.participantUsername === dto.username)!.isOnline = false;
+            this.chats.find((x) => x.participantUsername === dto.username)!.lastSeen = lastSeen;
+        }
+        //Update the current chat if group or private chat
+        if (!this.currentChat) return;
+        if (this.currentChat.participantUsername === dto.username) {
+            this.currentChat.isOnline = false;
+            this.currentChat.lastSeen = lastSeen;
+        }
+        if (this.currentChat.type === 1) {
+            const member = this.currentChat.groupChat!.members.find((x) => x.username === dto.username);
+            if (member) {
+                this.currentChat.groupChat!.members.find((x) => x.username === dto.username)!.isOnline = true;
+                this.currentChat.groupChat!.members.find((x) => x.username === dto.username)!.lastSeenOnline = lastSeen;
+            }
         }
     };
 }

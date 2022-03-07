@@ -23,6 +23,8 @@ namespace Domain.Direct
         public bool RemainAnonymous { get; set; } = true;
         public string CustomTitle { get; set; }
         public string AppUserId { get; set; }
+        public bool IsOnline { get; set; }
+        public DateTime LastSeenOnline { get; set; }
         [JsonIgnore] public Guid ChatId { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace Application.Chats
         public string ParticipantUsername { get; set; }
         public int MembershipType { get; set; }
         public ICollection<PinDto> Pins { get; set; } = new List<PinDto>();
+        public bool IsOnline { get; set; }
+        public DateTime LastSeen { get; set; }
     }
 }

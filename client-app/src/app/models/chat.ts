@@ -21,6 +21,8 @@ export interface ChatDto {
     participantUsername: string | null;
     membershipType: number;
     messages?: Message[];
+    lastSeen: Date;
+    isOnline: boolean;
 }
 
 export interface SearchChatDto {
@@ -105,6 +107,8 @@ export interface GroupMember {
     addNewAdmins: boolean;
     remainAnonymous: boolean;
     customTitle: string;
+    lastSeenOnline: Date;
+    isOnline: boolean;
 }
 
 export interface ChannelMember {
@@ -181,7 +185,9 @@ export const createLocalChat = (username: string, displayName: string, image?: s
         notSeenCount: 0,
         pins: [],
         participantUsername: username,
-        membershipType: 0
+        membershipType: 0,
+        isOnline: false,
+        lastSeen: new Date()
     } as ChatDto;
 };
 
@@ -195,4 +201,13 @@ export interface SearchResult {
     image: string | undefined;
     startIndexDisp: number;
     startIndexUser: number;
+}
+
+export interface ConnectedDto {
+    username: string;
+}
+
+export interface DisconnectedDto {
+    username: string;
+    lastSeen: Date;
 }

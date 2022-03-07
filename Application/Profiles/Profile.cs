@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Domain;
 
 namespace Application.Profiles
@@ -13,5 +14,7 @@ namespace Application.Profiles
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
         public ICollection<Photo> Photos { get; set; }
+        public DateTime LastSeen { get; set; }
+        public bool IsOnline { get; set; }
     }
 }

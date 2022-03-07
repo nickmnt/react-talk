@@ -17,6 +17,6 @@ namespace Domain.Direct
         public virtual Message ReplyTo { get; set; }
 
         public AppUser ForwardedFrom { get; set; }
-        public Guid ChatId { get; set; }
+        public Guid? ChatId { get; set; }
     }
 }
