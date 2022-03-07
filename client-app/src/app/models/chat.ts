@@ -23,6 +23,8 @@ export interface ChatDto {
     messages?: Message[];
     lastSeen: Date;
     isOnline: boolean;
+    typing?: boolean;
+    typists?: Typist[];
 }
 
 export interface SearchChatDto {
@@ -210,4 +212,15 @@ export interface ConnectedDto {
 export interface DisconnectedDto {
     username: string;
     lastSeen: Date;
+}
+
+export interface TypingDto {
+    username: string;
+    displayName: string;
+    chatId: string;
+}
+
+export interface Typist {
+    username: string;
+    displayName: string;
 }

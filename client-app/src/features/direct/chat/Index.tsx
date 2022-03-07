@@ -71,6 +71,12 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
         }
     }
 
+    const isTyping = !!chat.typing || !!chat.typists;
+    let typingMessage = 'is typing...';
+    if (chat.type === 1 && chat.typists) {
+        typingMessage = `${chat.typists[0].displayName} ${chat.typists.length > 1 ? `and ${(chat.typists.length - 1).toString()} others are typing...` : 'is typing...'}`;
+    }
+
     return (
         <ListItemButton
             className={`chat__container`}
@@ -97,12 +103,18 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
                     </div>
                 </div>
                 <div className="chat__rightBottom">
-                    <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
-                        {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
-                        {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
-                        {chat.lastMessage && chat.lastMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
-                        {lastMsgText.substring(0, 15)}
-                    </div>
+                    {!isTyping ? (
+                        <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
+                            {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
+                            {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
+                            {chat.lastMessage && chat.lastMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
+                            {lastMsgText.substring(0, 15)}
+                        </div>
+                    ) : (
+                        <div className="last-msg" style={{ display: 'flex', alignItems: 'center', color: '#0088CC' }}>
+                            {typingMessage}
+                        </div>
+                    )}
                     {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && (
                         <Paper sx={{ backgroundColor: '#0088CC', color: 'white' }} square className="chat__badge">
                             {chat.notSeenCount}

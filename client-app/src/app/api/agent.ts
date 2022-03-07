@@ -170,7 +170,9 @@ const Chats = {
     updateAdminPermissions: (chatId: string, targetUsername: string, permissions: AdminPermissions) =>
         requests.put<AdminPermissions>('group/updateAdminPermissions', { chatId, targetUsername, ...permissions }),
     dismissAdmin: (chatId: string, targetUsername: string) => requests.put<void>('group/dismissAdmin', { chatId, targetUsername }),
-    deleteMessage: (chatId: string, messageId: number) => requests.put<void>('direct/deleteMessage', { chatId, messageId })
+    deleteMessage: (chatId: string, messageId: number) => requests.put<void>('direct/deleteMessage', { chatId, messageId }),
+    startTyping: (chatId: string) => requests.put<void>('direct/typing', { chatId }),
+    stopTyping: (chatId: string) => requests.put<void>('direct/stopTyping', { chatId })
 };
 
 const agent = {

@@ -14,6 +14,7 @@ import {
     Message,
     MessageNotifDto,
     SearchResult,
+    TypingDto,
     UpdatedSeenDto
 } from '../models/chat';
 import { Pagination, PagingParams } from '../models/pagination';
@@ -86,6 +87,14 @@ export default class DirectStore {
 
             this.hubConnection.on('Disconnected', (result: DisconnectedDto) => {
                 this.updateDisconnected(result);
+            });
+
+            this.hubConnection.on('StartedTyping', (result: TypingDto) => {
+                this.handleStartedTyping(result);
+            });
+
+            this.hubConnection.on('StoppedTyping', (result: TypingDto) => {
+                this.handleStoppedTyping(result);
             });
         }
     };
@@ -1112,6 +1121,72 @@ export default class DirectStore {
                 this.currentChat.groupChat!.members.find((x) => x.username === dto.username)!.isOnline = true;
                 this.currentChat.groupChat!.members.find((x) => x.username === dto.username)!.lastSeenOnline = lastSeen;
             }
+        }
+    };
+
+    handleStartedTyping = (dto: TypingDto) => {
+        const chat = this.chats.find((x) => x.id === dto.chatId);
+
+        if (chat) {
+            if (chat.type === 0) {
+                chat.typing = true;
+                if (this.currentChat && this.currentChat.id === chat.id) {
+                    this.currentChat.typing = true;
+                }
+            } else if (chat.type === 1) {
+                if (chat.typists) {
+                    chat.typists = [...chat.typists, { displayName: dto.displayName, username: dto.username }];
+                    if (this.currentChat && this.currentChat.id === chat.id) {
+                        this.currentChat.typists = [...chat.typists, { displayName: dto.displayName, username: dto.username }];
+                    }
+                } else {
+                    chat.typists = [{ displayName: dto.displayName, username: dto.username }];
+                    if (this.currentChat && this.currentChat.id === chat.id) {
+                        this.currentChat.typists = [{ displayName: dto.displayName, username: dto.username }];
+                    }
+                }
+            }
+        }
+    };
+
+    handleStoppedTyping = (dto: TypingDto) => {
+        const chat = this.chats.find((x) => x.id === dto.chatId);
+
+        if (chat) {
+            if (chat.type === 0) {
+                chat.typing = undefined;
+                if (this.currentChat && this.currentChat.id === chat.id) {
+                    this.currentChat.typing = undefined;
+                }
+            } else if (chat.type === 1) {
+                if (chat.typists && chat.typists.length > 1) {
+                    chat.typists = chat.typists.filter((x) => x.username !== dto.username);
+                    if (this.currentChat && this.currentChat.id === chat.id) {
+                        this.currentChat.typists = chat.typists.filter((x) => x.username !== dto.username);
+                    }
+                } else {
+                    chat.typists = undefined;
+                    if (this.currentChat && this.currentChat.id === chat.id) {
+                        this.currentChat.typists = undefined;
+                    }
+                }
+            }
+        }
+    };
+
+    startTyping = async (chat: ChatDto) => {
+        try {
+            await agent.Chats.startTyping(chat.id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    stopTyping = async (chat: ChatDto) => {
+        try {
+            await agent.Chats.stopTyping(chat.id);
+        } catch (error) {
+            console.log(error);
         }
     };
 }

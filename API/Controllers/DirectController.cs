@@ -8,7 +8,9 @@ using Application.Chats.ChannelChats;
 using Application.Chats.UserChats;
 using Application.Core;
 using Application.Interfaces;
+using Application.Typing;
 using Domain.Direct;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Create = Application.Messages.Create;
@@ -201,6 +203,42 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteMessage(DeleteMessage.Command command)
         {
             return HandleResult(await Mediator.Send(command));
+        }
+        
+        [HttpPut("typing")]
+        public async Task<IActionResult> StartTyping(GetTypeInfo.Query query)
+        {
+            var result = await Mediator.Send(query);
+
+            foreach (var user in result.Value.Members)
+            {
+                await _hubContext.Clients.User(user).SendAsync("StartedTyping", 
+                    new TypingDto { 
+                        Username = _accessor.GetUsername(),
+                        DisplayName = result.Value.DisplayName,
+                        ChatId = query.ChatId
+                    });
+            }
+            
+            return HandleResult(Result<Unit>.Success(Unit.Value));
+        }
+        
+        [HttpPut("stopTyping")]
+        public async Task<IActionResult> StopTyping(GetTypeInfo.Query query)
+        {
+            var result = await Mediator.Send(query);
+
+            foreach (var user in result.Value.Members)
+            {
+                await _hubContext.Clients.User(user).SendAsync("StoppedTyping", 
+                    new TypingDto { 
+                        Username = _accessor.GetUsername(),
+                        DisplayName = result.Value.DisplayName,
+                        ChatId = query.ChatId
+                    });
+            }
+            
+            return HandleResult(Result<Unit>.Success(Unit.Value));
         }
     }
 }

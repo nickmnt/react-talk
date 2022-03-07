@@ -8,7 +8,6 @@ import Paper from '@mui/material/Paper/Paper';
 import Stack from '@mui/material/Stack/Stack';
 import Typography from '@mui/material/Typography/Typography';
 import IconButton from '@mui/material/IconButton/IconButton';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Button from '@mui/material/Button/Button';
 import ShortcutIcon from '@mui/icons-material/Shortcut';
 import Picker from 'emoji-picker-react';
@@ -18,6 +17,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import MicIcon from '@mui/icons-material/Mic';
 import { useStopwatch } from 'react-timer-hook';
 import MicRecorder from 'mic-recorder-to-mp3';
+import ChatTextInput from './ChatTextInput';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -217,25 +217,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             >
                 {({ isValid, handleSubmit }) => (
                     <Form className="chatInput__form">
-                        <Field name="body">
-                            {(props: FieldProps) => (
-                                <TextareaAutosize
-                                    maxRows={2}
-                                    className="chatInput__input"
-                                    placeholder="Message"
-                                    {...props.field}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter' && e.shiftKey) {
-                                            return;
-                                        }
-                                        if (e.key === 'Enter' && !e.shiftKey) {
-                                            e.preventDefault();
-                                            isValid && handleSubmit();
-                                        }
-                                    }}
-                                />
-                            )}
-                        </Field>
+                        <Field name="body">{(props: FieldProps) => <ChatTextInput props={props} isValid={isValid} handleSubmit={handleSubmit} />}</Field>
                     </Form>
                 )}
             </Formik>

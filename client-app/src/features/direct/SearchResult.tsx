@@ -19,7 +19,7 @@ export default observer(function SearchResult({ searchResult, setSearchVal, sear
     const goToChat = () => {
         //Personal account
         const result = chats.find((x) => x.participantUsername === searchResult.username);
-        chats.forEach((x) => console.log(x.participantUsername));
+        // chats.forEach((x) => console.log(x.participantUsername));
         result ? getChatDetails(result) : setLocalChat(searchResult.username, searchResult.displayName, searchResult.image);
         clearSearchResults();
         setSearchVal('');
