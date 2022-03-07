@@ -72,7 +72,7 @@ export default observer(function ChatView() {
                     )}
                     <div style={{ zIndex: 1000 }}>
                         {stack.map((elem, i) => (
-                            <SlideDialog open={!elem.off}>
+                            <SlideDialog open={!elem.off} key={i}>
                                 <>
                                     {elem.type === 0 && <ChatDetails chatPage={elem} />}
                                     {elem.type === 1 && <ChatDetails chatPage={elem} />}

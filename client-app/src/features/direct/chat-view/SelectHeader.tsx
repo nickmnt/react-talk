@@ -21,8 +21,8 @@ export default observer(function SelectHeader({ count, clearSelected, copyMessag
     return (
         <div className="chatHeader">
             <div>
-                <IconButton>
-                    <CloseIcon onClick={clearSelected} />
+                <IconButton onClick={clearSelected}>
+                    <CloseIcon />
                 </IconButton>
             </div>
             <>
