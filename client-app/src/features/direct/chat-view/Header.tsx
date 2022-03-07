@@ -28,6 +28,11 @@ export default observer(function Header() {
 
     if (!currentChat) return null;
 
+    let typingMessage = 'is typing...';
+    if (currentChat.type === 1 && currentChat.typists) {
+        typingMessage = `${currentChat.typists[0].displayName} ${currentChat.typists.length > 1 ? `and ${(currentChat.typists.length - 1).toString()} others are typing...` : 'is typing...'}`;
+    }
+
     return (
         <div className="chatHeader">
             <Menu
@@ -59,10 +64,11 @@ export default observer(function Header() {
                             <div className="chatHeader__lastSeen">Last seen at {format(currentChat.lastSeen, 'yyyy-MM-dd HH:mm')}</div>
                         ) : (
                             <div className="chatHeader__status">
-                                {currentChat.type === 1 && `${currentChat.groupChat?.memberCount} ${currentChat.groupChat?.memberCount === 1 ? 'member' : 'members'}`}
+                                {currentChat.type === 1 && !currentChat.typists && `${currentChat.groupChat?.memberCount} ${currentChat.groupChat?.memberCount === 1 ? 'member' : 'members'}`}
+                                {currentChat.type === 1 && currentChat.typists && typingMessage}
                                 {currentChat.type === 2 && `${currentChat.channelChat?.memberCount} ${currentChat.channelChat?.memberCount === 1 ? 'subscriber' : 'subscribers'}`}
                                 {currentChat.type === 0 && currentChat.isOnline && !currentChat.typing && 'online'}
-                                {currentChat.isOnline && currentChat.typing && 'is typing...'}
+                                {currentChat.isOnline && currentChat.typing && typingMessage}
                                 {currentChat.type === -10 && `Send your first message to ${currentChat.participantUsername!}!`}
                             </div>
                         )}
