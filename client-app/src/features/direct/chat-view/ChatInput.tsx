@@ -18,6 +18,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import { useStopwatch } from 'react-timer-hook';
 import MicRecorder from 'mic-recorder-to-mp3';
 import ChatTextInput from './ChatTextInput';
+import AttachmentDialog from './AttachmentDialog';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -222,7 +223,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                 )}
             </Formik>
 
-            <input type="file" ref={inputFile} style={{ display: 'none' }} onChange={onAttachmentChange} />
+            <input type="file" ref={inputFile} style={{ display: 'none' }} onClick={(e) => (e.currentTarget.value = '')} onChange={onAttachmentChange} />
             {canSendMedia && (
                 <IconButton onClick={onAttachmentClick}>
                     <AttachFileIcon />
@@ -250,6 +251,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             >
                 <Picker onEmojiClick={onEmojiClick} />
             </Menu>
+            <AttachmentDialog open={!!file} onClose={() => setFile(null)} file={file} />
         </Paper>
     );
 });
