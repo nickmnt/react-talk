@@ -228,7 +228,12 @@ export default class DirectStore {
     };
 
     setLocalSavedChat = () => {
-        this.currentChat = createLocalSavedChat();
+        const chat = this.chats.find((x) => x.type === 3);
+        if (chat) {
+            this.currentChat = chat;
+        } else {
+            this.currentChat = createLocalSavedChat();
+        }
     };
 
     setCurrentChat = (chat: ChatDto) => {
