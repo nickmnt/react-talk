@@ -56,10 +56,10 @@ export default observer(function Header() {
                     <ArrowBackIcon />
                 </IconButton>
             </div>
-            {currentChat.privateChat || currentChat.groupChat || currentChat.channelChat ? (
+            {currentChat.privateChat || currentChat.groupChat || currentChat.channelChat || currentChat.type === -20 || currentChat.type === 3 ? (
                 <>
                     <div className="chatHeader__left" onClick={async () => await addDetailsToStack(currentChat)}>
-                        <div className="chatHeader__name">{currentChat?.displayName}</div>
+                        <div className="chatHeader__name">{currentChat.type === -20 || currentChat.type === 3 ? 'Saved Messages' : currentChat?.displayName}</div>
                         {currentChat.type === 0 && !currentChat.isOnline ? (
                             <div className="chatHeader__lastSeen">Last seen at {format(currentChat.lastSeen, 'yyyy-MM-dd HH:mm')}</div>
                         ) : (

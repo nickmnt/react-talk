@@ -2,6 +2,6 @@
 {
     public enum ChatType
     {
-        PrivateChat, Group, Channel
+        PrivateChat, Group, Channel, Saved
     }
 }

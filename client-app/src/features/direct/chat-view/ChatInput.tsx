@@ -35,7 +35,7 @@ export interface Props {
 
 export default observer(function ChatInput({ selectedCount }: Props) {
     const {
-        directStore: { currentChat, createPrivateChat, createMessage, createPhoto, createVideo, setForwarding, forwardingSingle, forwardSingle, createVoice }
+        directStore: { currentChat, createMessage, setForwarding, forwardingSingle, forwardSingle, createVoice }
     } = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [file, setFile] = useState<null | FileRecord>(null);
@@ -51,7 +51,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
         const f = inputFile.current!.files![0];
 
         if (f) {
-            const extension = getFileExtension(f.name);
+            const extension = getFileExtension(f.name)?.toLowerCase();
 
             if (f.size >= 1024 * 1024 * 50) {
                 toast.error('File size is greater than 50 MB.');
@@ -184,30 +184,13 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             <Formik
                 innerRef={formRef}
                 onSubmit={(values, { resetForm }) => {
-                    if (!currentChat.id) {
-                        createPrivateChat(currentChat.privateChat!.otherUsername, values.body, file).then(() => {
-                            resetForm();
-                            setFile(null);
-                        });
-                    } else {
-                        if (!file) {
-                            if (forwardingSingle) {
-                                forwardSingle(values.body).then(() => resetForm());
-                            } else {
-                                createMessage(values.body).then(() => resetForm());
-                            }
+                    if (!file) {
+                        const tmp = values.body;
+                        resetForm();
+                        if (forwardingSingle) {
+                            forwardSingle(tmp);
                         } else {
-                            if (file.video) {
-                                createVideo(file.file, values.body).then(() => {
-                                    resetForm();
-                                    setFile(null);
-                                });
-                            } else {
-                                createPhoto(file.file, values.body).then(() => {
-                                    resetForm();
-                                    setFile(null);
-                                });
-                            }
+                            createMessage(tmp);
                         }
                     }
                 }}
@@ -230,7 +213,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                 </IconButton>
             )}
             <IconButton
-                onClick={(e) => {
+                onClick={() => {
                     startRecording();
                 }}
             >

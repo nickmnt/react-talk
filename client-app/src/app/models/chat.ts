@@ -193,6 +193,24 @@ export const createLocalChat = (username: string, displayName: string, image?: s
     } as ChatDto;
 };
 
+export const createLocalSavedChat = () => {
+    return {
+        id: '',
+        type: -20,
+        privateChatId: '',
+        displayName: 'Saved Messages',
+        image: '',
+        lastMessage: null,
+        lastMessageSeen: false,
+        notSeenCount: 0,
+        pins: [],
+        participantUsername: '',
+        membershipType: 0,
+        isOnline: false,
+        lastSeen: new Date()
+    } as ChatDto;
+};
+
 export interface PhotoType extends File {
     preview: string;
 }

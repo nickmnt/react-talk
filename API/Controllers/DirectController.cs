@@ -47,6 +47,12 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+        
+        [HttpPost("savedMessagesChat")]
+        public async Task<IActionResult> CreateSavedMessagesChat(AddSavedChat.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
 
         [HttpGet("privateChatDetails/{chatId}")]
         public async Task<IActionResult> GetPrivateChatDetails(Guid chatId)

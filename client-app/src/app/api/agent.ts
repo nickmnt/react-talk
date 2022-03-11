@@ -172,7 +172,8 @@ const Chats = {
     dismissAdmin: (chatId: string, targetUsername: string) => requests.put<void>('group/dismissAdmin', { chatId, targetUsername }),
     deleteMessage: (chatId: string, messageId: number) => requests.put<void>('direct/deleteMessage', { chatId, messageId }),
     startTyping: (chatId: string) => requests.put<void>('direct/typing', { chatId }),
-    stopTyping: (chatId: string) => requests.put<void>('direct/stopTyping', { chatId })
+    stopTyping: (chatId: string) => requests.put<void>('direct/stopTyping', { chatId }),
+    createSavedChat: () => requests.post<ChatDto>('direct/savedMessagesChat', {})
 };
 
 const agent = {

@@ -1,6 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
 import {
     AdminPermissions,
@@ -8,6 +7,7 @@ import {
     ChatPage,
     ConnectedDto,
     createLocalChat,
+    createLocalSavedChat,
     DisconnectedDto,
     GroupMemberPermissions,
     ImageElem,
@@ -227,6 +227,10 @@ export default class DirectStore {
         this.currentChat = createLocalChat(username, displayName, image);
     };
 
+    setLocalSavedChat = () => {
+        this.currentChat = createLocalSavedChat();
+    };
+
     setCurrentChat = (chat: ChatDto) => {
         this.currentChat = chat;
     };
@@ -239,6 +243,7 @@ export default class DirectStore {
             chat.privateChat.myLastSeen = new Date(chat.privateChat.myLastSeen + 'Z');
             chat.privateChat.otherLastSeen = new Date(chat.privateChat.otherLastSeen + 'Z');
             this.updateMessages();
+            this.currentChat = chat;
         });
     };
 
@@ -254,6 +259,7 @@ export default class DirectStore {
             chat.groupChat!.memberCount = chat.groupChat.members.length;
             chat.groupChat!.me = chat.groupChat.members.find((x) => x.username === store.userStore.user?.username);
             this.updateMessages();
+            this.currentChat = chat;
         });
     };
 
@@ -329,7 +335,10 @@ export default class DirectStore {
     };
 
     createLocalImage = (file: Blob, body: string) => {
-        if (!this.currentChat || !this.currentChat.messages) return { id: -1, msg: undefined };
+        if (!this.currentChat) return { id: -1, msg: undefined };
+        if (!this.currentChat.messages) {
+            this.currentChat.messages = [];
+        }
 
         const msg = {
             body,
@@ -457,6 +466,11 @@ export default class DirectStore {
 
     createMessage = async (body: string) => {
         if (!this.currentChat) return;
+        if (this.currentChat.type === -10) {
+            await this.createPrivateChat(this.currentChat.privateChat!.otherUsername);
+        } else if (this.currentChat.type === -20) {
+            await this.createSavedMessagesChat();
+        }
         const id = this.createLocalMessage(body);
         if (id === -1) return;
         const response = await agent.Chats.createMessage(body, this.currentChat.id, this.replyMessage ? this.replyMessage.id : -1);
@@ -469,6 +483,11 @@ export default class DirectStore {
 
     createPhoto = async (file: Blob, body: string) => {
         if (!this.currentChat) return;
+        if (this.currentChat.type === -10) {
+            await this.createPrivateChat(this.currentChat.privateChat!.otherUsername);
+        } else if (this.currentChat.type === -20) {
+            await this.createSavedMessagesChat();
+        }
         const { id } = this.createLocalImage(file, body);
         if (id === -1) return;
         // let config = {
@@ -481,13 +500,20 @@ export default class DirectStore {
         // };
         let config = {};
         const response = await agent.Chats.createPhoto(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
-        this.updateLocalMessage(response.data, id);
-        this.replyMessage = null;
+        runInAction(() => {
+            this.updateLocalMessage(response.data, id);
+            this.replyMessage = null;
+        });
         this.handleDateMessages();
     };
 
     createVideo = async (file: Blob, body: string) => {
         if (!this.currentChat) return;
+        if (this.currentChat.type === -10) {
+            await this.createPrivateChat(this.currentChat.privateChat!.otherUsername);
+        } else if (this.currentChat.type === -20) {
+            await this.createSavedMessagesChat();
+        }
         const { id } = this.createLocalVideo(file, body);
         if (id === -1) return;
         // let config = {
@@ -507,6 +533,11 @@ export default class DirectStore {
 
     createVoice = async (file: Blob) => {
         if (!this.currentChat) return;
+        if (this.currentChat.type === -10) {
+            await this.createPrivateChat(this.currentChat.privateChat!.otherUsername);
+        } else if (this.currentChat.type === -20) {
+            await this.createSavedMessagesChat();
+        }
         const { id } = this.createLocalVoice(file);
         if (id === -1) return;
         // let config = {
@@ -519,29 +550,34 @@ export default class DirectStore {
         // };
         let config = {};
         const response = await agent.Chats.createVoice(file, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
-        this.updateLocalMessage(response.data, id);
-        this.replyMessage = null;
-        this.handleDateMessages();
+        runInAction(() => {
+            this.updateLocalMessage(response.data, id);
+            this.replyMessage = null;
+            this.handleDateMessages();
+        });
     };
 
-    createPrivateChat = async (username: string, body: string, file: FileRecord | null) => {
+    createPrivateChat = async (username: string) => {
         try {
             if (!this.currentChat) return;
 
             const response = await agent.Chats.createPrivateChat(username);
+            response.lastSeen = new Date(response.lastSeen + 'Z');
             this.setChat(response);
-            this.getChatDetails(response).then(() => {
-                if (!file) {
-                    this.createMessage(body);
-                } else {
-                    if (file.video) {
-                        this.createVideo(file.file, body);
-                    } else {
-                        this.createPhoto(file.file, body);
-                    }
-                }
+            await this.getChatDetails(response);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    createSavedMessagesChat = async () => {
+        try {
+            const response = await agent.Chats.createSavedChat();
+            runInAction(() => {
+                this.setChat(response);
+                response.messages = [];
+                this.currentChat = response;
             });
-            this.getChatDetails(response);
         } catch (error) {
             console.log(error);
         }
@@ -1175,6 +1211,9 @@ export default class DirectStore {
     };
 
     startTyping = async (chat: ChatDto) => {
+        if (chat.type < 0) {
+            return;
+        }
         try {
             await agent.Chats.startTyping(chat.id);
         } catch (error) {
@@ -1183,6 +1222,9 @@ export default class DirectStore {
     };
 
     stopTyping = async (chat: ChatDto) => {
+        if (chat.type < 0) {
+            return;
+        }
         try {
             await agent.Chats.stopTyping(chat.id);
         } catch (error) {

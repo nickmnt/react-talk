@@ -13,6 +13,7 @@ import { useLongPress } from 'use-long-press';
 import ImageIcon from '@mui/icons-material/Image';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 interface Props {
     chat: ChatDto;
@@ -85,7 +86,13 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
             {...bind}
         >
             <ListItemAvatar sx={{ position: 'relative', overflow: 'visible' }}>
-                <Avatar alt={chat.displayName} src={chat.image} sx={{ width: 48, height: 48 }}></Avatar>
+                {chat.type === 3 ? (
+                    <Avatar alt={chat.displayName} sx={{ width: 48, height: 48, backgroundColor: '#007FFF' }}>
+                        <BookmarksIcon />
+                    </Avatar>
+                ) : (
+                    <Avatar alt={chat.displayName} src={chat.image} sx={{ width: 48, height: 48 }} />
+                )}
                 {selected && selected.length > 0 && (
                     <div className={`chat__selectCircle ${isSelected && 'chat__selectCircle--selected'}`}>
                         {isSelected && <DoneIcon sx={{ width: '1.75rem', height: '1.75rem', color: 'white' }} />}
@@ -95,7 +102,7 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
             </ListItemAvatar>
             <div className="chat__right">
                 <div className="chat__rightTop">
-                    <div className="chat__name">{chat.displayName}</div>
+                    <div className="chat__name">{chat.type === 3 ? 'Saved Messages' : chat.displayName}</div>
 
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         {chat.lastMessage?.username === user!.username && (chat.lastMessageSeen ? <DoubleTick /> : <Tick />)}

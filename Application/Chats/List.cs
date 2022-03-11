@@ -74,6 +74,9 @@ namespace Application.Chats
                         case ChatType.PrivateChat:
                             mapped = _mapper.Map<ChatDto>(userChat);
                             break;
+                        case ChatType.Saved:
+                            mapped = _mapper.Map<ChatDto>(userChat);
+                            break;
                     }
 
                     Message lastMessage = userChat.Chat.Messages.OrderByDescending

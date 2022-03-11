@@ -40,24 +40,23 @@ export default observer(function AttachmentDialog({ open, onClose, file }: Props
     const [value, setValue] = useState('');
 
     const {
-        directStore: { createVideo, createPhoto }
+        directStore: { createVideo, createPhoto, currentChat }
     } = useStore();
 
-    if (!file) {
+    if (!file || !currentChat) {
         return null;
     }
 
-    const onSend = () => {
-        if (file.video) {
-            createVideo(file.file, value).then(() => {
-                setValue('');
-                onClose();
-            });
+    const onSend = async () => {
+        const tmp = file;
+        const tmpVal = value;
+        setValue('');
+        onClose();
+
+        if (tmp.video) {
+            createVideo(tmp.file, tmpVal);
         } else {
-            createPhoto(file.file, value).then(() => {
-                setValue('');
-                onClose();
-            });
+            createPhoto(tmp.file, tmpVal);
         }
     };
 

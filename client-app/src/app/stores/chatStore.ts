@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { ChatDto, ChatPage, GroupMember } from '../models/chat';
 import { store } from './store';
@@ -20,6 +21,8 @@ export default class ChatStore {
         } else if (val.type === 2) {
             this.stack = [...this.stack, { type: val.type, channelData: val, index: this.i }];
             this.i += 1;
+        } else if (val.type === -20 || val.type === 3) {
+            toast('The saved messages chat does not have details.');
         }
     };
 

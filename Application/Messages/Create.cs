@@ -78,18 +78,7 @@ namespace Application.Messages
                     ReplyTo = replyTo
                 };
 
-                switch (userChat.Chat.Type)
-                {
-                    case ChatType.PrivateChat:
-                        userChat.Chat.Messages.Add(message);
-                        break;
-                    case ChatType.Group:
-                        userChat.Chat.Messages.Add(message);
-                        break;
-                    case ChatType.Channel:
-                        userChat.Chat.Messages.Add(message);
-                        break;
-                }
+                userChat.Chat.Messages.Add(message);
 
                 var result = await _context.SaveChangesAsync(cancellationToken);
 
