@@ -23,6 +23,10 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DeleteDialog from '../DeleteDialog';
 import { PagingParams } from '../../../../app/models/pagination';
 import ChatScroller from '../../../../app/common/utility/ChatScroller';
+import { truncate } from '../../../../app/common/utility';
+import ImageIcon from '@mui/icons-material/Image';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 export interface Props {
     selected: Message[];
@@ -113,7 +117,19 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const forwardedSenderCount = forwardedMessages.map((x) => x.username).filter(onlyUnique).length;
     let forwardBody = '';
     if (forwardedMessages.length === 1) {
-        forwardBody = forwardedMessages[0].displayName + ': ' + forwardedMessages[0].body;
+        let msgType = '';
+        switch (forwardedMessages[0].type) {
+            case 1:
+                msgType = 'Photo';
+                break;
+            case 2:
+                msgType = 'Video';
+                break;
+            case 3:
+                msgType = 'Voice';
+                break;
+        }
+        forwardBody = `${forwardedMessages[0].displayName}: ${msgType ? msgType : forwardedMessages[0].body}`;
     } else {
         if (forwardedSenderCount === 1) {
             forwardBody = `From  ${forwardedMessages[0].displayName}`;
@@ -123,10 +139,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             forwardBody = `From  ${forwardedMessages[0].displayName} and ${(forwardedSenderCount - 1).toString()} others`;
         }
     }
-
-    const truncate = (str: string, n: number) => {
-        return str.length > n ? str.substring(0, n - 1) + '...' : str;
-    };
 
     if (!currentChat || !user) return null;
 
@@ -141,6 +153,20 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const canDelete =
         menuMsg &&
         (menuMsg.username === user.username || (currentChat.type === 1 && ((currentChat.membershipType === 1 && currentChat.groupChat!.deleteMessages) || currentChat.membershipType === 2)));
+
+    let replyType = '';
+    switch (replyMessage?.type) {
+        case 1:
+            replyType = 'Photo ';
+            break;
+        case 2:
+            replyType = 'Video ';
+            break;
+        case 3:
+            replyType = 'Voice ';
+            break;
+    }
+
     return (
         <div
             style={{
@@ -177,7 +203,12 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                             <Typography fontSize="1.4rem" variant="h6" sx={{ color: '#007FFF' }}>
                                 {replyMessage.displayName}
                             </Typography>
-                            <Typography fontSize="1.4rem">{truncate(replyMessage.body, 30)}</Typography>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                {replyMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
+                                {replyMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
+                                {replyMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
+                                <Typography fontSize="1.4rem">{truncate(replyType + (replyMessage.body || ''), 30)}</Typography>
+                            </div>
                         </Stack>
                     </div>
                     <IconButton style={{ width: 48, height: 48, margin: 'auto 0' }} onClick={clearReply}>
