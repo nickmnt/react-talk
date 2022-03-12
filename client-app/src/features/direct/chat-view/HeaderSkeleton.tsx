@@ -1,9 +1,9 @@
-import { MoreVert } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { observer } from 'mobx-react-lite';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useStore } from '../../../app/stores/store';
 import Skeleton from '@mui/material/Skeleton/Skeleton';
+import Button from '@mui/material/Button/Button';
 
 export default observer(function HeaderSkeleton() {
     const {
@@ -26,9 +26,9 @@ export default observer(function HeaderSkeleton() {
                     </div>
                 </div>
                 <div className="chatHeader__right">
-                    <IconButton>
-                        <MoreVert />
-                    </IconButton>
+                    <div className="chatHeader__right">
+                        <Button variant="contained">Details</Button>
+                    </div>
                 </div>
             </>
         </div>

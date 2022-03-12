@@ -17,6 +17,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
 import Avatar from '@mui/material/Avatar/Avatar';
 import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 import Stack from '@mui/material/Stack/Stack';
+import { toast } from 'react-toastify';
 
 export default observer(function GroupFinalization() {
     const {
@@ -39,7 +40,7 @@ export default observer(function GroupFinalization() {
                 </AppBar>
             </Box>
             <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '2rem' }} alignItems="center" justifyContent="center">
-                <Avatar sx={{ bgcolor: '#0080FF', width: 60, height: 60 }}>
+                <Avatar sx={{ bgcolor: '#0080FF', width: 60, height: 60, cursor: 'pointer' }} onClick={() => toast("Change the picture in the group settings after it's created")}>
                     <AddAPhotoIcon fontSize="large" />
                 </Avatar>
                 <Input

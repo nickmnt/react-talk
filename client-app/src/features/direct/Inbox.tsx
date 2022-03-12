@@ -17,7 +17,6 @@ export default observer(function Inbox() {
         directStore: {
             createHubConnection,
             clearChats,
-            chats,
             currentChat,
             settingsOpen,
             setSettingsOpen,

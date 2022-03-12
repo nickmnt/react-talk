@@ -1,30 +1,16 @@
-import { MoreVert } from '@mui/icons-material';
-import Search from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText/ListItemText';
-import Menu from '@mui/material/Menu/Menu';
-import MenuItem from '@mui/material/MenuItem/MenuItem';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { format } from 'date-fns';
+import Button from '@mui/material/Button/Button';
 
 export default observer(function Header() {
     const {
         directStore: { currentChat, removeCurrentChat },
         chatStore: { addDetailsToStack }
     } = useStore();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     if (!currentChat) return null;
 
@@ -35,22 +21,6 @@ export default observer(function Header() {
 
     return (
         <div className="chatHeader">
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button'
-                }}
-            >
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Search fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Search</ListItemText>
-                </MenuItem>
-            </Menu>
             <div className="chatHeader__back">
                 <IconButton onClick={removeCurrentChat}>
                     <ArrowBackIcon />
@@ -73,11 +43,13 @@ export default observer(function Header() {
                             </div>
                         )}
                     </div>
-                    <div className="chatHeader__right">
-                        <IconButton onClick={handleClick}>
-                            <MoreVert />
-                        </IconButton>
-                    </div>
+                    {currentChat.type !== -20 && currentChat.type !== 3 && (
+                        <div className="chatHeader__right">
+                            <Button variant="contained" onClick={async () => await addDetailsToStack(currentChat)}>
+                                Details
+                            </Button>
+                        </div>
+                    )}
                 </>
             ) : (
                 <LoadingComponent />
