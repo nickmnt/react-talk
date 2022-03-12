@@ -1,6 +1,7 @@
 ﻿using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
+using AspNetCoreRateLimit;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
@@ -29,7 +30,7 @@ namespace API.Extensions
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000","https://localhost:3000");
                 });
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
@@ -39,6 +40,25 @@ namespace API.Extensions
             services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
             services.AddSignalR();
             
+            // needed to load configuration from appsettings.json
+            services.AddOptions();
+
+            // needed to store rate limit counters and ip rules
+            services.AddMemoryCache();
+
+            //load general configuration from appsettings.json
+            services.Configure<IpRateLimitOptions>(config.GetSection("IpRateLimiting"));
+
+            //load ip rules from appsettings.json
+            services.Configure<IpRateLimitPolicies>(config.GetSection("IpRateLimitPolicies"));
+
+            // inject counter and rules stores
+            services.AddInMemoryRateLimiting();
+            //services.AddDistributedRateLimiting<AsyncKeyLockProcessingStrategy>();
+            //services.AddDistributedRateLimiting<RedisProcessingStrategy>();
+            //services.AddRedisRateLimiting();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
             return services;
         }
     }

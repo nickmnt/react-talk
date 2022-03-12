@@ -6,6 +6,7 @@ using API.Extensions;
 using API.SignalR;
 using Application.Activities;
 using Application.Core;
+using AspNetCoreRateLimit;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,8 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
+
+            app.UseIpRateLimiting();
 
             app.UseRouting();
 
