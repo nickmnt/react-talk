@@ -73,9 +73,7 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
                         }}
                         alignItems="center"
                     >
-                        <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
-                            What can members of this group do?
-                        </Typography>
+                        <Typography sx={{ color: '#007FFF', fontWeight: '500', fontSize: '2rem' }}>What can members of this group do?</Typography>
                         <Formik
                             onSubmit={(values, { resetForm }) => {
                                 updatePermissions(chat, values, chatPage);

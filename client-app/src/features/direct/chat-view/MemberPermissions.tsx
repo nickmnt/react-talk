@@ -93,9 +93,7 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                         }}
                         alignItems="center"
                     >
-                        <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
-                            What can this user do?
-                        </Typography>
+                        <Typography sx={{ color: '#007FFF', fontWeight: '500', fontSize: '2rem' }}>What can this user do?</Typography>
 
                         <Formik
                             onSubmit={(values, { resetForm }) => {}}

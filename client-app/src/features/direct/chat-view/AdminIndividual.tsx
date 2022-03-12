@@ -161,7 +161,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                             />
                                         )}
                                     </Field>
-                                    <Typography sx={{ fontSize: '1.6rem', color: '#8e8e8e' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
+                                    <Typography sx={{ fontSize: '1.6rem', color: '#8e8e8e', padding: '1rem' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
                                     {member.memberType === 1 && !loadingAdminPermissions && (
                                         <Button onClick={() => dismissAdmin(chatPage.groupData!.id, member.username, chatPage)} sx={{ width: '55%', color: '#ff2800' }}>
                                             Dismiss Admin

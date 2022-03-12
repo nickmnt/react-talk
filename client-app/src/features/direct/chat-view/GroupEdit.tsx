@@ -14,11 +14,6 @@ import { useStore } from '../../../app/stores/store';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack/Stack';
 import Input from '@mui/material/Input/Input';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import MenuList from '@mui/material/MenuList/MenuList';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
@@ -67,7 +62,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                     </Toolbar>
                 </AppBar>
 
-                <div style={{ width: '60%', margin: 'auto 0', border: '1px solid' }}>
+                <Paper style={{ margin: 'auto 0' }} className="groupEdit" elevation={3}>
                     <Paper square sx={{ marginBottom: '1rem' }}>
                         <Stack
                             direction="column"
@@ -82,7 +77,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                             alignItems="center"
                             justifyContent="center"
                         >
-                            <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '1rem', border: '1px solid' }}>
+                            <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '1.5rem' }}>
                                 <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={chat.image} />
                                 <Input
                                     defaultValue={chat.displayName}
@@ -98,7 +93,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                         </Stack>
                     </Paper>
 
-                    <Paper
+                    {/* <Paper
                         square
                         sx={{
                             display: 'flex',
@@ -124,7 +119,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                                 </RadioGroup>
                             </FormControl>
                         </Stack>
-                    </Paper>
+                    </Paper> */}
                     <Paper
                         square
                         sx={{
@@ -141,12 +136,12 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                                 </ListItemIcon>
                                 <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Permissions</ListItemText>
                             </MenuItem>
-                            <MenuItem>
+                            {/* <MenuItem>
                                 <ListItemIcon>
                                     <LocalPoliceOutlinedIcon fontSize="large" />
                                 </ListItemIcon>
                                 <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Administrators</ListItemText>
-                            </MenuItem>
+                            </MenuItem> */}
                         </MenuList>
                     </Paper>
                     <Paper
@@ -162,7 +157,7 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                             <ListItemButton sx={{ color: '#ff2800', fontSize: '1.8rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
                         </List>
                     </Paper>
-                </div>
+                </Paper>
             </Box>
         </div>
     );
