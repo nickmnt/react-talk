@@ -268,7 +268,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                         <div style={{ position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue' }} key={img.id}>
                                             <img
                                                 src={img.src}
-                                                alt={img.caption}
+                                                alt={img.title ? img.title : 'No Info'}
                                                 style={{ display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
                                             />
                                         </div>

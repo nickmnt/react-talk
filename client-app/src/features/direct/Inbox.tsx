@@ -4,6 +4,7 @@ import CopyDialog from '../../app/common/dialog/CopyDialog';
 import { useStore } from '../../app/stores/store';
 import ContactsDialog from '../contacts/ContactsDialog';
 import ChatView from './chat-view/Index';
+import LightboxWrapper from './chat-view/messages/LightboxWrapper';
 import HomeSidebar from './HomeSidebar';
 import BioDialog from './settings/BioDialog';
 import NameDialog from './settings/NameDialog';
@@ -62,6 +63,7 @@ export default observer(function Inbox() {
             <BioDialog open={bioOpen} onClose={() => setBioOpen(false)} />
             <CopyDialog open={copyOpen} onClose={() => setCopyOpen(false)} onCopy={copyFunc} />
             <ContactsDialog open={contactsOpen} onClose={() => setContactsOpen(false)} />
+            <LightboxWrapper />
         </div>
     );
 });

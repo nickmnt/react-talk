@@ -40,7 +40,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const [menuLeft, setMenuLeft] = useState(0);
     const messagesRef = useRef<(HTMLElement | null)[]>([]);
     const [selectedPin, setSelectedPin] = useState(0);
-    const [deleteOpen, setDeleteOpen] = useState(false);
     const [loadingNext, setLoadingNext] = useState(false);
 
     const {
@@ -61,7 +60,10 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             clearForwardingSingle,
             paginationMessages,
             setPagingParamsMessages,
-            loadMessages
+            loadMessages,
+            canDelete,
+            deleteMsgId,
+            setDeleteMsgId
         },
         userStore: { user }
     } = useStore();
@@ -150,9 +152,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
 
     // Message menu items enable booleans
     const canPin = currentChat.type !== 1 || currentChat.membershipType !== 0 || (currentChat.groupChat!.pinMessagesAll && currentChat.groupChat!.pinMessages);
-    const canDelete =
-        menuMsg &&
-        (menuMsg.username === user.username || (currentChat.type === 1 && ((currentChat.membershipType === 1 && currentChat.groupChat!.deleteMessages) || currentChat.membershipType === 2)));
 
     let replyType = '';
     switch (replyMessage?.type) {
@@ -166,6 +165,8 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             replyType = 'Voice ';
             break;
     }
+
+    const msgBeingDeleted = currentChat.messages?.find((x) => x.id === deleteMsgId);
 
     return (
         <div
@@ -345,7 +346,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </ListItemIcon>
                     <ListItemText>Copy</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={menuForward}>
+                <MenuItem onClick={() => menuForward(menuMsg!.id)}>
                     <ListItemIcon>
                         <ForwardIcon fontSize="small" />
                     </ListItemIcon>
@@ -360,7 +361,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </MenuItem>
                 )}
                 {canDelete && (
-                    <MenuItem onClick={() => setDeleteOpen(true)}>
+                    <MenuItem onClick={() => setDeleteMsgId(menuMsg!.id)}>
                         <ListItemIcon>
                             <DeleteOutlineIcon fontSize="small" />
                         </ListItemIcon>
@@ -368,7 +369,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </MenuItem>
                 )}
             </Menu>
-            {menuMsg && <DeleteDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} chatId={currentChat.id} messageId={menuMsg.id} />}
+            {msgBeingDeleted && <DeleteDialog open={deleteMsgId !== -1} onClose={() => setDeleteMsgId(-1)} chatId={currentChat.id} messageId={deleteMsgId} />}
         </div>
     );
 });

@@ -16,7 +16,6 @@ import Stack from '@mui/material/Stack/Stack';
 import Input from '@mui/material/Input/Input';
 import MenuList from '@mui/material/MenuList/MenuList';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
-import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 

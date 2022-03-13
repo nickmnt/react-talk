@@ -30,7 +30,7 @@ interface Props {
 
 export default observer(function Text({ isMe, name, text, date, isDoubleTick, showImg, type, attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage, inViewport }: Props) {
     const {
-        directStore: { currentChat, getMessageById },
+        directStore: { currentChat, getMessageById, openLightbox },
         chatStore: { addProfileDetailsToStack }
     } = useStore();
     const replyTo = getMessageById(message.replyToId);
@@ -97,9 +97,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                         </Stack>
                     </div>
                 )}
-                {type === 1 && (
-                    <img onClick={() => console.log('open lightbox with image index')} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />
-                )}
+                {type === 1 && <img onClick={() => openLightbox(message.id)} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />}
                 {type === 2 && <ReactPlayer controls={true} url={isLocal ? URL.createObjectURL(localBlob!) : attachedVideo} />}
                 {type === 3 && <audio src={isLocal ? URL.createObjectURL(localBlob!) : message.url} controls />}
                 <div className="text__container">

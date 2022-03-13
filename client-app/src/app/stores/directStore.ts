@@ -56,6 +56,10 @@ export default class DirectStore {
     paginationMessages: Pagination | null = null;
     pagingParamsMessages = new PagingParams();
     contactsOpen = false;
+    lightboxOpen = false;
+    lightboxIndex = 0;
+    deleteMsgId = -1;
+    messagesRef: (HTMLElement | null)[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -116,6 +120,19 @@ export default class DirectStore {
         params.append('pageSize', this.pagingParamsMessages.pageSize.toString());
         return params;
     }
+
+    get canDelete() {
+        return !!this.menuMsg && this.canDeleteMsg(this.menuMsg);
+    }
+
+    canDeleteMsg = (msg: Message) => {
+        return (
+            !!this.currentChat &&
+            !!store.userStore.user &&
+            (msg.username === store.userStore.user.username ||
+                (this.currentChat.type === 1 && ((this.currentChat.membershipType === 1 && this.currentChat.groupChat!.deleteMessages) || this.currentChat.membershipType === 2)))
+        );
+    };
 
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
@@ -624,7 +641,7 @@ export default class DirectStore {
         this.currentChat.messages?.forEach((x) => {
             switch (x.type) {
                 case 1:
-                    this.images.push({ src: x.url, caption: x.body ? x.body : 'No comment', id: x.id });
+                    this.images.push({ src: x.url, description: x.body ? x.body : 'No comment', id: x.id });
                     break;
                 case 2:
                     this.videos.push(x.url);
@@ -879,10 +896,12 @@ export default class DirectStore {
         this.menuMsg = value;
     };
 
-    menuForward = () => {
-        if (!this.menuMsg) return;
-        this.selected = [this.menuMsg];
-        this.forwarding = true;
+    menuForward = (id: number) => {
+        const msg = this.getMessageById(id);
+        if (msg) {
+            this.selected = [msg];
+            this.forwarding = true;
+        }
     };
 
     setShowSenderName = (value: boolean) => {
@@ -1235,5 +1254,22 @@ export default class DirectStore {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    openLightbox = (id: number) => {
+        this.lightboxOpen = true;
+        this.lightboxIndex = this.getImageIndex(id);
+    };
+
+    setLightboxIndex = (val: number) => {
+        this.lightboxIndex = val;
+    };
+
+    resetLightbox = () => {
+        this.lightboxOpen = false;
+    };
+
+    setDeleteMsgId = (val: number) => {
+        this.deleteMsgId = val;
     };
 }

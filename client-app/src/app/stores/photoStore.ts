@@ -6,6 +6,7 @@ export default class PhotoStore {
     photoOpen = false;
     uploading = false;
     step = 0;
+    isGroup = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -15,10 +16,11 @@ export default class PhotoStore {
         this.step = value;
     };
 
-    setPhotoOpen = (value: boolean) => {
+    setPhotoOpen = (value: boolean, isGroup: boolean = false) => {
         if (value === true) {
             this.step = 0;
             this.uploading = false;
+            this.isGroup = isGroup;
         }
         this.photoOpen = value;
     };

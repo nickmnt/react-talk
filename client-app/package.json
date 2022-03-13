@@ -28,6 +28,7 @@
         "mic-recorder-to-mp3": "^2.2.2",
         "mobx": "^6.3.3",
         "mobx-react-lite": "^3.2.1",
+        "r-lightbox": "^1.0.4",
         "react": "^17.0.2",
         "react-calendar": "^3.4.0",
         "react-cropper": "^2.1.8",

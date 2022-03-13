@@ -1,3 +1,4 @@
+import { LboxImage } from 'r-lightbox';
 import { Profile } from './profile';
 
 export interface Pin {
@@ -137,10 +138,8 @@ export interface ChatPage {
     off?: boolean;
 }
 
-export interface ImageElem {
+export interface ImageElem extends LboxImage {
     id: number;
-    src: string;
-    caption: string;
 }
 
 export interface UpdatedSeenDto {
