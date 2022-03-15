@@ -20,5 +20,6 @@ namespace Domain.Direct
         public bool PinMessages { get; set; } = true;
         public bool ChangeChatInfo { get; set; } = true;
         public ICollection<Pin> Pins { get; set; } = new List<Pin>();
+        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
     }
 }

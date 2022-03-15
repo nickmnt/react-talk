@@ -23,5 +23,23 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new SetMain.Command {Id = id}));
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddGroup([FromForm] Add.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGroup(string id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command {Id = id}));
+        }
+
+        [HttpPost("{id}/setMain")]
+        public async Task<IActionResult> SetMainGroup(string id)
+        {
+            return HandleResult(await Mediator.Send(new SetMain.Command {Id = id}));
+        }
     }
 }
