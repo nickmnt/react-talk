@@ -18,7 +18,7 @@ import {
     UpdatedSeenDto
 } from '../models/chat';
 import { Pagination, PagingParams } from '../models/pagination';
-import { Profile } from '../models/profile';
+import { Photo, Profile } from '../models/profile';
 import { store } from './store';
 
 let id = -10;
@@ -1271,5 +1271,22 @@ export default class DirectStore {
 
     setDeleteMsgId = (val: number) => {
         this.deleteMsgId = val;
+    };
+
+    updateGroupPhoto = (photo: Photo) => {
+        if (this.currentChat && this.currentChat.type === 1) {
+            const photos = this.currentChat.groupChat!.photos;
+            const main = photos.find((x) => x.isMain);
+            if (main) {
+                main.isMain = false;
+            }
+            photos.push(...photos, photo);
+            this.currentChat.groupChat!.photos = photos;
+            this.currentChat.image = photo.url;
+            const chat = this.chats.find((x) => x.id === this.currentChat?.id);
+            if (chat) {
+                chat.image = photo.url;
+            }
+        }
     };
 }

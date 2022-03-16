@@ -18,16 +18,21 @@ import MenuList from '@mui/material/MenuList/MenuList';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import LockIcon from '@mui/icons-material/Lock';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { observer } from 'mobx-react-lite';
 
 export interface Props {
     chatPage: ChatPage;
-    chat: ChatDto;
 }
 
-export default function GroupEdit({ chatPage, chat }: Props) {
+export default observer(function GroupEdit({ chatPage }: Props) {
     const {
-        chatStore: { removeFromStack, addPermissionsAllToStack }
+        directStore: { currentChat },
+        chatStore: { removeFromStack, addPermissionsAllToStack },
+        photoStore: { setPhotoOpen }
     } = useStore();
+
+    if (!currentChat) return null;
 
     return (
         <div
@@ -77,9 +82,9 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                             justifyContent="center"
                         >
                             <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '1.5rem' }}>
-                                <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={chat.image} />
+                                <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={currentChat.image} />
                                 <Input
-                                    defaultValue={chat.displayName}
+                                    defaultValue={currentChat.displayName}
                                     sx={{
                                         fontSize: '1.6rem',
                                         padding: 1.5,
@@ -129,8 +134,14 @@ export default function GroupEdit({ chatPage, chat }: Props) {
                         }}
                     >
                         <MenuList sx={{ width: '100%' }}>
-                            <MenuItem onClick={() => addPermissionsAllToStack(chat)}>
-                                <ListItemIcon>
+                            <MenuItem onClick={() => setPhotoOpen(true, true)}>
+                                <ListItemIcon sx={{ marginRight: '.5rem' }}>
+                                    <AddAPhotoIcon fontSize="large" />
+                                </ListItemIcon>
+                                <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Add a new photo</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={() => addPermissionsAllToStack(currentChat)}>
+                                <ListItemIcon sx={{ marginRight: '.5rem' }}>
                                     <LockIcon fontSize="large" />
                                 </ListItemIcon>
                                 <ListItemText primaryTypographyProps={{ fontSize: 14 }}>Permissions</ListItemText>
@@ -160,4 +171,4 @@ export default function GroupEdit({ chatPage, chat }: Props) {
             </Box>
         </div>
     );
-}
+});

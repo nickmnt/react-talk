@@ -112,6 +112,19 @@ const Profiles = {
     editBio: (bio: string) => requests.put('/profiles/editBio', { bio })
 };
 
+const Photos = {
+    uploadPhotoGroup: (file: Blob, chatId: string) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        formData.append('ChatId', chatId);
+        return axios.post<Photo>('photos/group', formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        });
+    },
+    setMainPhotoGroup: (id: string) => requests.post(`/photos/group/${id}/setMain`, {}),
+    deletePhotoGroup: (id: string) => requests.del(`/photos/group/${id}`)
+};
+
 const Search = {
     search: (term: string) => requests.get<SearchResult[]>(`/search/${term}`)
 };
@@ -181,7 +194,8 @@ const agent = {
     Account,
     Profiles,
     Search,
-    Chats
+    Chats,
+    Photos
 };
 
 export default agent;

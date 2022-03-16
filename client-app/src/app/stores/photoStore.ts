@@ -26,20 +26,41 @@ export default class PhotoStore {
     };
 
     uploadPhoto = async (file: Blob) => {
-        this.uploading = true;
-        try {
-            const response = await agent.Profiles.uploadPhoto(file);
-            store.settingsStore.updateImage(response.data.url);
-            runInAction(() => {
-                this.uploading = false;
-                this.photoOpen = false;
-            });
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.uploading = false;
-                this.photoOpen = false;
-            });
+        if (this.isGroup) {
+            if (!store.directStore.currentChat || store.directStore.currentChat.type !== 1) {
+                return;
+            }
+            this.uploading = true;
+            try {
+                const response = await agent.Photos.uploadPhotoGroup(file, store.directStore.currentChat.id);
+                store.directStore.updateGroupPhoto(response.data);
+                runInAction(() => {
+                    this.uploading = false;
+                    this.photoOpen = false;
+                });
+            } catch (error) {
+                console.log(error);
+                runInAction(() => {
+                    this.uploading = false;
+                    this.photoOpen = false;
+                });
+            }
+        } else {
+            this.uploading = true;
+            try {
+                const response = await agent.Profiles.uploadPhoto(file);
+                store.settingsStore.updateImage(response.data.url);
+                runInAction(() => {
+                    this.uploading = false;
+                    this.photoOpen = false;
+                });
+            } catch (error) {
+                console.log(error);
+                runInAction(() => {
+                    this.uploading = false;
+                    this.photoOpen = false;
+                });
+            }
         }
     };
 }

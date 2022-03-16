@@ -1,5 +1,5 @@
 import { LboxImage } from 'r-lightbox';
-import { Profile } from './profile';
+import { Photo, Profile } from './profile';
 
 export interface Pin {
     id: number;
@@ -72,6 +72,7 @@ export interface GroupDetailsDto {
     members: GroupMember[];
     memberCount?: number;
     me?: GroupMember;
+    photos: Photo[];
     // All members permissions
     sendMessagesAll: boolean;
     sendMediaAll: boolean;

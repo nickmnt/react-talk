@@ -107,7 +107,8 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                         </IconButton>
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative' }} alignItems="center" justifyContent="center">
-                        <Avatar sx={{ width: 100, height: 100 }} alt="Okay" src="/broken-image.jpg" />
+                        {accountData && <Avatar sx={{ width: 100, height: 100 }} alt="Profile" src={accountData.image} />}
+                        {groupData && <Avatar sx={{ width: 100, height: 100 }} alt="Profile" src={groupData.image} />}
                         <Typography variant="h4" sx={{ color: '#333', fontWeight: '500' }}>
                             {accountData && accountData.displayName}
                             {groupData && groupData.displayName}

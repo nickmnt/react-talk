@@ -80,7 +80,7 @@ export default observer(function ChatView() {
                                     {elem.type === 20 && <AddMember chatPage={elem} />}
                                     {elem.type === 21 && <AddMember chatPage={elem} />}
                                     {elem.type === 30 && <MemberPermissions chatPage={elem} member={elem.member!} />}
-                                    {elem.type === 40 && <GroupEdit chatPage={elem} chat={elem.groupData!} />}
+                                    {elem.type === 40 && <GroupEdit chatPage={elem} />}
                                     {elem.type === 50 && <MemberPermissionsAll chatPage={elem} chat={elem.groupData!} />}
                                     {elem.type === 60 && <AdminIndividual chatPage={elem} member={elem.member!} />}
                                 </>
