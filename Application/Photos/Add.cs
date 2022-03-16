@@ -45,13 +45,17 @@ namespace Application.Photos
                 var photo = new Photo
                 {
                     Url = photoUploadResult.Url,
-                    Id = photoUploadResult.PublicId
+                    Id = photoUploadResult.PublicId,
+                    IsMain = true
                 };
 
-                if (!user.Photos.Any(x => x.IsMain))
+                var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+                
+                if (currentMain != null)
                 {
-                    photo.IsMain = true;
+                    currentMain.IsMain = false;
                 }
+
                 
                 user.Photos.Add(photo);
 
