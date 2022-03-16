@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import agent from '../api/agent';
-import { Profile } from '../models/profile';
+import { Photo, Profile } from '../models/profile';
 import { store } from './store';
 
 export default class SettingsStore {
@@ -26,9 +26,10 @@ export default class SettingsStore {
         }
     };
 
-    updateImage = (src: string) => {
+    updateImage = (photo: Photo) => {
         if (!this.profile) return null;
-        this.profile.image = src;
+        this.profile.photos = [...this.profile.photos!, photo];
+        this.profile.image = photo.url;
     };
 
     updateName = async (displayName: string) => {

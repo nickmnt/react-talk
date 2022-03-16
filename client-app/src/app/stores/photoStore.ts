@@ -51,7 +51,7 @@ export default class PhotoStore {
             this.uploading = true;
             try {
                 const response = await agent.Profiles.uploadPhoto(file);
-                store.settingsStore.updateImage(response.data.url);
+                store.settingsStore.updateImage(response.data);
                 runInAction(() => {
                     this.uploading = false;
                     this.photoOpen = false;
