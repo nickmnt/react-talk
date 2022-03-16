@@ -114,7 +114,8 @@ namespace Application.Core
                 .ForMember(d => d.SendMediaAll, o => o.MapFrom(s => s.Chat.SendMedia))
                 .ForMember(d => d.AddUsersAll, o => o.MapFrom(s => s.Chat.AddUsers))
                 .ForMember(d => d.PinMessagesAll, o => o.MapFrom(s => s.Chat.PinMessages))
-                .ForMember(d => d.ChangeChatInfoAll, o => o.MapFrom(s => s.Chat.ChangeChatInfo));
+                .ForMember(d => d.ChangeChatInfoAll, o => o.MapFrom(s => s.Chat.ChangeChatInfo))
+                .ForMember(d => d.Photos, o => o.MapFrom(s => s.Chat.Photos));
             CreateMap<UserChat, GroupMember>()
                 .ForMember(d => d.MemberType, o => o.MapFrom(s => s.MembershipType))
                 .ForMember(d => d.LastSeen, o => o.MapFrom(s => s.LastSeen))

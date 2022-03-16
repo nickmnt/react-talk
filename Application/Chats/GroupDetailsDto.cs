@@ -9,6 +9,8 @@ namespace Application.Chats
     {
         public string Description { get; set; }
         public List<GroupMember> Members { get; set; }
+
+        public Photo[] Photos { get; set; }
         // Member Permissions (For All)
         public bool SendMessagesAll { get; set; } = true;
         public bool SendMediaAll { get; set; } = true;

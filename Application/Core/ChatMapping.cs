@@ -31,7 +31,7 @@ namespace Application.Core
             return new ChatDto
             {
                 Id = userChat.ChatId,
-                Image = "",
+                Image = userChat.Chat.Photos.FirstOrDefault(x => x.IsMain)?.Url ?? "",
                 DisplayName = userChat.Chat.Name,
                 Type = (int)ChatType.Group,
                 ParticipantUsername = null,

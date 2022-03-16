@@ -54,6 +54,8 @@ namespace Application.Chats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Users)
                     .ThenInclude(x => x.AppUser)
+                    .Include(x => x.Chat)
+                    .ThenInclude(x => x.Photos)
                     .Where(x => x.AppUser.UserName == user.UserName);
 
                 var chats = await PagedList<UserChat>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize);
