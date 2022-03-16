@@ -54,6 +54,7 @@ namespace Application.Chats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Users)
                     .ThenInclude(x => x.AppUser)
+                    .ThenInclude(x => x.Photos)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Photos)
                     .Where(x => x.AppUser.UserName == user.UserName);
