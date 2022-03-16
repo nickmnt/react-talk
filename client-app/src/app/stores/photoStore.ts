@@ -80,6 +80,20 @@ export default class PhotoStore {
         }
     };
 
+    deletePhotoGroup = async (photo: Photo, chatId: string) => {
+        if (!store.settingsStore.profile) return;
+        if (photo.isMain) {
+            toast.error('Cannot delete the main photo.');
+            return;
+        }
+        try {
+            await agent.Photos.deletePhotoGroup(photo.id, chatId);
+            store.directStore.deleteGroupPhoto(photo.id, chatId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     setMain = async (photo: Photo) => {
         if (!store.settingsStore.profile) return;
 
@@ -90,6 +104,21 @@ export default class PhotoStore {
         try {
             await agent.Profiles.setMainPhoto(photo.id);
             store.settingsStore.setMainPhoto(photo.id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    setMainGroup = async (photo: Photo, chatId: string) => {
+        if (!store.settingsStore.profile) return;
+
+        if (photo.isMain) {
+            toast.error('Set another photo as the main one instead.');
+            return;
+        }
+        try {
+            await agent.Photos.setMainPhotoGroup(photo.id, chatId);
+            store.directStore.setGroupMainPhoto(photo.id, chatId, photo.url);
         } catch (error) {
             console.log(error);
         }

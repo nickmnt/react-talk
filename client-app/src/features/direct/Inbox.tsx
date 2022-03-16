@@ -6,6 +6,7 @@ import ContactsDialog from '../contacts/ContactsDialog';
 import ChatView from './chat-view/Index';
 import LightboxWrapper from './chat-view/messages/LightboxWrapper';
 import HomeSidebar from './HomeSidebar';
+import LightboxWrapperGroup from './lightbox/LightboxWrapperGroup';
 import LightboxWrapperProfile from './lightbox/LightboxWrapperProfile';
 import BioDialog from './settings/BioDialog';
 import NameDialog from './settings/NameDialog';
@@ -66,6 +67,7 @@ export default observer(function Inbox() {
             <ContactsDialog open={contactsOpen} onClose={() => setContactsOpen(false)} />
             <LightboxWrapper />
             <LightboxWrapperProfile />
+            <LightboxWrapperGroup />
         </div>
     );
 });

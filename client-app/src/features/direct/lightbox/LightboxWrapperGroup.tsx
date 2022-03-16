@@ -9,41 +9,41 @@ import StarIcon from '@mui/icons-material/Star';
 
 export default observer(function LightboxWrapperProfile() {
     const {
-        directStore: { profilePicsOpen, setProfilePicsOpen },
-        photoStore: { deletePhoto, setMain },
+        directStore: { groupPicsOpen, setGroupPicsOpen },
+        photoStore: { deletePhotoGroup, setMainGroup },
         userStore: { user }
     } = useStore();
 
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
-        if (profilePicsOpen && profilePicsOpen.photos) {
-            const mainIndex = profilePicsOpen.photos.findIndex((x) => x.isMain);
+        if (groupPicsOpen && groupPicsOpen.groupChat && groupPicsOpen.groupChat.photos) {
+            const mainIndex = groupPicsOpen.groupChat.photos.findIndex((x) => x.isMain);
             setSelectedIndex(mainIndex);
         }
-    }, [profilePicsOpen]);
+    }, [groupPicsOpen]);
 
-    if (!profilePicsOpen || !profilePicsOpen.photos || !user || !(selectedIndex >= 0 && selectedIndex < profilePicsOpen.photos.length)) {
+    if (!groupPicsOpen || !groupPicsOpen.groupChat || !groupPicsOpen.groupChat.photos || !user || !(selectedIndex >= 0 && selectedIndex < groupPicsOpen.groupChat.photos.length)) {
         return null;
     }
 
-    const images: LboxImage[] = profilePicsOpen.photos.map((x) => {
+    const images: LboxImage[] = groupPicsOpen.groupChat.photos.map((x) => {
         return { src: x.url };
     });
 
-    const photo = profilePicsOpen.photos[selectedIndex];
+    const photo = groupPicsOpen.groupChat.photos[selectedIndex];
 
     const handleDelete = () => {
-        deletePhoto(photo);
+        deletePhotoGroup(photo, groupPicsOpen.id);
     };
 
     const handleStar = () => {
-        setMain(photo);
+        setMainGroup(photo, groupPicsOpen.id);
     };
 
     const headerElem = (
         <>
-            {user.username === profilePicsOpen.username ? (
+            {!!groupPicsOpen.groupChat.members.find((x) => x.username === user.username) && groupPicsOpen.groupChat.changeChatInfo && groupPicsOpen.groupChat.changeChatInfoAll ? (
                 <>
                     <IconButton sx={{ color: 'white' }} onClick={handleDelete}>
                         <DeleteOutlinedIcon />
@@ -60,7 +60,7 @@ export default observer(function LightboxWrapperProfile() {
 
     return (
         <div style={{ zIndex: 1301 }}>
-            <LightBox open={!!profilePicsOpen} onClose={() => setProfilePicsOpen(null)} images={images} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} headerElement={headerElem} />
+            <LightBox open={!!groupPicsOpen} onClose={() => setGroupPicsOpen(null)} images={images} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} headerElement={headerElem} />
         </div>
     );
 });

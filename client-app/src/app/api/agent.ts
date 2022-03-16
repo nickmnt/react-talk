@@ -121,8 +121,8 @@ const Photos = {
             headers: { 'Content-type': 'multipart/form-data' }
         });
     },
-    setMainPhotoGroup: (id: string) => requests.post(`/photos/group/${id}/setMain`, {}),
-    deletePhotoGroup: (id: string) => requests.del(`/photos/group/${id}`)
+    setMainPhotoGroup: (id: string, chatId: string) => requests.post(`/photos/group/${chatId}/${id}/setMain`, {}),
+    deletePhotoGroup: (id: string, chatId: string) => requests.del(`/photos/group/${chatId}/${id}`)
 };
 
 const Search = {

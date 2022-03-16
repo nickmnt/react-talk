@@ -60,7 +60,8 @@ export default class DirectStore {
     lightboxIndex = 0;
     deleteMsgId = -1;
     messagesRef: (HTMLElement | null)[] = [];
-    profilePicsOpen = false;
+    profilePicsOpen: Profile | null = null;
+    groupPicsOpen: ChatDto | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -1291,7 +1292,35 @@ export default class DirectStore {
         }
     };
 
-    setProfilePicsOpen = (value: boolean) => {
+    setProfilePicsOpen = (value: Profile | null) => {
         this.profilePicsOpen = value;
+    };
+
+    setGroupPicsOpen = (value: ChatDto | null) => {
+        this.groupPicsOpen = value;
+    };
+
+    deleteGroupPhoto = (id: string, chatId: string) => {
+        if (!this.currentChat || !this.currentChat.groupChat || this.currentChat.id !== chatId) return;
+        this.currentChat.groupChat.photos = this.currentChat.groupChat.photos.filter((x) => x.id !== id);
+    };
+
+    setGroupMainPhoto = (id: string, chatId: string, url: string) => {
+        this.currentChat?.groupChat?.photos.forEach((x) => {
+            if (x.id === id) {
+                x.isMain = true;
+            } else {
+                x.isMain = false;
+            }
+        });
+
+        const chat = this.chats.find((x) => x.id === chatId);
+        if (chat) {
+            chat.image = url;
+        }
+        if (this.currentChat?.id === chatId) {
+            this.currentChat.image = url;
+            this.groupPicsOpen = this.currentChat;
+        }
     };
 }

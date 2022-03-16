@@ -97,7 +97,7 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                             sx={{ width: 60, height: 60, cursor: profile.photos!.length > 0 ? 'pointer' : 'auto' }}
                             onClick={() => {
                                 if (profile.photos!.length > 0) {
-                                    setProfilePicsOpen(true);
+                                    setProfilePicsOpen(profile);
                                 }
                             }}
                         >

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.Photos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,16 +31,16 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(command));
         }
 
-        [HttpDelete("group/{id}")]
-        public async Task<IActionResult> DeleteGroup(string id)
+        [HttpDelete("group/{chatId}/{id}")]
+        public async Task<IActionResult> DeleteGroup(string id, Guid chatId)
         {
-            return HandleResult(await Mediator.Send(new DeleteGroup.Command {Id = id}));
+            return HandleResult(await Mediator.Send(new DeleteGroup.Command {Id = id, ChatId = chatId}));
         }
 
-        [HttpPost("group/{id}/setMain")]
-        public async Task<IActionResult> SetMainGroup(string id)
+        [HttpPost("group/{chatId}/{id}/setMain")]
+        public async Task<IActionResult> SetMainGroup(string id, Guid chatId)
         {
-            return HandleResult(await Mediator.Send(new SetMainGroup.Command {Id = id}));
+            return HandleResult(await Mediator.Send(new SetMainGroup.Command {Id = id, ChatId = chatId}));
         }
     }
 }

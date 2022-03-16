@@ -42,7 +42,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images }
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
     const [open, setOpen] = useState<GroupMember | null>(null);
@@ -107,8 +107,30 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                         </IconButton>
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative' }} alignItems="center" justifyContent="center">
-                        {accountData && <Avatar sx={{ width: 100, height: 100 }} alt="Profile" src={accountData.image} />}
-                        {groupData && <Avatar sx={{ width: 100, height: 100 }} alt="Profile" src={groupData.image} />}
+                        {accountData && (
+                            <Avatar
+                                sx={{ width: 100, height: 100, cursor: accountData.photos!.length > 0 ? 'pointer' : 'auto' }}
+                                alt="Profile"
+                                src={accountData.image}
+                                onClick={() => {
+                                    if (accountData.photos!.length > 0) {
+                                        setProfilePicsOpen(accountData);
+                                    }
+                                }}
+                            />
+                        )}
+                        {groupData && (
+                            <Avatar
+                                sx={{ width: 100, height: 100, cursor: groupData.groupChat!.photos!.length > 0 ? 'pointer' : 'auto' }}
+                                alt="Profile"
+                                src={groupData.image}
+                                onClick={() => {
+                                    if (groupData.groupChat!.photos!.length > 0) {
+                                        setGroupPicsOpen(groupData);
+                                    }
+                                }}
+                            />
+                        )}
                         <Typography variant="h4" sx={{ color: '#333', fontWeight: '500' }}>
                             {accountData && accountData.displayName}
                             {groupData && groupData.displayName}
