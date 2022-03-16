@@ -1,5 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
+import { Photo } from '../models/profile';
 import { store } from './store';
 
 export default class PhotoStore {
@@ -61,6 +63,35 @@ export default class PhotoStore {
                     this.photoOpen = false;
                 });
             }
+        }
+    };
+
+    deletePhoto = async (photo: Photo) => {
+        if (!store.settingsStore.profile) return;
+        if (photo.isMain) {
+            toast.error('Cannot delete your main photo.');
+            return;
+        }
+        try {
+            await agent.Profiles.deletePhoto(photo.id);
+            store.settingsStore.removePhoto(photo.id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    setMain = async (photo: Photo) => {
+        if (!store.settingsStore.profile) return;
+
+        if (photo.isMain) {
+            toast.error('Set another photo as your main one instead.');
+            return;
+        }
+        try {
+            await agent.Profiles.setMainPhoto(photo.id);
+            store.settingsStore.setMainPhoto(photo.id);
+        } catch (error) {
+            console.log(error);
         }
     };
 }

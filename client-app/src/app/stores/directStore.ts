@@ -60,6 +60,7 @@ export default class DirectStore {
     lightboxIndex = 0;
     deleteMsgId = -1;
     messagesRef: (HTMLElement | null)[] = [];
+    profilePicsOpen = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -1288,5 +1289,9 @@ export default class DirectStore {
                 chat.image = photo.url;
             }
         }
+    };
+
+    setProfilePicsOpen = (value: boolean) => {
+        this.profilePicsOpen = value;
     };
 }

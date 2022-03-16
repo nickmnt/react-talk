@@ -6,6 +6,7 @@ import ContactsDialog from '../contacts/ContactsDialog';
 import ChatView from './chat-view/Index';
 import LightboxWrapper from './chat-view/messages/LightboxWrapper';
 import HomeSidebar from './HomeSidebar';
+import LightboxWrapperProfile from './lightbox/LightboxWrapperProfile';
 import BioDialog from './settings/BioDialog';
 import NameDialog from './settings/NameDialog';
 import PhotoDialog from './settings/PhotoDialog';
@@ -64,6 +65,7 @@ export default observer(function Inbox() {
             <CopyDialog open={copyOpen} onClose={() => setCopyOpen(false)} onCopy={copyFunc} />
             <ContactsDialog open={contactsOpen} onClose={() => setContactsOpen(false)} />
             <LightboxWrapper />
+            <LightboxWrapperProfile />
         </div>
     );
 });

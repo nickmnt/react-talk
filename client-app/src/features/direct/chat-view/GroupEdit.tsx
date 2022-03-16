@@ -1,4 +1,3 @@
-import { ChatDto } from '../../../app/models/chat';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import { ChatPage } from '../../../app/models/chat';

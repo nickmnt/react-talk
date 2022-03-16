@@ -68,4 +68,20 @@ export default class SettingsStore {
             runInAction(() => (this.loadingBio = false));
         }
     };
+
+    removePhoto = (id: string) => {
+        if (!this.profile) return;
+        this.profile.photos! = this.profile.photos!.filter((x) => x.id !== id);
+    };
+
+    setMainPhoto = (id: string) => {
+        if (!this.profile) return;
+        this.profile.photos!.forEach((x) => {
+            if (x.id === id) {
+                x.isMain = true;
+            } else {
+                x.isMain = false;
+            }
+        });
+    };
 }

@@ -45,7 +45,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default observer(function SettingsDialog({ open, onClose }: Props) {
     const {
-        directStore: { setNameOpen, setBioOpen, openCopy },
+        directStore: { setNameOpen, setBioOpen, openCopy, setProfilePicsOpen },
         settingsStore: { loadProfile, profile, loadingName, loadingBio },
         photoStore: { setPhotoOpen },
         userStore: { logout }
@@ -91,7 +91,16 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                 </AppBar>
                 <Paper sx={{ width: '100%' }}>
                     <Stack sx={{ padding: '2rem', minWidth: '25rem' }} direction="row" alignItems="center">
-                        <Avatar src={profile.image} alt={profile.displayName} sx={{ width: 60, height: 60 }}>
+                        <Avatar
+                            src={profile.image}
+                            alt={profile.displayName}
+                            sx={{ width: 60, height: 60, cursor: profile.photos!.length > 0 ? 'pointer' : 'auto' }}
+                            onClick={() => {
+                                if (profile.photos!.length > 0) {
+                                    setProfilePicsOpen(true);
+                                }
+                            }}
+                        >
                             {truncateBasic(profile.displayName, 2)}
                         </Avatar>
                         <Stack sx={{ marginLeft: '1.5rem' }} justifyContent="center">
