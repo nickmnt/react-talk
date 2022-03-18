@@ -99,15 +99,6 @@
         }
     }
 
-    &__date {
-        color: $color-grey-dark-1;
-
-        &:active,
-        &--active {
-            color: $color-white;
-        }
-    }
-
     &__selectCircle {
         // width: '2rem', height: '2rem', backgroundColor: 'green', borderRadius: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid white'
         position: absolute;

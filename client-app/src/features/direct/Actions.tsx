@@ -1,4 +1,4 @@
-import SearchIcon from '@mui/icons-material/Search';
+// import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import DirectDrawer from './chat-view/DirectDrawer';
@@ -32,9 +32,9 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
             </IconButton>
             <Paper component="form" sx={{ p: '2x 4px', display: 'flex', alignItems: 'center', width: 400 }} className="actions__form actions__search" elevation={0}>
                 <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search google maps' }} value={searchVal} onChange={(e) => setSearchVal(e.target.value)} />
-                <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+                {/* <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
                     <SearchIcon />
-                </IconButton>
+                </IconButton> */}
             </Paper>
         </div>
     );

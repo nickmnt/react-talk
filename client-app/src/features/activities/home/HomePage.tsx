@@ -19,18 +19,14 @@ export default observer(function HomePage() {
                 <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <ForumIcon sx={{ width: '15rem', height: '15rem', color: 'white', marginRight: '1rem' }} />
-                            <Typography variant="h1" sx={{ color: 'white' }}>
-                                ReactTalk
-                            </Typography>
+                            <ForumIcon className="welcome__icon" />
+                            <div className="welcome__title">ReactTalk</div>
                         </div>
                         {userStore.isLoggedIn ? (
                             <>
-                                <Typography variant="h6" sx={{ color: 'white' }}>
-                                    Welcome! Click below to enter
-                                </Typography>
+                                <div className="welcome__mainText">Welcome! Click below to enter</div>
                                 <Link to="/direct/inbox" style={{ textDecoration: 'none' }}>
-                                    <Button className="welcome__enter" sx={{ fontSize: '2rem', marginTop: '1rem', color: 'white', borderColor: 'white', fontWeight: '500' }} variant="outlined">
+                                    <Button className="welcome__enter" variant="outlined">
                                         Go to chats!
                                     </Button>
                                 </Link>

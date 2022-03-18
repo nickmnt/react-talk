@@ -1,3 +1,4 @@
+import Paper from '@mui/material/Paper/Paper';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import CopyDialog from '../../app/common/dialog/CopyDialog';
@@ -52,12 +53,12 @@ export default observer(function Inbox() {
     return (
         <div className="home">
             <div className={`home__container ${expanded && 'home__container--expanded'}`}>
-                <div className={`home__main ${currentChat && 'home__main--active'}`}>
+                <Paper className={`home__main ${currentChat && 'home__main--active'}`} square>
                     <ChatView />
-                </div>
-                <div className={`home__sidebar ${currentChat && 'home__sidebar--inactive'}`}>
+                </Paper>
+                <Paper className={`home__sidebar ${currentChat && 'home__sidebar--inactive'}`} square>
                     <HomeSidebar />
-                </div>
+                </Paper>
             </div>
             <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
             <PhotoDialog open={photoOpen} onClose={() => setPhotoOpen(false)} />

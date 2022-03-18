@@ -7,10 +7,71 @@
     -webkit-animation: AnimationName 30s ease infinite;
     -moz-animation: AnimationName 30s ease infinite;
     animation: AnimationName 30s ease infinite;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 
     &__enter {
         animation: wobbleAnim 2.5s ease 0s infinite normal forwards;
+    }
+
+    &__mainText {
+        font-size: 3rem;
+        font-weight: 500;
+        color: white;
+
+        @media screen and (max-width: $small) {
+            font-size: 3rem;
+        }
+
+        @media screen and (max-width: $mini) {
+            font-size: 1.5rem;
+        }
+    }
+
+    &__title {
+        font-size: 10rem;
+        font-weight: 600;
+        color: white;
+
+        @media screen and (max-width: $small) {
+            font-size: 8rem;
+        }
+
+        @media screen and (max-width: $mini) {
+            font-size: 5rem;
+        }
+    }
+
+    &__icon {
+        color: white;
+        width: 15rem !important;
+        height: 15rem !important;
+
+        @media screen and (max-width: $small) {
+            width: 12.5rem !important;
+            height: 12.5rem !important;
+        }
+
+        @media screen and (max-width: $mini) {
+            width: 10rem !important;
+            height: 10rem !important;
+        }
+    }
+
+    &__enter {
+        font-size: 3rem !important;
+        color: white !important;
+        border-color: white !important;
+        font-weight: 500 !important;
+        margin-top: 1.5rem !important;
+
+        @media screen and (max-width: $small) {
+            font-size: 3rem !important;
+        }
+
+        @media screen and (max-width: $mini) {
+            font-size: 1.5rem !important;
+        }
     }
 }
 

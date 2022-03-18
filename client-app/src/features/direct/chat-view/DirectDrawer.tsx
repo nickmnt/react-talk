@@ -2,7 +2,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+// import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import List from '@mui/material/List';
 import { Box } from '@mui/system';
 import React from 'react';
@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography/Typography';
 import ListItem from '@mui/material/ListItem/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
-import Divider from '@mui/material/Divider/Divider';
+// import Divider from '@mui/material/Divider/Divider';
 
 interface Props {
     drawerOpen: boolean;
@@ -100,13 +100,13 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                         </ListItemIcon>
                         <ListItemText primary="Settings" primaryTypographyProps={{ fontSize: menuFontSize }} />
                     </ListItem>
-                    <Divider />
+                    {/* <Divider />
                     <ListItem button>
                         <ListItemIcon>
                             <PersonAddOutlinedIcon fontSize="large" />
                         </ListItemIcon>
                         <ListItemText primary="Invite Friends" primaryTypographyProps={{ fontSize: menuFontSize }} />
-                    </ListItem>
+                    </ListItem> */}
                 </List>
             </Box>
         </SwipeableDrawer>
