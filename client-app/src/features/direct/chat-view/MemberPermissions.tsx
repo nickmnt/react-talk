@@ -24,6 +24,7 @@ export interface Props {
 
 export default function MemberPermissions({ member, chatPage }: Props) {
     const {
+        directStore: { updateSinglePermissions },
         chatStore: { removeFromStack }
     } = useStore();
 
@@ -98,11 +99,11 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                         <Formik
                             onSubmit={(values, { resetForm }) => {}}
                             initialValues={{
-                                sendMessages: true,
-                                sendMedia: true,
-                                addUsers: true,
-                                pinMessages: true,
-                                changeChatInfo: true
+                                sendMessages: member.sendMessages,
+                                sendMedia: member.sendMedia,
+                                addUsers: member.addUsers,
+                                pinMessages: member.pinMessages,
+                                changeChatInfo: member.changeChatInfo
                             }}
                             innerRef={formRef}
                         >
@@ -115,7 +116,14 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                                         <ToggleField name="pinMessages" label="Pin Messages" setFieldValue={setFieldValue} values={values} touched={touched} />
                                         <ToggleField name="changeChatInfo" label="Change Chat Info" setFieldValue={setFieldValue} values={values} touched={touched} />
                                     </List>
-                                    {dirty && <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 16, right: 16 }} icon={<Done />} onClick={() => {}} />}
+                                    {dirty && (
+                                        <SpeedDial
+                                            ariaLabel="SpeedDial basic example"
+                                            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                                            icon={<Done />}
+                                            onClick={() => updateSinglePermissions(chatPage.groupData!, values, chatPage, member.username)}
+                                        />
+                                    )}
                                 </>
                             )}
                         </Formik>

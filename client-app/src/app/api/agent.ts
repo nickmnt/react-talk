@@ -175,7 +175,9 @@ const Chats = {
     getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
     updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, { chatId, newLastSeen }),
     removeMember: (chatId: string, username: string) => requests.post<boolean>(`direct/removeMember/`, { chatId, username }),
-    updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions) => requests.put<boolean>(`group/updateMembersPermissions`, { chatId, ...permissions }),
+    updateMembersPermissions: (chatId: string, permissions: GroupMemberPermissions) => requests.put<boolean>(`group/updateMembersPermissions`, { chatId, ...permissions }),
+    updateMemberPermissions: (chatId: string, permissions: GroupMemberPermissions, targetUsername: string) =>
+        requests.put<GroupMemberPermissions>(`group/updateMemberPermissions`, { chatId, ...permissions, targetUsername }),
     addPin: (chatId: string, messageId: number, isMutual: boolean) => requests.post<Pin>('direct/addPin', { chatId, messageId, isMutual }),
     removePin: (chatId: string, pinId: number) => requests.post<boolean>('direct/removePin', { chatId, pinId }),
     forwardMessages: (chatIds: string[], messageIds: number[], srcChatId: string, body: string, showSender: boolean) =>

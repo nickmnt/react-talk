@@ -82,7 +82,10 @@ export default class ChatStore {
     };
 
     addPermissionsToStack = (member: GroupMember) => {
-        this.stack = [...this.stack, { type: 30, index: this.i, member }];
+        if (!store.directStore.currentChat) {
+            return;
+        }
+        this.stack = [...this.stack, { type: 30, index: this.i, member, groupData: store.directStore.currentChat }];
         this.i += 1;
     };
 

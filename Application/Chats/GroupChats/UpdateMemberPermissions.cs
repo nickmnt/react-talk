@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -15,6 +16,7 @@ namespace Application.Chats.GroupChats
         public class Command : IRequest<Result<MemberPermissionsDto>>
         {
             public Guid ChatId { get; set; }
+            public string TargetUsername { get; set; }
             public bool SendMessages { get; set; }
             public bool SendMedia { get; set; }
             public bool AddUsers { get; set; }
@@ -35,14 +37,37 @@ namespace Application.Chats.GroupChats
             
             public async Task<Result<MemberPermissionsDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var userChat = await _context.UserChats
+                var userChats = await _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .SingleOrDefaultAsync(x => x.AppUser.UserName == _accessor.GetUsername(), cancellationToken);
+                    .Where(x => x.ChatId == request.ChatId && (x.AppUser.UserName == _accessor.GetUsername() || x.AppUser.UserName == request.TargetUsername))
+                    .ToListAsync(cancellationToken);
 
-                if (userChat == null)
+                UserChat userChat = null;
+                UserChat targetUChat = null;
+                if (_accessor.GetUsername() == request.TargetUsername)
                 {
-                    return Result<MemberPermissionsDto>.Failure("Chat does not exist");
+                    userChat = userChats[0];
+                    targetUChat = userChat;
+                }
+                else
+                {
+                    foreach (var uChat in userChats)
+                    {
+                        if (uChat.AppUser.UserName == _accessor.GetUsername())
+                        {
+                            userChat = uChat;
+                        }
+                        else
+                        {
+                            targetUChat = uChat;
+                        }
+                    }    
+                }
+                
+                if (userChat == null || targetUChat == null)
+                {
+                    return Result<MemberPermissionsDto>.Failure("Membership does not exist");
                 }
                 if (userChat.Chat.Type != ChatType.Group)
                 {
@@ -53,11 +78,11 @@ namespace Application.Chats.GroupChats
                     return Result<MemberPermissionsDto>.Failure("User is not the owner or an admin of the group.");
                 }
 
-                userChat.SendMessages = request.SendMessages;
-                userChat.SendMedia = request.SendMedia;
-                userChat.AddUsers = request.AddUsers;
-                userChat.PinMessages = request.PinMessages;
-                userChat.ChangeChatInfo = request.ChangeChatInfo;
+                targetUChat.SendMessages = request.SendMessages;
+                targetUChat.SendMedia = request.SendMedia;
+                targetUChat.AddUsers = request.AddUsers;
+                targetUChat.PinMessages = request.PinMessages;
+                targetUChat.ChangeChatInfo = request.ChangeChatInfo;
                 
                 var result = await _context.SaveChangesAsync(cancellationToken);
 
@@ -65,11 +90,11 @@ namespace Application.Chats.GroupChats
                 {
                     var dto = new MemberPermissionsDto
                     {
-                        SendMessages = userChat.SendMessages,
-                        SendMedia = userChat.SendMedia,
-                        AddUsers = userChat.AddUsers,
-                        PinMessages = userChat.PinMessages,
-                        ChangeChatInfo = userChat.ChangeChatInfo
+                        SendMessages = targetUChat.SendMessages,
+                        SendMedia = targetUChat.SendMedia,
+                        AddUsers = targetUChat.AddUsers,
+                        PinMessages = targetUChat.PinMessages,
+                        ChangeChatInfo = targetUChat.ChangeChatInfo
                     };
                     return Result<MemberPermissionsDto>.Success(dto);
                 }

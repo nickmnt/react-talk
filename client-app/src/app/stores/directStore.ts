@@ -62,6 +62,7 @@ export default class DirectStore {
     messagesRef: (HTMLElement | null)[] = [];
     profilePicsOpen: Profile | null = null;
     groupPicsOpen: ChatDto | null = null;
+    updatingPermissions = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -277,6 +278,7 @@ export default class DirectStore {
         runInAction(() => {
             chat.groupChat = response;
             chat.groupChat!.members.forEach((x) => {
+                console.log(x.sendMessages);
                 x.lastSeen = new Date(x.lastSeen + 'Z');
                 x.lastSeenOnline = new Date(x.lastSeenOnline + 'Z');
             });
@@ -735,7 +737,7 @@ export default class DirectStore {
     updatePermissions = async (chat: ChatDto, permissions: GroupMemberPermissions, chatPage: ChatPage) => {
         try {
             this.updatingPermissionsAll = true;
-            await agent.Chats.updateMemberPermissions(chat.id, permissions);
+            await agent.Chats.updateMembersPermissions(chat.id, permissions);
             runInAction(() => {
                 if (this.currentChat && this.currentChat.type === 1) {
                     const groupChat = this.currentChat.groupChat!;
@@ -747,6 +749,33 @@ export default class DirectStore {
             });
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    updateSinglePermissions = async (chat: ChatDto, permissions: GroupMemberPermissions, chatPage: ChatPage, targetUsername: string) => {
+        try {
+            this.updatingPermissions = true;
+            const result = await agent.Chats.updateMemberPermissions(chat.id, permissions, targetUsername);
+            runInAction(() => {
+                if (this.currentChat && this.currentChat.id === chat.id) {
+                    const groupChat = this.currentChat.groupChat!;
+                    const member = groupChat.members.find((x) => x.username === targetUsername);
+                    if (member) {
+                        member.sendMessages = result.sendMessages;
+                        member.sendMedia = result.sendMedia;
+                        member.addUsers = result.addUsers;
+                        member.pinMessages = result.pinMessages;
+                        member.changeChatInfo = result.changeChatInfo;
+                    }
+                    this.updatingPermissions = false;
+                    store.chatStore.removeFromStack(chatPage);
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.updatingPermissions = false;
+            });
         }
     };
 
