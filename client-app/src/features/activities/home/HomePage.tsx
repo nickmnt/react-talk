@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import ForumIcon from '@mui/icons-material/Forum';
-import Typography from '@mui/material/Typography/Typography';
 import Button from '@mui/material/Button/Button';
 import LoginDialog from '../../users/LoginDialog';
 import RegisterDialog from '../../users/RegisterDialog';

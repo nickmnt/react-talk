@@ -29,7 +29,6 @@ import MenuItem from '@mui/material/MenuItem/MenuItem';
 import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import LockIcon from '@mui/icons-material/Lock';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
 import { format } from 'date-fns';
@@ -42,7 +41,8 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen }
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing },
+        contactsStore: { isFollowing }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
     const [open, setOpen] = useState<GroupMember | null>(null);
@@ -85,7 +85,19 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     };
 
     if (!accountData && !groupData && !channelData) return <LoadingComponent />;
-
+    let contactsBtnText = '';
+    if (accountData) {
+        const following = isFollowing(accountData.username);
+        if (loadingFollowing) {
+            contactsBtnText = 'Loading...';
+        } else {
+            if (following) {
+                contactsBtnText = 'Remove from contacts';
+            } else {
+                contactsBtnText = 'Add to contacts';
+            }
+        }
+    }
     const canAddUsers = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.addUsers && chatPage.groupData.groupChat!.addUsersAll));
     const canEdit = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.changeChatInfo && chatPage.groupData.groupChat!.changeChatInfoAll));
     return (
@@ -102,9 +114,18 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                 <EditIcon sx={{ width: 24, height: 24 }} />
                             </IconButton>
                         )}
-                        <IconButton>
-                            <MoreVertIcon sx={{ width: 24, height: 24 }} />
-                        </IconButton>
+                        {accountData && (
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    if (!loadingFollowing) {
+                                        updateFollowing(accountData);
+                                    }
+                                }}
+                            >
+                                {contactsBtnText}
+                            </Button>
+                        )}
                     </Toolbar>
                     <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '2rem', marginBottom: '2rem', position: 'relative' }} alignItems="center" justifyContent="center">
                         {accountData && (

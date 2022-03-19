@@ -63,6 +63,7 @@ export default class DirectStore {
     profilePicsOpen: Profile | null = null;
     groupPicsOpen: ChatDto | null = null;
     updatingPermissions = false;
+    loadingFollowing = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -1350,6 +1351,28 @@ export default class DirectStore {
         if (this.currentChat?.id === chatId) {
             this.currentChat.image = url;
             this.groupPicsOpen = this.currentChat;
+        }
+    };
+
+    updateFollowing = async (profile: Profile) => {
+        if (!store.contactsStore.followings) return;
+        this.loadingFollowing = true;
+        try {
+            const username = profile.username;
+            await agent.Profiles.updateFollowing(username);
+            if (store.contactsStore.followings.find((x) => x.username === username)) {
+                store.contactsStore.removeFollowing(username);
+            } else {
+                store.contactsStore.addFollowing(profile);
+            }
+            runInAction(() => {
+                this.loadingFollowing = false;
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loadingFollowing = false;
+            });
         }
     };
 }

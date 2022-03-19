@@ -29,4 +29,18 @@ export default class ContactsStore {
             }
         }
     };
+
+    isFollowing = (username: string) => {
+        return this.followings && !!this.followings.find((x) => x.username === username);
+    };
+
+    removeFollowing = (username: string) => {
+        if (!this.followings) return;
+        this.followings = this.followings.filter((x) => x.username !== username);
+    };
+
+    addFollowing = (profile: Profile) => {
+        if (!this.followings) return;
+        this.followings = [...this.followings, profile];
+    };
 }
