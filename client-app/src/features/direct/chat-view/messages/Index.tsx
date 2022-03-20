@@ -27,6 +27,8 @@ import { truncate } from '../../../../app/common/utility';
 import ImageIcon from '@mui/icons-material/Image';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 
 export interface Props {
     selected: Message[];
@@ -258,18 +260,53 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     </IconButton>
                 </Paper>
             )}
-            <ChatScroller className="messages" onMoreUp={onMoreUp}>
-                {user &&
-                    currentChat.messages?.map((message, i) => (
-                        <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
-                            {message.type === 1000 ? (
-                                <DateMessage message={message} />
-                            ) : (
-                                <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected} />
-                            )}
+            {currentChat.messages && currentChat.messages.length > 0 ? (
+                <ChatScroller className="messages" onMoreUp={onMoreUp}>
+                    {user &&
+                        currentChat.messages.map((message, i) => (
+                            <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
+                                {message.type === 1000 ? (
+                                    <DateMessage message={message} />
+                                ) : (
+                                    <MessageComponent onRightClick={(e) => onRightClick(e, message)} message={message} goToMessage={goToMessage} selected={selected} toggleSelected={toggleSelected} />
+                                )}
+                            </div>
+                        ))}
+                </ChatScroller>
+            ) : (
+                <>
+                    {currentChat.type === 3 || currentChat.type === -20 ? (
+                        <div className="savedChatWelcome">
+                            <div className="savedChatWelcome__container">
+                                <div className="savedChatWelcome__icon">
+                                    <CloudDownloadIcon className="savedChatWelcome__cloud" />
+                                    Your cloud storage
+                                </div>
+                                <ul>
+                                    <li>Forward messages here to save them</li>
+                                    <li>Send media nad files to store them</li>
+                                    <li>Access this chat from any device</li>
+                                </ul>
+                            </div>
                         </div>
-                    ))}
-            </ChatScroller>
+                    ) : (
+                        <div className="savedChatWelcome">
+                            <div className="savedChatWelcome__container">
+                                <div className="savedChatWelcome__icon">
+                                    <EmojiPeopleIcon className="savedChatWelcome__cloud" />
+                                    No messages here yet...
+                                </div>
+                                <ul>
+                                    <li>Send messages</li>
+                                    <li>Send photos/videos</li>
+                                    <li>Send voice messages</li>
+                                    <li>Forward messages here</li>
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+                </>
+            )}
             {selected.length === 0 && currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && (
                 <Paper
                     square

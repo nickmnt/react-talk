@@ -1,0 +1,29 @@
+.savedChatWelcome {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white !important;
+    font-size: 2rem;
+
+    &__container {
+        background-color: rgba(#000, 0.75);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 4rem;
+        border-radius: 1rem;
+        margin: 1.5rem;
+    }
+
+    &__icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1rem auto;
+    }
+
+    &__cloud {
+        width: 5rem !important;
+        height: 5rem !important;
+    }
+}
