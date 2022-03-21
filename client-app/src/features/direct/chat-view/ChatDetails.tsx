@@ -41,7 +41,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing },
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox },
         contactsStore: { isFollowing }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
@@ -211,17 +211,16 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                             <Box sx={{ width: '100', display: 'flex', justifyContent: 'center' }}>
                                 <Tabs variant="scrollable" value={value} onChange={handleChange} aria-label="basic tabs example">
                                     {groupData?.groupChat?.members && <Tab label="Members" sx={{ fontSize: '1.4rem' }} />}
-                                    {channelData?.channelChat?.members && <Tab label="Members" sx={{ fontSize: '1.4rem' }} />}
-                                    <Tab label="Media" sx={{ fontSize: '1.4rem' }} />
-                                    <Tab label="Links" sx={{ fontSize: '1.4rem' }} />
-                                    <Tab label="Voice" sx={{ fontSize: '1.4rem' }} />
+                                    {images.length > 0 && <Tab label="Photos" sx={{ fontSize: '1.4rem' }} />}
+                                    {/* <Tab label="Links" sx={{ fontSize: '1.4rem' }} /> */}
+                                    {/* <Tab label="Voice" sx={{ fontSize: '1.4rem' }} /> */}
                                     {chatPage.accountData && <Tab label="Groups" sx={{ fontSize: '1.4rem' }} />}
                                 </Tabs>
                             </Box>
-                            {value === 0 && (
+                            {groupData && value === 0 && (
                                 <>
                                     {groupData?.groupChat?.members && canAddUsers && (
-                                        <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{ width: '100%' }} onClick={() => addAddMembersToStack(groupData)}>
+                                        <Button variant="text" startIcon={<PersonAddOutlinedIcon />} sx={{ width: '100%', marginTop: '0.5rem' }} onClick={() => addAddMembersToStack(groupData)}>
                                             Add Member
                                         </Button>
                                     )}
@@ -306,19 +305,21 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                     </Modal>
                                 </>
                             )}
-                            {value === 1 && (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem' }}>
-                                    {imagesDesc.map((img) => (
-                                        <div style={{ position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue' }} key={img.id}>
-                                            <img
-                                                src={img.src}
-                                                alt={img.title ? img.title : 'No Info'}
-                                                style={{ display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                            {(groupData && value === 1) ||
+                                (accountData && value === 0 && (
+                                    <div style={{ display: 'inline-grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem' }}>
+                                        {imagesDesc.map((img) => (
+                                            <div style={{ position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue' }} key={img.id}>
+                                                <img
+                                                    src={img.src}
+                                                    alt={img.title ? img.title : 'No Info'}
+                                                    style={{ display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, cursor: 'pointer' }}
+                                                    onClick={() => openLightbox(img.id)}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
                         </Box>
                     </Stack>
                 </Paper>

@@ -73,20 +73,12 @@
         // padding: 1rem;
         background-color: $color-blue;
         border-radius: 100%;
-        min-width: 2rem;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
         // height: 5rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        // min-height: 2rem;
-
-        text-align: center;
-
-        &:before {
-            content: '';
-            float: left;
-            padding-top: 100%;
-        }
     }
 
     &__name {

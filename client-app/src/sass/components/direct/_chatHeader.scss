@@ -17,6 +17,7 @@
     &__left {
         flex: 1;
         margin-left: 1.5rem;
+        cursor: pointer;
         // background-color: red;
         @media (max-width: $small) {
             margin: 0;
