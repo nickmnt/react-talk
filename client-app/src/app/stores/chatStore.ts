@@ -30,6 +30,7 @@ export default class ChatStore {
         this.stack = [...this.stack, { type: 0, index: this.i }];
         try {
             var response = await agent.Profiles.get(username);
+            response.lastSeen = new Date(response.lastSeen + 'Z');
             runInAction(() => {
                 this.stack = [...this.stack.filter((x) => x.index !== this.i), { type: 0, accountData: response, index: this.i }];
                 this.i += 1;
