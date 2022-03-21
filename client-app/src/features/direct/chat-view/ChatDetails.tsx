@@ -214,7 +214,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                     {images.length > 0 && <Tab label="Photos" sx={{ fontSize: '1.4rem' }} />}
                                     {/* <Tab label="Links" sx={{ fontSize: '1.4rem' }} /> */}
                                     {/* <Tab label="Voice" sx={{ fontSize: '1.4rem' }} /> */}
-                                    {chatPage.accountData && <Tab label="Groups" sx={{ fontSize: '1.4rem' }} />}
+                                    {/* {chatPage.accountData && <Tab label="Groups" sx={{ fontSize: '1.4rem' }} />} */}
                                 </Tabs>
                             </Box>
                             {groupData && value === 0 && (
@@ -305,21 +305,20 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                     </Modal>
                                 </>
                             )}
-                            {(groupData && value === 1) ||
-                                (accountData && value === 0 && (
-                                    <div style={{ display: 'inline-grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem' }}>
-                                        {imagesDesc.map((img) => (
-                                            <div style={{ position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue' }} key={img.id}>
-                                                <img
-                                                    src={img.src}
-                                                    alt={img.title ? img.title : 'No Info'}
-                                                    style={{ display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, cursor: 'pointer' }}
-                                                    onClick={() => openLightbox(img.id)}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                ))}
+                            {((groupData && value === 1) || (accountData && value === 0)) && (
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gridGap: '1rem', marginTop: '1rem' }}>
+                                    {imagesDesc.map((img) => (
+                                        <div style={{ position: 'relative', paddingTop: '100%', border: '1px solid', background: 'cadetblue' }} key={img.id}>
+                                            <img
+                                                src={img.src}
+                                                alt={img.title ? img.title : 'No Info'}
+                                                style={{ display: 'block', objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, cursor: 'pointer' }}
+                                                onClick={() => openLightbox(img.id)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </Box>
                     </Stack>
                 </Paper>

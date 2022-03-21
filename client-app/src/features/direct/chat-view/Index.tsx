@@ -20,6 +20,7 @@ import FoOptionsDialog from './FoOptionsDialog';
 import AdminIndividual from './AdminIndividual';
 import ChatViewSkeleton from './ChatViewSkeleton';
 import SlideDialog from '../../../app/common/dialog/SlideDialog';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default observer(function ChatView() {
     const [pinOpen, setPinOpen] = useState(false);
@@ -93,6 +94,12 @@ export default observer(function ChatView() {
                     <Paper className="chatView__welcomeContainer" elevation={5}>
                         <ChatIcon sx={{ width: 100, height: 100, marginBottom: '2.5rem' }} />
                         Select a chat to start messaging
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ArrowBackIcon sx={{ width: 100, height: 100 }} />
+                            <ArrowBackIcon sx={{ width: 100, height: 100 }} />
+                            <ArrowBackIcon sx={{ width: 100, height: 100 }} />
+                        </div>
+                        Search for that users you know
                     </Paper>
                 </div>
             )}
