@@ -99,7 +99,8 @@ namespace Application.Chats
                     mapped.LastMessageSeen = beenSeen;
 
                     int notSeenCount = userChat.Chat.Messages
-                        .Count(x => x.CreatedAt > userChat.LastSeen);;
+                        .Count(x => x.CreatedAt > userChat.LastSeen &&
+                                    x.Sender.UserName != _accessor.GetUsername());
                     
                     mapped.NotSeenCount = notSeenCount;
                     

@@ -64,6 +64,7 @@ export default class DirectStore {
     groupPicsOpen: ChatDto | null = null;
     updatingPermissions = false;
     loadingFollowing = false;
+    initialMessagesLoaded = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -195,7 +196,7 @@ export default class DirectStore {
                 }
                 this.updateMessages();
                 this.handleDateMessages();
-                this.loadingChats = false;
+                this.initialMessagesLoaded = false;
             });
         } catch (error) {
             console.log(error);
@@ -251,7 +252,7 @@ export default class DirectStore {
     setLocalSavedChat = () => {
         const chat = this.chats.find((x) => x.type === 3);
         if (chat) {
-            this.currentChat = chat;
+            this.getChatDetails(chat);
         } else {
             this.currentChat = createLocalSavedChat();
         }
@@ -317,6 +318,7 @@ export default class DirectStore {
         this.currentChat = chat;
         this.currentChat.messages = undefined;
         this.paginationMessages = null;
+        this.initialMessagesLoaded = false;
         this.pagingParamsMessages = new PagingParams();
         switch (chat.type) {
             case 0:
@@ -656,7 +658,7 @@ export default class DirectStore {
             }
         });
 
-        if (this.currentChat.messages) {
+        if (this.currentChat.messages && this.initialMessagesLoaded) {
             const thisChat = this.chats.find((x) => x.id === this.currentChat?.id);
             if (thisChat) {
                 if (this.currentChat.messages.length === 0) {
