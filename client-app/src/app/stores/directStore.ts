@@ -505,6 +505,7 @@ export default class DirectStore {
             this.updateLocalMessage(response, id);
             this.replyMessage = null;
         });
+        this.updateMessages();
         this.handleDateMessages();
     };
 
@@ -531,6 +532,7 @@ export default class DirectStore {
             this.updateLocalMessage(response.data, id);
             this.replyMessage = null;
         });
+        this.updateMessages();
         this.handleDateMessages();
     };
 
@@ -555,6 +557,7 @@ export default class DirectStore {
         const response = await agent.Chats.createVideo(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
         this.updateLocalMessage(response.data, id);
         this.replyMessage = null;
+        this.updateMessages();
         this.handleDateMessages();
     };
 
@@ -652,6 +655,18 @@ export default class DirectStore {
                     this.videos.push(x.url);
             }
         });
+
+        if (this.currentChat.messages) {
+            const thisChat = this.chats.find((x) => x.id === this.currentChat?.id);
+            if (thisChat) {
+                if (this.currentChat.messages.length === 0) {
+                    thisChat.lastMessage = null;
+                } else {
+                    const currentLastMessage = this.currentChat.messages[this.currentChat.messages.length - 1];
+                    thisChat.lastMessage = currentLastMessage;
+                }
+            }
+        }
     };
 
     // getCurrentMessages = () => {
@@ -1035,6 +1050,7 @@ export default class DirectStore {
                     this.currentChat.messages = this.currentChat.messages.filter((x) => x.id !== messageId);
                 }
             });
+            this.updateMessages();
             this.handleDateMessages();
         } catch (error) {
             console.log(error);
