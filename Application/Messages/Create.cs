@@ -44,6 +44,7 @@ namespace Application.Messages
                         .Include(x => x.AppUser)
                         .Include(x => x.Chat)
                         .ThenInclude(x => x.Messages)
+                        .AsSplitQuery()
                         .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                    x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
                 }
@@ -53,6 +54,7 @@ namespace Application.Messages
                         .UserChats
                         .Include(x => x.AppUser)
                         .Include(x => x.Chat)
+                        .AsSplitQuery()
                         .SingleOrDefaultAsync(x => x.ChatId == request.ChatId && 
                                                    x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
                 }
@@ -61,7 +63,7 @@ namespace Application.Messages
                 if (userChat == null)
                     return null;
                 
-                Message replyTo = userChat.Chat.Messages.FirstOrDefault(x => x.Id == request.ReplyToMessageId);
+                Message replyTo = userChat.Chat.Messages.SingleOrDefault(x => x.Id == request.ReplyToMessageId);
                 if (request.ReplyToMessageId != -1)
                 {
                     if (replyTo == null)

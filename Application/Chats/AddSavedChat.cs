@@ -42,6 +42,7 @@ namespace Application.Chats
                     .Include(x => x.AppUser)
                     .Include(x =>
                         x.Chat)
+                    .AsSplitQuery()
                     .Count(x => x.AppUser.UserName == _accessor.GetUsername()
                                 && x.Chat.Type == ChatType.Saved);
                 if(count == 1)

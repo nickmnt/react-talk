@@ -35,7 +35,7 @@ namespace Application.Photos
             public async Task<Result<Photo>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.Include(p => p.Photos)
-                    .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
+                    .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
                 if (user == null)
                     return null;
@@ -49,7 +49,7 @@ namespace Application.Photos
                     IsMain = true
                 };
 
-                var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+                var currentMain = user.Photos.SingleOrDefault(x => x.IsMain);
                 
                 if (currentMain != null)
                 {

@@ -48,7 +48,8 @@ namespace Application
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
                     .Where(x => x.AppUser.UserName == _accessor.GetUsername() && x.ChatId == request.ChatId)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .AsSplitQuery()
+                    .SingleOrDefaultAsync(cancellationToken);
 
                 if (userChat == null)
                 {
@@ -56,7 +57,7 @@ namespace Application
                 }
 
                 Message message = userChat.Chat.Messages
-                    .FirstOrDefault(x => x.Id == request.MessageId);;
+                    .SingleOrDefault(x => x.Id == request.MessageId);;
 
                 if (message == null)
                 {

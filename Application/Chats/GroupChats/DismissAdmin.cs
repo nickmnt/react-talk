@@ -36,6 +36,7 @@ namespace Application.Chats.GroupChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .Where(x => x.ChatId == request.ChatId && (x.AppUser.UserName == _accessor.GetUsername() || x.AppUser.UserName == request.TargetUsername))
+                    .AsSplitQuery()
                     .ToListAsync(cancellationToken);
 
                 UserChat userChat = null;

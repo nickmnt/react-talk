@@ -33,6 +33,7 @@ namespace Application.Online
                     .Include(x => x.Observer)
                     .Where(x => x.Target.UserName == request.Username)
                     .Select(x => x.Observer.Id)
+                    .AsSplitQuery()
                     .ToListAsync(cancellationToken);
                 
                 var chatIds = new HashSet<Guid>(

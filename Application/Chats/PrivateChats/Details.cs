@@ -43,6 +43,7 @@ namespace Application.Chats.PrivateChats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.ForwardedFrom)
+                    .AsSplitQuery()
                     .Where(x => x.ChatId == request.ChatId)
                     .ToListAsync(cancellationToken);
 

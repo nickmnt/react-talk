@@ -38,6 +38,7 @@ namespace Application.Chats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
+                    .AsSplitQuery()
                     .SingleOrDefaultAsync(
                         x => x.ChatId == request.ChatId && x.AppUser.UserName == _accessor.GetUsername(),
                         cancellationToken);

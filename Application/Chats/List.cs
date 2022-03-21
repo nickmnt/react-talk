@@ -38,7 +38,7 @@ namespace Application.Chats
             public async Task<Result<PagedList<ChatDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
+                    .SingleOrDefaultAsync(x => x.UserName == _accessor.GetUsername(), cancellationToken);
                 if (user == null)
                     return null;
 
@@ -57,7 +57,9 @@ namespace Application.Chats
                     .ThenInclude(x => x.Photos)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Photos)
-                    .Where(x => x.AppUser.UserName == user.UserName);
+                    .Where(x => x.AppUser.UserName == user.UserName)
+                    .AsSplitQuery()
+                    .OrderByDescending(x => x.LastSeen);
 
                 var chats = await PagedList<UserChat>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize);
 

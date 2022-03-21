@@ -48,7 +48,7 @@ namespace Application.Chats.ChannelChats
             {
                 var chat = await _context.UserChats
                     .Include(x => x.Chat)
-                    .FirstOrDefaultAsync(x => x.Chat.Id == request.Id, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.Chat.Id == request.Id, cancellationToken);
 
                 if (chat == null)
                     return null;

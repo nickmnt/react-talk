@@ -48,9 +48,9 @@ namespace Application.Chats
 
                 var query = _context.Messages
                     .Where(x => x.ChatId == request.ChatId)
-                    .OrderByDescending(x => x.CreatedAt)
                     .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
-                    .AsQueryable();
+                    .AsQueryable()
+                    .OrderByDescending(x => x.CreatedAt);
 
                 return Result<PagedList<MessageDto>>
                     .Success(await PagedList<MessageDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));

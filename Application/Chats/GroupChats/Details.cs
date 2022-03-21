@@ -53,8 +53,10 @@ namespace Application.Chats.GroupChats
                     .ThenInclude(x => x.ForwardedFrom)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Photos)
-                    .FirstOrDefaultAsync(x => x.ChatId == request.ChatId 
-                                              && x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
+                    .OrderBy(x => x.LastSeen)
+                    .AsSplitQuery()
+                    .SingleOrDefaultAsync(x => x.ChatId == request.ChatId 
+                                               && x.AppUser.UserName == _userAccessor.GetUsername(), cancellationToken);
 
                 if (userChat == null)
                 {

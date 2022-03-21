@@ -47,6 +47,7 @@ namespace Application.Chats
                 var userChats = await _context.UserChats
                     .Include(x => x.Chat)
                     .Include(x => x.AppUser)
+                    .AsSplitQuery()
                     .Where(x => x.Chat.Id == request.ChatId)
                     .ToListAsync(cancellationToken);
 

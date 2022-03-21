@@ -26,7 +26,7 @@ namespace Application.Online
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(x => x.UserName == request.Username, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.UserName == request.Username, cancellationToken);
 
                 if (user == null)
                 {

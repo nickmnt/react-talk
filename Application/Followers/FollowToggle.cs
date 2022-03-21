@@ -31,11 +31,11 @@ namespace Application.Followers
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var observer = await _context.Users
-                    .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
+                    .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
                 var target = await _context.Users
                     .Include(x => x.FollowNotifications)
-                    .FirstOrDefaultAsync(x => x.UserName == request.TargetUsername, cancellationToken);
+                    .SingleOrDefaultAsync(x => x.UserName == request.TargetUsername, cancellationToken);
 
                 if (target == null)
                 {
@@ -61,7 +61,7 @@ namespace Application.Followers
                     _context.UserFollowings.Remove(following);
 
                     var notification = target.FollowNotifications
-                        .FirstOrDefault(x => x.Follower.UserName == target.UserName);
+                        .SingleOrDefault(x => x.Follower.UserName == target.UserName);
                     if (notification != null)
                         target.FollowNotifications.Remove(notification);
                 }

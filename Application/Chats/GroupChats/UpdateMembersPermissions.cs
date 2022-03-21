@@ -40,7 +40,7 @@ namespace Application.Chats.GroupChats
                 var userChat = await _context.UserChats
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
-                    .FirstOrDefaultAsync(x => x.AppUser.UserName == _accessor.GetUsername()
+                    .SingleOrDefaultAsync(x => x.AppUser.UserName == _accessor.GetUsername()
                                               && x.ChatId == request.ChatId, cancellationToken);
 
                 if (userChat == null)

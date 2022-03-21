@@ -44,6 +44,7 @@ namespace Application.Chats
                     .ThenInclude(x => x.Messages)
                     .ThenInclude(x => x.Sender)
                     .Include(x => x.Chat)
+                    .AsSplitQuery()
                     .Where(x => x.AppUser.UserName == _accessor.GetUsername()
                                 && (x.ChatId == request.SrcChatId || request.ChatIds.Contains(x.ChatId)))
                     .ToListAsync(cancellationToken);

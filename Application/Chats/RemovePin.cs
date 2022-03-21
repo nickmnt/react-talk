@@ -35,7 +35,7 @@ namespace Application.Chats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Pins)
                     .Where(x => x.ChatId == request.ChatId)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .SingleOrDefaultAsync(cancellationToken);
 
                 if (userChat == null)
                 {

@@ -40,7 +40,8 @@ namespace Application.Photos
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Photos)
-                    .FirstOrDefaultAsync(x => x.AppUser.UserName == _userAccessor.GetUsername()
+                    .AsSplitQuery()
+                    .SingleOrDefaultAsync(x => x.AppUser.UserName == _userAccessor.GetUsername()
                     && x.ChatId == request.ChatId
                     && x.Chat.Type == ChatType.Group);
 
@@ -56,7 +57,7 @@ namespace Application.Photos
                     IsMain = true
                 };
 
-                var currentMain = userChat.Chat.Photos.FirstOrDefault(x => x.IsMain);
+                var currentMain = userChat.Chat.Photos.SingleOrDefault(x => x.IsMain);
                 
                 if (currentMain != null)
                 {

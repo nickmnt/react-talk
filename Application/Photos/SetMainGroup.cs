@@ -36,19 +36,19 @@ namespace Application.Photos
                     .Include(x => x.AppUser)
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Photos)
-                    .FirstOrDefaultAsync(x => x.AppUser.UserName == _userAccessor.GetUsername()
+                    .SingleOrDefaultAsync(x => x.AppUser.UserName == _userAccessor.GetUsername()
                                               && x.ChatId == request.ChatId
                                               && x.Chat.Type == ChatType.Group);
 
                 if (userChat == null)
                     return null;
 
-                var photo = userChat.Chat.Photos.FirstOrDefault(x => x.Id == request.Id);
+                var photo = userChat.Chat.Photos.SingleOrDefault(x => x.Id == request.Id);
 
                 if (photo == null)
                     return null;
 
-                var currentMain = userChat.Chat.Photos.FirstOrDefault(x => x.IsMain);
+                var currentMain = userChat.Chat.Photos.SingleOrDefault(x => x.IsMain);
 
                 if (currentMain != null)
                 {

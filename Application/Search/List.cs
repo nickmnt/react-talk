@@ -38,7 +38,7 @@ namespace Application.Search
                     {
                         DisplayName = x.DisplayName,
                         Username = x.UserName,
-                        Image = x.Photos.FirstOrDefault(p => p.IsMain).Url,
+                        Image = x.Photos.SingleOrDefault(p => p.IsMain).Url,
                     })
                     .Where(x => x.DisplayName.Contains(request.Term) || x.Username.Contains(request.Term))
                     .OrderBy(x => x.DisplayName)

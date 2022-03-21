@@ -72,7 +72,7 @@ namespace Application.Messages.Videos
                 if (userChat == null)
                     return null;
                 
-                Message replyTo = userChat.Chat.Messages.FirstOrDefault(x => x.Id == request.ReplyToMessageId);
+                Message replyTo = userChat.Chat.Messages.SingleOrDefault(x => x.Id == request.ReplyToMessageId);
                 if (request.ReplyToMessageId != -1)
                 {
                     if (replyTo == null)

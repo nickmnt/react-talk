@@ -37,7 +37,7 @@ namespace Application.Profiles
             }
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                 var user = _context.Users.First(x => x.UserName == _userAccessor.GetUsername());
+                 var user = _context.Users.Single(x => x.UserName == _userAccessor.GetUsername());
                  user.Bio = request.Bio ?? user.Bio;
                  user.DisplayName = request.DisplayName ?? user.DisplayName;
 

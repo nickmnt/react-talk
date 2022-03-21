@@ -69,7 +69,7 @@ namespace Application.Messages.Images
                 if (userChat == null)
                     return null;
 
-                Message replyTo = userChat.Chat.Messages.FirstOrDefault(x =>
+                Message replyTo = userChat.Chat.Messages.SingleOrDefault(x =>
                     x.Id == request.ReplyToMessageId);
                 if (request.ReplyToMessageId != -1)
                 {
