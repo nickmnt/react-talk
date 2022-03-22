@@ -5,6 +5,8 @@ import DirectDrawer from './chat-view/DirectDrawer';
 import Paper from '@mui/material/Paper/Paper';
 import InputBase from '@mui/material/InputBase/InputBase';
 import IconButton from '@mui/material/IconButton/IconButton';
+import { useStore } from '../../app/stores/store';
+import Typography from '@mui/material/Typography/Typography';
 
 interface Props {
     searchVal: string;
@@ -13,6 +15,10 @@ interface Props {
 
 export default observer(function Actions({ setSearchVal, searchVal }: Props) {
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const {
+        directStore: { connected }
+    } = useStore();
 
     const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event && event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
@@ -30,12 +36,16 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
                     <path d="M1664 1344v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45z" />
                 </svg>
             </IconButton>
-            <Paper component="form" sx={{ p: '2x 4px', display: 'flex', alignItems: 'center', width: 400 }} className="actions__form actions__search" elevation={0}>
-                <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search google maps' }} value={searchVal} onChange={(e) => setSearchVal(e.target.value)} />
-                {/* <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+            {connected !== 'reconnecting' ? (
+                <Paper component="form" sx={{ p: '2x 4px', display: 'flex', alignItems: 'center', width: 400 }} className="actions__form actions__search" elevation={0}>
+                    <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search google maps' }} value={searchVal} onChange={(e) => setSearchVal(e.target.value)} />
+                    {/* <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
                     <SearchIcon />
                 </IconButton> */}
-            </Paper>
+                </Paper>
+            ) : (
+                <Typography variant="h6">Reconnecting...</Typography>
+            )}
         </div>
     );
 });

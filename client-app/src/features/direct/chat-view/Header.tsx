@@ -5,14 +5,15 @@ import { useStore } from '../../../app/stores/store';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { format } from 'date-fns';
 import Button from '@mui/material/Button/Button';
+import HeaderSkeleton from './HeaderSkeleton';
 
 export default observer(function Header() {
     const {
-        directStore: { currentChat, removeCurrentChat },
+        directStore: { currentChat, removeCurrentChat, connected },
         chatStore: { addDetailsToStack }
     } = useStore();
 
-    if (!currentChat) return null;
+    if (!currentChat) return <HeaderSkeleton />;
 
     let typingMessage = 'is typing...';
     if (currentChat.type === 1 && currentChat.typists) {
@@ -30,7 +31,9 @@ export default observer(function Header() {
                 <>
                     <div className="chatHeader__left" onClick={async () => await addDetailsToStack(currentChat)}>
                         <div className="chatHeader__name">{currentChat.type === -20 || currentChat.type === 3 ? 'Saved Messages' : currentChat?.displayName}</div>
-                        {currentChat.type === 0 && !currentChat.isOnline ? (
+                        {connected === 'reconnecting' ? (
+                            <div className="chatHeader__lastSeen">Disconnected. Reconnecting...</div>
+                        ) : currentChat.type === 0 && !currentChat.isOnline ? (
                             <div className="chatHeader__lastSeen">Last seen at {format(currentChat.lastSeen, 'yyyy-MM-dd HH:mm')}</div>
                         ) : (
                             <div className="chatHeader__status">
