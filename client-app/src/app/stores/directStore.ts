@@ -280,7 +280,6 @@ export default class DirectStore {
         runInAction(() => {
             chat.groupChat = response;
             chat.groupChat!.members.forEach((x) => {
-                console.log(x.sendMessages);
                 x.lastSeen = new Date(x.lastSeen + 'Z');
                 x.lastSeenOnline = new Date(x.lastSeenOnline + 'Z');
             });
@@ -722,10 +721,19 @@ export default class DirectStore {
 
     addMembers = async (chat: ChatDto, members: Profile[]) => {
         try {
-            await agent.Chats.addMembers(
+            const response = await agent.Chats.addMembers(
                 chat.id,
                 members.map((x) => x.username)
             );
+            runInAction(() => {
+                if (this.currentChat && this.currentChat.id === chat.id) {
+                    response.forEach((x) => {
+                        x.lastSeen = new Date(x.lastSeen + 'Z');
+                        x.lastSeenOnline = new Date(x.lastSeen + 'Z');
+                    });
+                    this.currentChat.groupChat!.members = [...this.currentChat.groupChat!.members, ...response];
+                }
+            });
         } catch (error) {
             console.log(error);
         }

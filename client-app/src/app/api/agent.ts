@@ -6,7 +6,7 @@ import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
-import { AdminPermissions, ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMemberPermissions, Message, Pin, PrivateChat, SearchResult } from '../models/chat';
+import { AdminPermissions, ChannelDetailsDto, ChatDto, GroupDetailsDto, GroupMember, GroupMemberPermissions, Message, Pin, PrivateChat, SearchResult } from '../models/chat';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
@@ -170,7 +170,7 @@ const Chats = {
     },
     createChannel: (name: string, description: string) => requests.post<ChatDto>('/channel/', { name, description }),
     getChannelDetails: (id: string) => requests.get<ChannelDetailsDto>(`/channel/${id}`),
-    addMembers: (id: string, members: string[]) => requests.post<boolean>('direct/addMember', { id, members }),
+    addMembers: (id: string, members: string[]) => requests.post<GroupMember[]>('direct/addMember', { id, members }),
     createGroup: (name: string, members: string[]) => requests.post<ChatDto>('/group/', { name, members }),
     getGroupDetails: (id: string) => requests.get<GroupDetailsDto>(`/group/${id}`),
     updateSeen: (chatId: string, newLastSeen: Date) => requests.post<boolean>(`direct/updateSeen`, { chatId, newLastSeen }),

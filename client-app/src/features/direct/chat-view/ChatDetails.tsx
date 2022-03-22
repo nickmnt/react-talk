@@ -101,7 +101,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const canAddUsers = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.addUsers && chatPage.groupData.groupChat!.addUsersAll));
     const canEdit = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.changeChatInfo && chatPage.groupData.groupChat!.changeChatInfoAll));
     return (
-        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue', overflow: 'hidden' }}>
+        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
                     <Toolbar variant="dense">
@@ -162,7 +162,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                         </Button>
                     </Stack>
                 </AppBar>
-                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1 }} elevation={0}>
+                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1, overflow: 'scroll' }} elevation={0}>
                     <Stack direction="row" spacing={2} sx={{ width: '100%' }} alignItems="center" justifyContent="center">
                         <Stack direction="column" spacing={2} className="chatDetails__infoStack">
                             <Typography variant="h5" sx={{ color: '#0080FF', fontWeight: '500', marginTop: '1.5rem', marginLeft: '1.5rem' }}>
