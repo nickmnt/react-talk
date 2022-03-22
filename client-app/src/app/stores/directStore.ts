@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import {
     AdminPermissions,
@@ -65,6 +66,7 @@ export default class DirectStore {
     updatingPermissions = false;
     loadingFollowing = false;
     initialMessagesLoaded = false;
+    connected: 'connected' | 'reconnecting' = 'reconnecting';
 
     constructor() {
         makeAutoObservable(this);
@@ -80,7 +82,24 @@ export default class DirectStore {
                 .configureLogging(LogLevel.Information)
                 .build();
 
-            this.hubConnection.start().catch((error) => console.log('Error establishing the connection'));
+            this.hubConnection
+                .start()
+                .then(() => {
+                    runInAction(() => {
+                        this.connected = 'connected';
+                    });
+                })
+                .catch((error) => console.log('Error establishing the connection'));
+
+            this.hubConnection.onreconnected(() => {
+                this.connected = 'connected';
+                toast.success('Reconnected.');
+            });
+
+            this.hubConnection.onreconnecting(() => {
+                this.connected = 'reconnecting';
+                toast.error('Disconnected. Reconnecting...');
+            });
 
             this.hubConnection.on('ReceiveNewMessage', (result: MessageNotifDto) => {
                 this.addNewMessage(result);
