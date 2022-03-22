@@ -15,8 +15,6 @@ import PhotoDialog from './settings/PhotoDialog';
 import SettingsDialog from './settings/SettingsDialog';
 
 export default observer(function Inbox() {
-    const expanded = false;
-
     const {
         directStore: {
             createHubConnection,
@@ -52,7 +50,7 @@ export default observer(function Inbox() {
 
     return (
         <div className="home">
-            <div className={`home__container ${expanded && 'home__container--expanded'}`}>
+            <div className="home__container">
                 <Paper className={`home__main ${currentChat && 'home__main--active'}`} square>
                     <ChatView />
                 </Paper>

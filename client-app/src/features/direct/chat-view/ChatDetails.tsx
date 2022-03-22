@@ -162,7 +162,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                         </Button>
                     </Stack>
                 </AppBar>
-                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1, overflow: 'scroll' }} elevation={0}>
+                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1 }} className="beautifulScroll" elevation={0}>
                     <Stack direction="row" spacing={2} sx={{ width: '100%' }} alignItems="center" justifyContent="center">
                         <Stack direction="column" spacing={2} className="chatDetails__infoStack">
                             <Typography variant="h5" sx={{ color: '#0080FF', fontWeight: '500', marginTop: '1.5rem', marginLeft: '1.5rem' }}>

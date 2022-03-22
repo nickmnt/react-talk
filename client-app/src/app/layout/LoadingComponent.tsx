@@ -1,4 +1,3 @@
-import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import React from 'react';
 interface Props {
     inverted?: boolean;
@@ -7,8 +6,9 @@ interface Props {
 
 export default function LoadingComponent({ inverted = true, content = 'Loading...' }: Props) {
     return (
-        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <CircularProgress />
+        <div className="loader">
+            <div className="spinner" />
+            <div className="loader__content">{content}</div>
         </div>
     );
 }
