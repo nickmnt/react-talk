@@ -5,7 +5,6 @@
     display: flex;
     align-items: center;
     position: relative;
-    border-bottom: 1px solid $color-grey-light;
 
     &__burgerIco {
         width: 2rem;
@@ -31,7 +30,5 @@
         flex: 1;
         height: 3rem;
         padding-left: 1rem;
-        border-radius: 0.7rem;
-        border: 1px solid $color-grey-light;
     }
 }

@@ -6,6 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { format } from 'date-fns';
 import Button from '@mui/material/Button/Button';
 import HeaderSkeleton from './HeaderSkeleton';
+import Paper from '@mui/material/Paper/Paper';
 
 export default observer(function Header() {
     const {
@@ -21,7 +22,7 @@ export default observer(function Header() {
     }
 
     return (
-        <div className="chatHeader">
+        <Paper square className="chatHeader">
             <div className="chatHeader__back">
                 <IconButton onClick={removeCurrentChat}>
                     <ArrowBackIcon />
@@ -57,6 +58,6 @@ export default observer(function Header() {
             ) : (
                 <LoadingComponent />
             )}
-        </div>
+        </Paper>
     );
 });

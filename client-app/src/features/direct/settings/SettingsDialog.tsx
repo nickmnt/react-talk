@@ -78,7 +78,7 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
     return (
         <>
             <Dialog onClose={handleClose} open={open} sx={{ minWidth: '50vw' }} TransitionComponent={Transition}>
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClose}>
                             <CloseIcon fontSize="large" />
@@ -105,14 +105,14 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         </Avatar>
                         <Stack sx={{ marginLeft: '1.5rem' }} justifyContent="center">
                             <Typography sx={{ fontWeight: 500 }}>{loadingName ? <Skeleton width="30" height="16" /> : profile.displayName}</Typography>
-                            <Typography sx={{ color: '#007FFF' }}>online</Typography>
+                            <Typography sx={{ color: 'primary.main' }}>online</Typography>
                         </Stack>
                         <div style={{ flexGrow: 1 }} />
                         <IconButton sx={{ width: 48, height: 48 }} onClick={() => setPhotoOpen(true)}>
-                            <AddAPhotoIcon sx={{ width: 36, height: 36, color: '#007FFF' }} />
+                            <AddAPhotoIcon sx={{ width: 36, height: 36, color: 'primary.main' }} />
                         </IconButton>
                     </Stack>
-                    <Typography variant="h6" sx={{ color: '#007FFF', marginLeft: '2rem' }}>
+                    <Typography variant="h6" sx={{ color: 'primary.main', marginLeft: '2rem' }}>
                         Account
                     </Typography>
                     <List sx={{ width: '100%' }}>
@@ -128,10 +128,10 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         >
                             <ListItemButton>
                                 <Stack sx={{ width: '100%', height: '100%' }}>
-                                    <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: '.5rem' }}>
+                                    <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '500', marginLeft: '.5rem' }}>
                                         {profile.username}
                                     </Typography>
-                                    <Typography variant="h6" sx={{ color: '#595959', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
+                                    <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
                                         Username
                                     </Typography>
                                 </Stack>
@@ -154,10 +154,10 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         >
                             <ListItemButton>
                                 <Stack sx={{ width: '100%', height: '100%' }}>
-                                    <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: '.5rem' }}>
+                                    <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '500', marginLeft: '.5rem' }}>
                                         {loadingBio ? <Skeleton width="30" height="16" /> : profile.bio ? truncate(profile.bio, 20) : 'Bio'}
                                     </Typography>
-                                    <Typography variant="h6" sx={{ color: '#595959', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
+                                    <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: '1.4rem', fontWeight: '400', marginLeft: '.5rem' }}>
                                         {profile.bio ? 'Bio' : 'Add a few words about yourself'}
                                     </Typography>
                                 </Stack>

@@ -40,9 +40,9 @@ export default observer(function ChooseMembers() {
     }
 
     return (
-        <div style={{ backgroundColor: 'white', height: '100%' }}>
+        <div style={{ height: '100%' }}>
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="static" elevation={0}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={stopEditing}>
                             <ArrowBack fontSize="large" />
@@ -57,7 +57,7 @@ export default observer(function ChooseMembers() {
                 <Input placeholder="Add people..." sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small" />
             </Box>
             {!loadingFollowings ? (
-                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                <List sx={{ width: '100%' }}>
                     {followings.map((profile) => {
                         const labelId = `checkbox-list-label-${profile.username}`;
 

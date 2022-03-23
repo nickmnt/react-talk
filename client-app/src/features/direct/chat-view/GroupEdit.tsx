@@ -54,7 +54,7 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                     alignItems: 'center'
                 }}
             >
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -65,7 +65,7 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                     </Toolbar>
                 </AppBar>
 
-                <Paper style={{ margin: 'auto 0' }} className="groupEdit" elevation={3}>
+                <Paper style={{ margin: 'auto 0' }} className="groupEdit" elevation={3} square>
                     <Paper square sx={{ marginBottom: '1rem' }}>
                         <Stack
                             direction="column"
@@ -163,7 +163,7 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                         }}
                     >
                         <List sx={{ width: '100%' }}>
-                            <ListItemButton sx={{ color: '#ff2800', fontSize: '1.8rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
+                            <ListItemButton sx={{ color: 'error.main', fontSize: '1.8rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
                         </List>
                     </Paper>
                 </Paper>

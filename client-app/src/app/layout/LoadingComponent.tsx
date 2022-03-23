@@ -1,3 +1,4 @@
+import Paper from '@mui/material/Paper/Paper';
 import React from 'react';
 interface Props {
     inverted?: boolean;
@@ -6,9 +7,9 @@ interface Props {
 
 export default function LoadingComponent({ inverted = true, content = 'Loading...' }: Props) {
     return (
-        <div className="loader">
+        <Paper square className="loader">
             <div className="spinner" />
             <div className="loader__content">{content}</div>
-        </div>
+        </Paper>
     );
 }

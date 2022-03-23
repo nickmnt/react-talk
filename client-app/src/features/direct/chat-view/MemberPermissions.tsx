@@ -50,7 +50,7 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                     flexDirection: 'column'
                 }}
             >
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -75,7 +75,7 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                         justifyContent="center"
                     >
                         <Avatar sx={{ width: 48, height: 48 }} alt="Okay" src={member.image} />
-                        <Typography variant="h4" sx={{ color: '#333', fontWeight: '500' }}>
+                        <Typography variant="h4" sx={{ color: 'text.primary', fontWeight: '500' }}>
                             {member.displayName}
                         </Typography>
                     </Stack>
@@ -94,7 +94,7 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                         }}
                         alignItems="center"
                     >
-                        <Typography sx={{ color: '#007FFF', fontWeight: '500', fontSize: '2rem' }}>What can this user do?</Typography>
+                        <Typography sx={{ color: 'primary.main', fontWeight: '500', fontSize: '2rem' }}>What can this user do?</Typography>
 
                         <Formik
                             onSubmit={(values, { resetForm }) => {}}

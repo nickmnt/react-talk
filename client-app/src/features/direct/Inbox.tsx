@@ -51,9 +51,9 @@ export default observer(function Inbox() {
     return (
         <div className="home">
             <div className="home__container">
-                <Paper className={`home__main ${currentChat && 'home__main--active'}`} square>
+                <div className={`home__main ${currentChat && 'home__main--active'}`}>
                     <ChatView />
-                </Paper>
+                </div>
                 <Paper className={`home__sidebar ${currentChat && 'home__sidebar--inactive'}`} square>
                     <HomeSidebar />
                 </Paper>

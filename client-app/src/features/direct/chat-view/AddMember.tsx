@@ -60,9 +60,9 @@ export default function AddMember({ chatPage }: Props) {
     const candidates = chatPage.followings.filter((x) => !curMembers.includes(x.username));
 
     return (
-        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue', overflow: 'hidden' }}>
+        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', overflow: 'hidden' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -76,12 +76,12 @@ export default function AddMember({ chatPage }: Props) {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0' }} elevation={0}>
+                <Paper sx={{ width: '100%', borderRadius: '0' }} elevation={0}>
                     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Input placeholder="Search for people..." sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small" />
                     </Box>
                 </Paper>
-                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1, display: 'flex' }} elevation={0}>
+                <Paper sx={{ width: '100%', borderRadius: '0', flex: 1, display: 'flex' }} elevation={0}>
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                         {candidates.map((profile) => {
                             const labelId = `checkbox-list-label-${profile.username}`;

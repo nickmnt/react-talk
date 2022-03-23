@@ -26,9 +26,9 @@ export default observer(function GroupFinalization() {
     } = useStore();
 
     return (
-        <div style={{ backgroundColor: 'white', height: '100%' }}>
+        <div style={{ height: '100%' }}>
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="static" elevation={0}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={previousPhase}>
                             <ArrowBack fontSize="large" />
@@ -40,7 +40,7 @@ export default observer(function GroupFinalization() {
                 </AppBar>
             </Box>
             <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '2rem' }} alignItems="center" justifyContent="center">
-                <Avatar sx={{ bgcolor: '#0080FF', width: 60, height: 60, cursor: 'pointer' }} onClick={() => toast("Change the picture in the group settings after it's created")}>
+                <Avatar sx={{ bgcolor: 'primary.main', width: 60, height: 60, cursor: 'pointer' }} onClick={() => toast("Change the picture in the group settings after it's created")}>
                     <AddAPhotoIcon fontSize="large" />
                 </Avatar>
                 <Input
@@ -52,11 +52,11 @@ export default observer(function GroupFinalization() {
                 />
             </Stack>
             <Stack direction="row" spacing={2} sx={{ width: '100%', marginTop: '3rem' }} alignItems="center" justifyContent="center">
-                <Typography variant="h5" sx={{ color: '#0080FF', fontWeight: '500' }}>
+                <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: '500' }}>
                     {members.length} {members.length === 1 ? 'Member' : 'Members'}
                 </Typography>
             </Stack>
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <List sx={{ width: '100%' }}>
                 {members.map((profile) => {
                     const labelId = `checkbox-list-label-${profile.username}`;
 

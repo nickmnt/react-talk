@@ -60,14 +60,19 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
 
     return (
         <Zoom in={inViewport} timeout={250}>
-            <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? '#f0ffde' : 'white', opacity: message.beingDeleted ? '0.5' : '1' }} square elevation={6}>
+            <Paper
+                className={`text${isMe ? '--me' : '--other'}`}
+                sx={{ backgroundColor: isMe ? 'primary.light' : 'background.paper', opacity: message.beingDeleted ? '0.5' : '1', color: 'text.primary' }}
+                square
+                elevation={6}
+            >
                 {!isMe && (
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography fontSize="1.4rem" sx={{ color: '#007FFF', fontWeight: '500' }}>
+                        <Typography fontSize="1.4rem" sx={{ color: 'primary.main', fontWeight: '500' }}>
                             {message.displayName}
                         </Typography>
                         {title && (
-                            <Typography fontSize="1.4rem" sx={{ marginLeft: '1rem', color: '#8e8e8e' }}>
+                            <Typography fontSize="1.4rem" sx={{ marginLeft: '1rem', color: 'text.secondary' }}>
                                 {title}
                             </Typography>
                         )}
@@ -75,9 +80,9 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                 )}
                 {replyTo && (
                     <div style={{ width: '100%', height: '3.5rem', display: 'flex', margin: '.75rem 0', opacity: '.8', cursor: 'pointer' }} onClick={() => goToMessage(replyTo.id)}>
-                        <div style={{ width: '.3rem', height: '100%', backgroundColor: '#007fff', marginRight: '1rem' }} />
+                        <Stack sx={{ backgroundColor: 'primary.dark', marginRight: '1rem', width: '.3rem' }}></Stack>
                         <Stack direction="column" justifyContent="center" sx={{ fontSize: '1rem', height: '100%' }}>
-                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: '#007FFF' }}>
+                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: 'primary.dark' }}>
                                 {replyTo.username}
                             </Typography>
                             <Typography fontSize="1.4rem">{truncate(replyTo.body, 30)}</Typography>
@@ -85,7 +90,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                     </div>
                 )}
                 {message.forwardUsername && (
-                    <div style={{ height: '3.5rem', display: 'flex', margin: '.75rem 0', opacity: '.8', color: '#007FFF' }}>
+                    <div style={{ height: '3.5rem', display: 'flex', margin: '.75rem 0', opacity: '.8', color: 'primary.dark' }}>
                         <Stack direction="column" justifyContent="center" sx={{ fontSize: '1rem', height: '100%' }}>
                             <Typography fontSize="1.4rem">Forwarded message</Typography>
                             <Typography fontSize="1.4rem">
@@ -97,20 +102,28 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                         </Stack>
                     </div>
                 )}
-                {type === 1 && <img onClick={() => openLightbox(message.id)} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />}
-                {type === 2 && <ReactPlayer controls={true} url={isLocal ? URL.createObjectURL(localBlob!) : attachedVideo} />}
+                {type === 1 && (
+                    <Paper sx={{ overflow: 'hidden' }}>
+                        <img onClick={() => openLightbox(message.id)} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />
+                    </Paper>
+                )}
+                {type === 2 && (
+                    <Paper sx={{ overflow: 'hidden' }}>
+                        <ReactPlayer controls={true} url={isLocal ? URL.createObjectURL(localBlob!) : attachedVideo} />
+                    </Paper>
+                )}
                 {type === 3 && <audio src={isLocal ? URL.createObjectURL(localBlob!) : message.url} controls />}
                 <div className="text__container">
                     {!isMe && showImg && <div className="text__name">{name}</div>}
-                    <p className="text__content">
+                    <Typography className="text__content">
                         {message.localProgress?.toString()}
                         {text}
-                    </p>
+                    </Typography>
                     <div className="text__info">
-                        <div className={`text__date${isMe ? '--me' : '--other'}`} style={{ marginRight: isMe ? '.5rem' : '0' }}>
+                        <Typography className={`text__date${isMe ? '--me' : '--other'}`} sx={{ marginRight: isMe ? '.5rem' : '0', color: 'text.secondary' }}>
                             {date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                        </div>
-                        {isMe && (isLocal ? <AccessTimeIcon sx={{ color: '#57b84c' }} /> : isDoubleTick ? <DoubleTick /> : <Tick />)}
+                        </Typography>
+                        {isMe && (isLocal ? <AccessTimeIcon sx={{ color: 'text.primary' }} /> : isDoubleTick ? <DoubleTick /> : <Tick />)}
                     </div>
                 </div>
             </Paper>

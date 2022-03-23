@@ -41,7 +41,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox },
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox, theme },
         contactsStore: { isFollowing }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
@@ -57,9 +57,10 @@ export default observer(function ChatDetails({ chatPage }: Props) {
         transform: 'translate(-50%, -50%)',
         width: 400,
         bgcolor: 'background.paper',
-        border: '0px solid #000',
+        border: '0px solid text.primary',
         boxShadow: 24,
-        borderRadius: 2
+        borderRadius: 2,
+        color: 'text.primary'
     };
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -101,9 +102,9 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const canAddUsers = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.addUsers && chatPage.groupData.groupChat!.addUsersAll));
     const canEdit = chatPage.groupData && (chatPage.groupData.membershipType !== 0 || (chatPage.groupData.groupChat!.changeChatInfo && chatPage.groupData.groupChat!.changeChatInfoAll));
     return (
-        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', backgroundColor: 'blue' }}>
+        <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -152,20 +153,24 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                 }}
                             />
                         )}
-                        <Typography variant="h4" sx={{ color: '#333', fontWeight: '500' }}>
+                        <Typography variant="h4" sx={{ color: 'text.primary', fontWeight: '500' }}>
                             {accountData && accountData.displayName}
                             {groupData && groupData.displayName}
                             {channelData && channelData.displayName}
                         </Typography>
-                        <Button variant="contained" sx={{ borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40 }} onClick={goToChat}>
+                        <Button
+                            variant="contained"
+                            sx={{ borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40, border: `1px solid ${theme?.palette.divider}` }}
+                            onClick={goToChat}
+                        >
                             <ChatIcon sx={{ height: 40, width: 40 }}></ChatIcon>
                         </Button>
                     </Stack>
                 </AppBar>
-                <Paper sx={{ backgroundColor: 'white', width: '100%', borderRadius: '0', flex: 1 }} className="beautifulScroll" elevation={0}>
+                <Paper sx={{ width: '100%', borderRadius: '0', flex: 1 }} className="beautifulScroll" elevation={0}>
                     <Stack direction="row" spacing={2} sx={{ width: '100%' }} alignItems="center" justifyContent="center">
                         <Stack direction="column" spacing={2} className="chatDetails__infoStack">
-                            <Typography variant="h5" sx={{ color: '#0080FF', fontWeight: '500', marginTop: '1.5rem', marginLeft: '1.5rem' }}>
+                            <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: '500', marginTop: '1.5rem', marginLeft: '1.5rem' }}>
                                 Info
                             </Typography>
                             {(accountData?.bio || groupData?.groupChat?.description || channelData?.channelChat?.description) && (
@@ -175,12 +180,12 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                             <InfoOutlinedIcon sx={{ width: 35, height: 35 }} />
                                         </ListItemIcon>
                                         <Stack direction="column" spacing={0.25}>
-                                            <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: 'rem' }}>
+                                            <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '500', marginLeft: 'rem' }}>
                                                 {accountData?.bio && accountData?.bio}
                                                 {groupData?.groupChat?.description && groupData?.groupChat?.description}
                                                 {channelData?.channelChat?.description && channelData?.channelChat?.description}
                                             </Typography>
-                                            <Typography variant="h6" sx={{ color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem' }}>
+                                            <Typography variant="h6" sx={{ color: 'text.secondary', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem' }}>
                                                 Bio
                                             </Typography>
                                         </Stack>
@@ -194,10 +199,10 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                             <AlternateEmailIcon sx={{ width: 35, height: 35 }} />
                                         </ListItemIcon>
                                         <Stack direction="column" spacing={0.25}>
-                                            <Typography variant="h6" sx={{ color: '#333', fontWeight: '500', marginLeft: 'rem' }}>
+                                            <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '500', marginLeft: 'rem' }}>
                                                 {accountData?.username}
                                             </Typography>
-                                            <Typography variant="h6" sx={{ color: '#595959', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem' }}>
+                                            <Typography variant="h6" sx={{ color: 'text.secondary', fontWeight: '500', marginTop: '1.5rem', marginLeft: 'rem' }}>
                                                 Username
                                             </Typography>
                                         </Stack>
@@ -244,12 +249,12 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                     <ListItemText
                                                         primaryTypographyProps={{ fontSize: '1.6rem' }}
                                                         primary={x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeenOnline, 'yyyy-MM-dd HH:mm')}
-                                                        sx={{ color: x.isOnline ? '#0080FF' : 'inherit' }}
+                                                        sx={{ color: x.isOnline ? 'primary.main' : 'inherit' }}
                                                     />
                                                 </Stack>
                                                 <div style={{ flex: 1 }} />
-                                                {x.memberType === 1 && <Typography style={{ color: '#0080FF' }}>Admin</Typography>}
-                                                {x.memberType === 2 && <Typography style={{ color: '#0080FF' }}>Owner</Typography>}
+                                                {x.memberType === 1 && <Typography style={{ color: 'primary.main' }}>Admin</Typography>}
+                                                {x.memberType === 2 && <Typography style={{ color: 'primary.main' }}>Owner</Typography>}
                                             </ListItemButton>
                                         </ListItem>
                                     ))}
@@ -294,9 +299,9 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                     </ListItemIcon>
                                                     <ListItemText primaryTypographyProps={{ marginLeft: '1rem', fontSize: 14 }}>Restrict Permissions</ListItemText>
                                                 </MenuItem>
-                                                <MenuItem sx={{ color: '#ff2800' }} onClick={() => removeMember(open!.username)}>
+                                                <MenuItem sx={{ color: 'error.main' }} onClick={() => removeMember(open!.username)}>
                                                     <ListItemIcon>
-                                                        <RemoveCircleOutlineOutlinedIcon sx={{ color: '#ff2800' }} fontSize="large" />
+                                                        <RemoveCircleOutlineOutlinedIcon sx={{ color: 'error.main' }} fontSize="large" />
                                                     </ListItemIcon>
                                                     <ListItemText primaryTypographyProps={{ marginLeft: '1rem', fontSize: 14 }}>Remove from group</ListItemText>
                                                 </MenuItem>

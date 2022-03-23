@@ -1,5 +1,4 @@
 .chatInput {
-    background: white;
     width: 100%;
     height: 5rem;
 
@@ -35,7 +34,7 @@
     &__input {
         width: 100%;
         border: none;
-
+        background-color: inherit;
         caret-color: $color-blue;
 
         &:focus {

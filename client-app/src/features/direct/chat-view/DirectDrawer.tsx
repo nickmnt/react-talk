@@ -18,6 +18,9 @@ import Typography from '@mui/material/Typography/Typography';
 import ListItem from '@mui/material/ListItem/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
+import { IconButton } from '@mui/material';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 // import Divider from '@mui/material/Divider/Divider';
 
 interface Props {
@@ -32,7 +35,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
     const {
         userStore: { user },
         groupStore: { startCreateGroup },
-        directStore: { setSettingsOpen, setContactsOpen, setLocalSavedChat }
+        directStore: { setSettingsOpen, setContactsOpen, setLocalSavedChat, mode, switchMode }
     } = useStore();
 
     const onCreateGroup = () => {
@@ -67,6 +70,9 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                         <Typography sx={{ fontSize: 13 }} color="white" gutterBottom>
                             @{user?.username}
                         </Typography>
+                        <IconButton sx={{ position: 'absolute', top: '2rem', right: '2rem' }} onClick={switchMode}>
+                            {mode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
+                        </IconButton>
                     </CardContent>
                 </Card>
                 <List>

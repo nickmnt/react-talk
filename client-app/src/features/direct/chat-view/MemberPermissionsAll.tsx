@@ -49,7 +49,7 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
                     flexDirection: 'column'
                 }}
             >
-                <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                <AppBar position="relative" elevation={1}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -73,7 +73,7 @@ export default observer(function MemberPermissionsAll({ chatPage, chat }: Props)
                         }}
                         alignItems="center"
                     >
-                        <Typography sx={{ color: '#007FFF', fontWeight: '500', fontSize: '2rem' }}>What can members of this group do?</Typography>
+                        <Typography sx={{ color: 'primary.main', fontWeight: '500', fontSize: '2rem' }}>What can members of this group do?</Typography>
                         <Formik
                             onSubmit={(values, { resetForm }) => {
                                 updatePermissions(chat, values, chatPage);

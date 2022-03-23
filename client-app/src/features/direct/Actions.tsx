@@ -17,7 +17,7 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const {
-        directStore: { connected }
+        directStore: { connected, theme }
     } = useStore();
 
     const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -29,7 +29,7 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
     };
 
     return (
-        <div className="actions">
+        <Paper square className="actions">
             <DirectDrawer toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
             <IconButton onClick={toggleDrawer(true)} sx={{ marginRight: '1rem' }}>
                 <svg className="actions__burgerIco" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,11 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
                 </svg>
             </IconButton>
             {connected !== 'reconnecting' ? (
-                <Paper component="form" sx={{ p: '2x 4px', display: 'flex', alignItems: 'center', width: 400 }} className="actions__form actions__search" elevation={0}>
+                <Paper
+                    component="form"
+                    sx={{ p: '2x 4px', display: 'flex', alignItems: 'center', width: 400, border: `1px solid ${theme?.palette.divider}` }}
+                    className="actions__form actions__search"
+                >
                     <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" inputProps={{ 'aria-label': 'search google maps' }} value={searchVal} onChange={(e) => setSearchVal(e.target.value)} />
                     {/* <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
                     <SearchIcon />
@@ -46,6 +50,6 @@ export default observer(function Actions({ setSearchVal, searchVal }: Props) {
             ) : (
                 <Typography variant="h6">Reconnecting...</Typography>
             )}
-        </div>
+        </Paper>
     );
 });

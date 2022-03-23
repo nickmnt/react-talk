@@ -55,7 +55,6 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                             width: '100%',
                             height: '100%',
                             position: 'absolute',
-                            backgroundColor: 'white',
                             overflow: 'auto'
                         }}
                     >
@@ -67,7 +66,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                 flexDirection: 'column'
                             }}
                         >
-                            <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+                            <AppBar position="relative" elevation={1}>
                                 <Toolbar variant="dense">
                                     <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                                         <ArrowBackIcon fontSize="large" />
@@ -83,7 +82,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                 </Toolbar>
                             </AppBar>
 
-                            <Paper square sx={{ marginBottom: '1rem' }}>
+                            <Paper square sx={{ marginBottom: '0rem' }}>
                                 <Stack
                                     direction="row"
                                     spacing={2}
@@ -97,7 +96,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                     justifyContent="center"
                                 >
                                     <Avatar sx={{ width: 48, height: 48 }} alt="Okay" src={member.image} />
-                                    <Typography variant="h4" sx={{ color: '#333', fontWeight: '500' }}>
+                                    <Typography variant="h4" sx={{ color: 'text.primary', fontWeight: '500' }}>
                                         {member.displayName}
                                     </Typography>
                                 </Stack>
@@ -116,7 +115,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                     }}
                                     alignItems="center"
                                 >
-                                    <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
+                                    <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: '500' }}>
                                         What can this admin do?
                                     </Typography>
 
@@ -144,7 +143,7 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                     }}
                                     alignItems="center"
                                 >
-                                    <Typography variant="h5" sx={{ color: '#007FFF', fontWeight: '500' }}>
+                                    <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: '500' }}>
                                         Custom title
                                     </Typography>
                                     <Field name="customTitle">
@@ -156,14 +155,14 @@ export default observer(function AdminIndividual({ chatPage, member }: Props) {
                                                     fontSize: '1.6rem',
                                                     padding: 1.5,
                                                     height: '4rem',
-                                                    width: '55%'
+                                                    width: '75%'
                                                 }}
                                             />
                                         )}
                                     </Field>
-                                    <Typography sx={{ fontSize: '1.6rem', color: '#8e8e8e', padding: '1rem' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
+                                    <Typography sx={{ fontSize: '1.6rem', color: '#8e8e8e', padding: '1rem 3rem' }}>A custom title that will be shown to all members instead of 'Admin'</Typography>
                                     {member.memberType === 1 && !loadingAdminPermissions && (
-                                        <Button onClick={() => dismissAdmin(chatPage.groupData!.id, member.username, chatPage)} sx={{ width: '55%', color: '#ff2800' }}>
+                                        <Button onClick={() => dismissAdmin(chatPage.groupData!.id, member.username, chatPage)} sx={{ width: '55%', color: 'error.main' }}>
                                             Dismiss Admin
                                         </Button>
                                     )}

@@ -54,11 +54,11 @@
         }
 
         &--me {
-            color: $color-green-dark;
+            color: 'success.light';
         }
 
         &--other {
-            color: $color-grey-dark-1;
+            color: 'success.main';
         }
         //align-items: flex-start;
     }
@@ -66,18 +66,18 @@
     &--other {
         margin-left: 1.5rem;
         border-bottom-left-radius: 0;
-        background-color: white;
     }
 
     &--me {
         // margin-right: 1.5rem;
         border-bottom-right-radius: 0;
         margin-left: auto;
-        background-color: $color-green;
+        background-color: 'secondary.main';
     }
 
     &__attachedImg {
         width: 100%;
+        height: 100%;
         cursor: pointer;
     }
 }

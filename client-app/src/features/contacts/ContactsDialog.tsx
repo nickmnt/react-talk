@@ -59,7 +59,7 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
 
     return (
         <Dialog onClose={handleClose} open={open} TransitionComponent={Transition} fullScreen>
-            <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+            <AppBar position="relative" elevation={1}>
                 <Toolbar variant="dense">
                     {!searching ? (
                         <>
@@ -100,7 +100,7 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
                                             searchResultsContacts.map((x, i) => <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />)}
                                         {searchResultsContactsGlobal.length > 0 && (
                                             <>
-                                                <ListItemButton sx={{ backgroundColor: '#e3e3e3', fontWeight: 600 }}>Global Search Results</ListItemButton>
+                                                <ListItemButton sx={{ backgroundColor: 'background.paper', fontWeight: 600 }}>Global Search Results</ListItemButton>
                                                 {searchResultsContactsGlobal.map((x, i) => (
                                                     <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />
                                                 ))}
@@ -119,7 +119,7 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
                                                         <div className="chat__name">{x.displayName}</div>
                                                         <div>@{x.username}</div>
                                                     </div>
-                                                    <div className="chat__rightBottom" style={{ color: x.isOnline ? '#0080FF' : 'inherit' }}>
+                                                    <div className="chat__rightBottom" style={{ color: x.isOnline ? 'primary.main' : 'inherit' }}>
                                                         {x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeen, 'yyyy-MM-dd HH:mm')}
                                                     </div>
                                                 </div>

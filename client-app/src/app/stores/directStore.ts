@@ -1,4 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { Theme } from '@mui/material/styles/createTheme';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -67,6 +68,8 @@ export default class DirectStore {
     loadingFollowing = false;
     initialMessagesLoaded = false;
     connected: 'connected' | 'reconnecting' = 'reconnecting';
+    mode: 'light' | 'dark' = 'dark';
+    theme: Theme | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -1419,5 +1422,21 @@ export default class DirectStore {
                 this.loadingFollowing = false;
             });
         }
+    };
+
+    switchMode = () => {
+        if (this.mode === 'light') {
+            this.mode = 'dark';
+        } else {
+            this.mode = 'light';
+        }
+    };
+
+    setMode = (newVal: 'light' | 'dark') => {
+        this.mode = newVal;
+    };
+
+    setTheme = (theme: Theme) => {
+        this.theme = theme;
     };
 }

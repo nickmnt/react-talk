@@ -68,7 +68,7 @@ export default observer(function PhotoDialog({ open, onClose }: Props) {
 
     return (
         <Dialog onClose={handleClose} open={open} TransitionComponent={Transition}>
-            <AppBar position="relative" elevation={1} sx={{ backgroundColor: 'white', color: 'black' }}>
+            <AppBar position="relative" elevation={1}>
                 <Toolbar variant="dense">
                     <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleClose}>
                         <CloseIcon fontSize="large" />

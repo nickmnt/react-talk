@@ -18,7 +18,7 @@ export default observer(function TextSkeleton({ isMe }: Props) {
     }
 
     return (
-        <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? '#f0ffde' : 'white' }} square elevation={6}>
+        <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? 'primary.main' : 'background.paper' }} square elevation={6}>
             <div className="text__container">
                 {!isMe && (
                     <div className="text__name">
