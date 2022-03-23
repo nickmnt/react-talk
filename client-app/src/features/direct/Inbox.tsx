@@ -9,6 +9,7 @@ import LightboxWrapper from './chat-view/messages/LightboxWrapper';
 import HomeSidebar from './HomeSidebar';
 import LightboxWrapperGroup from './lightbox/LightboxWrapperGroup';
 import LightboxWrapperProfile from './lightbox/LightboxWrapperProfile';
+import NotificationHandler from './notifications/NotificationHandler';
 import BioDialog from './settings/BioDialog';
 import NameDialog from './settings/NameDialog';
 import PhotoDialog from './settings/PhotoDialog';
@@ -67,6 +68,7 @@ export default observer(function Inbox() {
             <LightboxWrapper />
             <LightboxWrapperProfile />
             <LightboxWrapperGroup />
+            <NotificationHandler />
         </div>
     );
 });

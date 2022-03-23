@@ -70,6 +70,7 @@ export default class DirectStore {
     connected: 'connected' | 'reconnecting' = 'reconnecting';
     mode: 'light' | 'dark' = 'dark';
     theme: Theme | null = null;
+    newMsgQueue: Message[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -478,6 +479,7 @@ export default class DirectStore {
         }
 
         this.chats = chats;
+        this.newMsgQueue = [...this.newMsgQueue, response.message];
 
         if (!this.currentChat || !this.currentChat.messages || this.currentChat.id !== response.chatId) {
             return;
@@ -1438,5 +1440,9 @@ export default class DirectStore {
 
     setTheme = (theme: Theme) => {
         this.theme = theme;
+    };
+
+    clearNewMsgQueue = () => {
+        this.newMsgQueue = [];
     };
 }
