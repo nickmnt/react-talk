@@ -71,7 +71,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                             @{user?.username}
                         </Typography>
                         <IconButton sx={{ position: 'absolute', top: '2rem', right: '2rem' }} onClick={switchMode}>
-                            {mode === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
+                            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
                         </IconButton>
                     </CardContent>
                 </Card>
