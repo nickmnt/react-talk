@@ -45,7 +45,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default observer(function SettingsDialog({ open, onClose }: Props) {
     const {
-        directStore: { setNameOpen, setBioOpen, openCopy, setProfilePicsOpen },
+        directStore: { setNameOpen, setBioOpen, openCopy, setProfilePicsOpen, setSettingsOpen },
         settingsStore: { loadProfile, profile, loadingName, loadingBio },
         photoStore: { setPhotoOpen },
         userStore: { logout }
@@ -204,7 +204,13 @@ export default observer(function SettingsDialog({ open, onClose }: Props) {
                         </ListItemIcon>
                         <ListItemText>Set new photo</ListItemText>
                     </MenuItem>
-                    <MenuItem onClick={logout}>
+                    <MenuItem
+                        onClick={() => {
+                            logout();
+                            handleMenuClose();
+                            setSettingsOpen(false);
+                        }}
+                    >
                         <ListItemIcon>
                             <LogoutIcon fontSize="small" />
                         </ListItemIcon>
