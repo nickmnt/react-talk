@@ -6,6 +6,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Typography from '@mui/material/Typography/Typography';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
+import Paper from '@mui/material/Paper/Paper';
 
 export interface Props {
     count: number;
@@ -19,7 +20,7 @@ export default observer(function SelectHeader({ count, clearSelected, copyMessag
     } = useStore();
 
     return (
-        <div className="chatHeader">
+        <Paper className="chatHeader">
             <div>
                 <IconButton onClick={clearSelected}>
                     <CloseIcon />
@@ -43,6 +44,6 @@ export default observer(function SelectHeader({ count, clearSelected, copyMessag
                     </IconButton>
                 </div>
             </>
-        </div>
+        </Paper>
     );
 });

@@ -2,6 +2,7 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography/Typography';
 import SearchIcon from '@mui/icons-material/Search';
+import Paper from '@mui/material/Paper/Paper';
 
 export interface Props {
     onClose: () => void;
@@ -9,7 +10,7 @@ export interface Props {
 
 export default function ForwardHeader({ onClose }: Props) {
     return (
-        <div className="chatHeader">
+        <Paper className="chatHeader">
             <div>
                 <IconButton onClick={onClose}>
                     <CloseIcon />
@@ -17,9 +18,7 @@ export default function ForwardHeader({ onClose }: Props) {
             </div>
             <>
                 <div className="chatHeader__left">
-                    <Typography variant="h6" sx={{ color: '#363636' }}>
-                        Forward to...
-                    </Typography>
+                    <Typography variant="h6">Forward to...</Typography>
                 </div>
                 <div className="chatHeader__right">
                     <IconButton>
@@ -27,6 +26,6 @@ export default function ForwardHeader({ onClose }: Props) {
                     </IconButton>
                 </div>
             </>
-        </div>
+        </Paper>
     );
 }
