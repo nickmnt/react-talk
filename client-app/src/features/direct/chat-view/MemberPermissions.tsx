@@ -38,7 +38,6 @@ export default function MemberPermissions({ member, chatPage }: Props) {
                 width: '100%',
                 height: '100%',
                 position: 'absolute',
-                backgroundColor: 'white',
                 overflow: 'hidden'
             }}
         >

@@ -41,7 +41,6 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                 width: '100%',
                 height: '100%',
                 position: 'absolute',
-                backgroundColor: 'white',
                 overflow: 'hidden'
             }}
         >
@@ -72,7 +71,6 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                             spacing={2}
                             sx={{
                                 width: '100%',
-                                marginTop: '2rem',
                                 marginBottom: '2rem',
                                 position: 'relative',
                                 paddingBottom: '2rem'
