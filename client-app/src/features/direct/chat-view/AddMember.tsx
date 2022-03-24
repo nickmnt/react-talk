@@ -14,8 +14,7 @@ import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import ListItemAvatar from '@mui/material/ListItemAvatar/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox/Checkbox';
-import { Profile } from '../../../app/models/profile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ListItemText from '@mui/material/ListItemText/ListItemText';
 import { useStore } from '../../../app/stores/store';
 import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
@@ -30,24 +29,29 @@ export interface Props {
 export default function AddMember({ chatPage }: Props) {
     const {
         chatStore: { removeFromStack },
-        directStore: { addMembers }
+        directStore: { addMembers, searchResultsContacts, searchResultsContactsGlobal, contactsSearch }
     } = useStore();
-    const [members, setMembers] = useState<Profile[]>([]);
+    const [members, setMembers] = useState<string[]>([]);
+    const [substr, setSubstr] = useState('');
+
+    useEffect(() => {
+        contactsSearch(substr);
+    }, [contactsSearch, substr]);
 
     if (!chatPage.followings || (!chatPage.groupData && !chatPage.channelData)) {
         return <LoadingComponent />;
     }
 
-    const toggleMember = (profile: Profile) => {
-        if (members.find((x) => x.username === profile.username)) {
-            setMembers(members.filter((x) => x.username !== profile.username));
+    const toggleMember = (username: string) => {
+        if (members.find((x) => x === username)) {
+            setMembers(members.filter((x) => x !== username));
         } else {
-            setMembers([...members, profile]);
+            setMembers([...members, username]);
         }
     };
 
-    const handleToggle = (profile: Profile) => () => {
-        toggleMember(profile);
+    const handleToggle = (username: string) => () => {
+        toggleMember(username);
     };
 
     let curMembers: string[] = [];
@@ -58,6 +62,9 @@ export default function AddMember({ chatPage }: Props) {
     }
 
     const candidates = chatPage.followings.filter((x) => !curMembers.includes(x.username));
+
+    const localCandidates = searchResultsContacts.filter((x) => !curMembers.includes(x.username));
+    const globalCandidates = searchResultsContactsGlobal.filter((x) => !curMembers.includes(x.username));
 
     return (
         <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', overflow: 'hidden' }}>
@@ -78,36 +85,96 @@ export default function AddMember({ chatPage }: Props) {
                 </AppBar>
                 <Paper sx={{ width: '100%', borderRadius: '0' }} elevation={0}>
                     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Input placeholder="Search for people..." sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small" />
+                        <Input
+                            placeholder="Search for people..."
+                            sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }}
+                            size="small"
+                            value={substr}
+                            onChange={(e) => setSubstr(e.currentTarget.value)}
+                        />
                     </Box>
                 </Paper>
                 <Paper sx={{ width: '100%', borderRadius: '0', flex: 1, display: 'flex' }} elevation={0}>
-                    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                        {candidates.map((profile) => {
-                            const labelId = `checkbox-list-label-${profile.username}`;
+                    {substr ? (
+                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            {localCandidates.map((profile) => {
+                                const labelId = `checkbox-list-label-${profile.username}`;
 
-                            return (
-                                <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
-                                    <ListItemButton role={undefined} onClick={handleToggle(profile)} sx={{ padding: '1.3rem' }} dense>
-                                        <ListItemIcon>
-                                            <Checkbox
-                                                edge="start"
-                                                checked={members.findIndex((x) => x.username === profile.username) !== -1}
-                                                tabIndex={-1}
-                                                disableRipple
-                                                inputProps={{ 'aria-labelledby': labelId }}
-                                                sx={{ transform: 'scale(1.5)' }}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemAvatar>
-                                            <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
-                                        </ListItemAvatar>
-                                        <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
-                                    </ListItemButton>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
+                                return (
+                                    <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
+                                        <ListItemButton role={undefined} onClick={handleToggle(profile.username)} sx={{ padding: '1.3rem' }} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    checked={members.findIndex((x) => x === profile.username) !== -1}
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                    sx={{ transform: 'scale(1.5)' }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemAvatar>
+                                                <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
+                                            </ListItemAvatar>
+                                            <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                            {globalCandidates.length > 0 && <ListItemButton sx={{ backgroundColor: 'background.paper', fontWeight: 600 }}>Global Search Results</ListItemButton>}
+                            {globalCandidates.map((profile) => {
+                                const labelId = `checkbox-list-label-${profile.username}`;
+
+                                return (
+                                    <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
+                                        <ListItemButton role={undefined} onClick={handleToggle(profile.username)} sx={{ padding: '1.3rem' }} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    checked={members.findIndex((x) => x === profile.username) !== -1}
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                    sx={{ transform: 'scale(1.5)' }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemAvatar>
+                                                <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
+                                            </ListItemAvatar>
+                                            <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    ) : (
+                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            {candidates.map((profile) => {
+                                const labelId = `checkbox-list-label-${profile.username}`;
+
+                                return (
+                                    <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
+                                        <ListItemButton role={undefined} onClick={handleToggle(profile.username)} sx={{ padding: '1.3rem' }} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    checked={members.findIndex((x) => x === profile.username) !== -1}
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                    sx={{ transform: 'scale(1.5)' }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemAvatar>
+                                                <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
+                                            </ListItemAvatar>
+                                            <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    )}
                 </Paper>
             </Box>
             {members.length > 0 && (
@@ -117,6 +184,7 @@ export default function AddMember({ chatPage }: Props) {
                     icon={<Done />}
                     onClick={() => {
                         chatPage.groupData ? addMembers(chatPage.groupData, members) : chatPage.channelData && addMembers(chatPage.channelData, members);
+                        contactsSearch('');
                         removeFromStack(chatPage);
                     }}
                 />

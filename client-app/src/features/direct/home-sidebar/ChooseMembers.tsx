@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '../../../app/stores/store';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
@@ -24,12 +24,17 @@ import SpeedDial from '@mui/material/SpeedDial/SpeedDial';
 export default observer(function ChooseMembers() {
     const {
         groupStore: { loadingFollowings, loadFollowings, followings, toggleMember, members, nextPhase, stopEditing, type, createdChannel },
-        directStore: { addMembers }
+        directStore: { addMembers, searchResultsContacts, searchResultsContactsGlobal, contactsSearch }
     } = useStore();
+    const [substr, setSubstr] = useState('');
 
     useEffect(() => {
         loadFollowings();
     }, [loadFollowings]);
+
+    useEffect(() => {
+        contactsSearch(substr);
+    }, [substr, contactsSearch]);
 
     const handleToggle = (profile: Profile) => () => {
         toggleMember(profile);
@@ -54,16 +59,57 @@ export default observer(function ChooseMembers() {
                 </AppBar>
             </Box>
             <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Input placeholder="Add people..." sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }} size="small" />
+                <Input
+                    placeholder="Add people..."
+                    sx={{ width: '100%', fontSize: '1.6rem', padding: 1.5, paddingLeft: 3.5 }}
+                    size="small"
+                    value={substr}
+                    onChange={(e) => setSubstr(e.currentTarget.value)}
+                />
             </Box>
-            {!loadingFollowings ? (
+            {substr ? (
                 <List sx={{ width: '100%' }}>
-                    {followings.map((profile) => {
+                    {searchResultsContacts.map((profile) => {
                         const labelId = `checkbox-list-label-${profile.username}`;
 
                         return (
                             <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
-                                <ListItemButton role={undefined} onClick={handleToggle(profile)} sx={{ padding: '1.3rem' }} dense>
+                                <ListItemButton
+                                    role={undefined}
+                                    onClick={handleToggle({ username: profile.username, displayName: profile.displayName, image: profile.image } as Profile)}
+                                    sx={{ padding: '1.3rem' }}
+                                    dense
+                                >
+                                    <ListItemIcon>
+                                        <Checkbox
+                                            edge="start"
+                                            checked={members.findIndex((x) => x.username === profile.username) !== -1}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ 'aria-labelledby': labelId }}
+                                            sx={{ transform: 'scale(1.5)' }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemAvatar>
+                                        <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
+                                    </ListItemAvatar>
+                                    <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
+                    {searchResultsContactsGlobal.length > 0 && <ListItemButton sx={{ backgroundColor: 'background.paper', fontWeight: 600 }}>Global Search Results</ListItemButton>}
+                    {searchResultsContactsGlobal.map((profile) => {
+                        const labelId = `checkbox-list-label-${profile.username}`;
+
+                        return (
+                            <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
+                                <ListItemButton
+                                    role={undefined}
+                                    onClick={handleToggle({ username: profile.username, displayName: profile.displayName, image: profile.image } as Profile)}
+                                    sx={{ padding: '1.3rem' }}
+                                    dense
+                                >
                                     <ListItemIcon>
                                         <Checkbox
                                             edge="start"
@@ -84,7 +130,38 @@ export default observer(function ChooseMembers() {
                     })}
                 </List>
             ) : (
-                <LoadingComponent />
+                <>
+                    {!loadingFollowings ? (
+                        <List sx={{ width: '100%' }}>
+                            {followings.map((profile) => {
+                                const labelId = `checkbox-list-label-${profile.username}`;
+
+                                return (
+                                    <ListItem key={profile.username} sx={{ width: '100%', padding: '0 2rem' }} disablePadding>
+                                        <ListItemButton role={undefined} onClick={handleToggle(profile)} sx={{ padding: '1.3rem' }} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    checked={members.findIndex((x) => x.username === profile.username) !== -1}
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                    sx={{ transform: 'scale(1.5)' }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemAvatar>
+                                                <Avatar alt={`${profile.displayName}`} src={profile.image} sx={{ width: 48, height: 48 }} />
+                                            </ListItemAvatar>
+                                            <ListItemText id={labelId} primaryTypographyProps={{ fontSize: '1.6rem' }} primary={profile.displayName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    ) : (
+                        <LoadingComponent />
+                    )}
+                </>
             )}
             {members.length > 0 && (
                 <SpeedDial
@@ -94,7 +171,11 @@ export default observer(function ChooseMembers() {
                     onClick={() => {
                         if (type === 'group') nextPhase();
                         else {
-                            addMembers(createdChannel!, members);
+                            addMembers(
+                                createdChannel!,
+                                members.map((x) => x.username)
+                            );
+                            contactsSearch('');
                             stopEditing();
                         }
                     }}

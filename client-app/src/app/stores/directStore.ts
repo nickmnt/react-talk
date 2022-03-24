@@ -743,12 +743,9 @@ export default class DirectStore {
         }
     };
 
-    addMembers = async (chat: ChatDto, members: Profile[]) => {
+    addMembers = async (chat: ChatDto, memberUsernames: string[]) => {
         try {
-            const response = await agent.Chats.addMembers(
-                chat.id,
-                members.map((x) => x.username)
-            );
+            const response = await agent.Chats.addMembers(chat.id, memberUsernames);
             runInAction(() => {
                 if (this.currentChat && this.currentChat.id === chat.id) {
                     response.forEach((x) => {

@@ -45,6 +45,7 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
     const [searchVal, setSearchVal] = useState('');
 
     const handleClose = () => {
+        contactsSearch('');
         setSearching(false);
         onClose();
     };
@@ -100,7 +101,6 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
                                             searchResultsContacts.map((x, i) => <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />)}
                                         {searchResultsContactsGlobal.length > 0 && (
                                             <>
-                                                <ListItemButton sx={{ backgroundColor: 'background.paper', fontWeight: 600 }}>Global Search Results</ListItemButton>
                                                 {searchResultsContactsGlobal.map((x, i) => (
                                                     <SearchResult searchResult={x} searchVal={searchVal} key={i} setSearchVal={setSearchVal} />
                                                 ))}
