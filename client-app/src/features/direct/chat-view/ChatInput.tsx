@@ -169,8 +169,8 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                     <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
                 </div>
                 <div style={{ fontSize: '1.6rem', fontWeight: '600' }}>Recording...</div>
-                <Button color="warning" sx={{ marginLeft: 'auto', width: '7.5rem', height: '7.5rem' }} variant="contained" onClick={stopRecording}>
-                    <Typography variant="h6">STOP</Typography>
+                <Button color="warning" sx={{ marginLeft: 'auto', width: '8rem', height: '8rem', marginRight: '-.5rem' }} variant="contained" onClick={stopRecording} className="chatInput__microphone">
+                    <Typography variant="h5">STOP</Typography>
                 </Button>
             </Paper>
         );
