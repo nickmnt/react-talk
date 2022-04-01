@@ -37,7 +37,7 @@ export default observer(function ChatTextInput({ props, isValid, handleSubmit }:
 
     return (
         <TextareaAutosize
-            maxRows={2}
+            maxRows={5}
             className="chatInput__input"
             placeholder="Message"
             {...props.field}
