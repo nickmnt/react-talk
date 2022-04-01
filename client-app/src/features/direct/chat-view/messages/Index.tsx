@@ -266,7 +266,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     sx={{
                         height: '5.5rem',
                         width: '100%',
-                        backgroundColor: 'white',
                         display: 'flex',
                         flexDirection: 'row'
                     }}
@@ -278,12 +277,12 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                             height: 30,
                             margin: 'auto 0',
                             marginLeft: '1rem',
-                            color: '#007FFF'
+                            color: 'primary.main'
                         }}
                     />
                     <div style={{ flex: 1 }}>
                         <Stack direction="column" justifyContent="center" sx={{ marginLeft: '1.5rem', fontSize: '1rem', height: '100%' }}>
-                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: '#007FFF' }}>
+                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: 'primary.main' }}>
                                 {replyMessage.displayName}
                             </Typography>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -305,7 +304,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     sx={{
                         height: '5.5rem',
                         width: '100%',
-                        backgroundColor: 'white',
                         display: 'flex',
                         flexDirection: 'row',
                         cursor: 'pointer'
@@ -318,12 +316,12 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                             height: 30,
                             margin: 'auto 0',
                             marginLeft: '1rem',
-                            color: '#007FFF'
+                            color: 'primary.main'
                         }}
                     />
                     <div style={{ flex: 1 }}>
                         <Stack direction="column" justifyContent="center" sx={{ marginLeft: '1.5rem', fontSize: '1rem', height: '100%' }}>
-                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: '#007FFF' }}>
+                            <Typography fontSize="1.4rem" variant="h6" sx={{ color: 'primary.main' }}>
                                 Forward {forwardedMessages.length === 1 ? 'message' : forwardedMessages.length + ' messages'}
                             </Typography>
                             <Typography fontSize="1.4rem">{truncate(forwardBody, 30)}</Typography>

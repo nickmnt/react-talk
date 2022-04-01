@@ -10,7 +10,7 @@ export interface Props {
 
 export default function ForwardHeader({ onClose }: Props) {
     return (
-        <Paper className="chatHeader">
+        <Paper square className="chatHeader">
             <div>
                 <IconButton onClick={onClose}>
                     <CloseIcon />

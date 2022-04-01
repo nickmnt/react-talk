@@ -20,7 +20,7 @@ export default observer(function SelectHeader({ count, clearSelected, copyMessag
     } = useStore();
 
     return (
-        <Paper className="chatHeader">
+        <Paper className="chatHeader" square>
             <div>
                 <IconButton onClick={clearSelected}>
                     <CloseIcon />
@@ -28,9 +28,7 @@ export default observer(function SelectHeader({ count, clearSelected, copyMessag
             </div>
             <>
                 <div className="chatHeader__left">
-                    <Typography variant="h6" sx={{ color: '#363636' }}>
-                        {count}
-                    </Typography>
+                    <Typography variant="h6">{count}</Typography>
                 </div>
                 <div className="chatHeader__right">
                     <IconButton onClick={copyMessages}>

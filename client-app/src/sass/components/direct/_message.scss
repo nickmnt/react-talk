@@ -25,6 +25,8 @@
 
     &__selectCircle {
         // width: '2rem', height: '2rem', backgroundColor: 'green', borderRadius: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid white'
+        min-width: 2rem;
+        min-height: 2rem;
         width: 2rem;
         height: 2rem;
         background-color: rgba(#000, 0.2);
