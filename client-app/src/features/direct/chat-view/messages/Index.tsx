@@ -216,7 +216,6 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
         e.stopPropagation();
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             handleFiles(e.dataTransfer.files);
-            e.dataTransfer.clearData();
         }
     };
 
