@@ -35,10 +35,9 @@ export interface Props {
 
 export default observer(function ChatInput({ selectedCount }: Props) {
     const {
-        directStore: { currentChat, createMessage, setForwarding, forwardingSingle, forwardSingle, createVoice }
+        directStore: { currentChat, createMessage, setForwarding, forwardingSingle, forwardSingle, createVoice, file, setFile }
     } = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
-    const [file, setFile] = useState<null | FileRecord>(null);
     const [recording, setRecording] = useState(false);
     const { seconds, minutes, hours, start, pause, reset } = useStopwatch({ autoStart: false });
     const [recorder, setRecorder] = useState<any>();

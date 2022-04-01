@@ -2,6 +2,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { Theme } from '@mui/material/styles/createTheme';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { toast } from 'react-toastify';
+import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
 import {
     AdminPermissions,
@@ -71,6 +72,7 @@ export default class DirectStore {
     mode: 'light' | 'dark' = 'dark';
     theme: Theme | null = null;
     newMsgQueue: Message[] = [];
+    file: FileRecord | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -342,6 +344,7 @@ export default class DirectStore {
         this.paginationMessages = null;
         this.initialMessagesLoaded = false;
         this.pagingParamsMessages = new PagingParams();
+        this.file = null;
         switch (chat.type) {
             case 0:
                 await this.getPrivateChatDetails(chat);
@@ -1441,5 +1444,9 @@ export default class DirectStore {
 
     clearNewMsgQueue = () => {
         this.newMsgQueue = [];
+    };
+
+    setFile = (file: FileRecord | null) => {
+        this.file = file;
     };
 }

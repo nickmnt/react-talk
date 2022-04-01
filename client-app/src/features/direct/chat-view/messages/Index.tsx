@@ -43,6 +43,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     const messagesRef = useRef<(HTMLElement | null)[]>([]);
     const [selectedPin, setSelectedPin] = useState(0);
     const [loadingNext, setLoadingNext] = useState(false);
+    const [dragCount, setDragCount] = useState(0);
 
     const {
         directStore: {
@@ -65,10 +66,17 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             loadMessages,
             canDelete,
             deleteMsgId,
-            setDeleteMsgId
+            setDeleteMsgId,
+            setFile
         },
         userStore: { user }
     } = useStore();
+
+    const dzStyles = {
+        border: 'dashed .5rem green',
+        borderRadius: '1rem',
+        height: 200
+    };
 
     const handleGetNext = () => {
         if (!currentChat) {
@@ -170,16 +178,89 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
 
     const msgBeingDeleted = currentChat.messages?.find((x) => x.id === deleteMsgId);
 
+    const getFileExtension = (filename: string) => {
+        return filename.split('.').pop();
+    };
+
+    const handleFiles = (files: FileList) => {
+        if (files.length > 1) {
+            toast('Drag only one file at a time.');
+        } else {
+            const f = files[0];
+            if (f) {
+                const extension = getFileExtension(f.name)?.toLowerCase();
+
+                if (f.size >= 1024 * 1024 * 50) {
+                    toast.error('File size is greater than 50 MB.');
+                    return;
+                }
+
+                if (extension) {
+                    if (['jpeg', 'bmp', 'gif', 'jpg', 'png'].includes(extension)) {
+                        setFile({ video: false, file: f });
+                    } else if (['flv', 'm3u8', 'mov', 'mkv', 'mp4', 'mpd', 'ogv', 'webm'].includes(extension)) {
+                        setFile({ video: true, file: f });
+                    } else {
+                        toast.error('Sorry we only support mainstream video and image types.');
+                    }
+                } else {
+                    toast.error('Sorry we only support mainstream video and image types.');
+                }
+            }
+        }
+    };
+
+    const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        setDragCount(0);
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFiles(e.dataTransfer.files);
+            e.dataTransfer.clearData();
+        }
+    };
+
     return (
         <div
-            style={{
-                display: 'flex',
-                flex: 1,
-                overflowY: 'auto',
-                overflowX: 'hidden',
-                flexDirection: 'column-reverse'
+            style={
+                dragCount === 0
+                    ? {
+                          display: 'flex',
+                          flex: 1,
+                          overflowY: 'auto',
+                          overflowX: 'hidden',
+                          flexDirection: 'column-reverse'
+                      }
+                    : {
+                          display: 'flex',
+                          flex: 1,
+                          overflowY: 'auto',
+                          overflowX: 'hidden',
+                          flexDirection: 'column-reverse',
+                          ...dzStyles
+                      }
+            }
+            onDrop={onDrop}
+            onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }}
+            onDragEnter={(e) => {
+                setDragCount(dragCount + 1);
+                e.preventDefault();
+                e.stopPropagation();
+            }}
+            onDragLeave={(e) => {
+                setDragCount(dragCount - 1);
+                e.preventDefault();
+                e.stopPropagation();
+            }}
+            onDrag={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
             }}
         >
+            <input type="file" className="file-browser-input" name="file-browser-input" style={{ display: 'none' }} />
             {selected.length === 0 && replyMessage && (
                 <Paper
                     square
