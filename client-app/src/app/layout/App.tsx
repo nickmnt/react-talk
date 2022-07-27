@@ -49,7 +49,7 @@ function App() {
                 palette: {
                     mode,
                     primary: {
-                        main: '#0080FF'
+                        main: '#BF40BF'
                     }
                 }
             }),

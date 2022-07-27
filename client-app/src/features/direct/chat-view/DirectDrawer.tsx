@@ -55,7 +55,7 @@ export default observer(function DirectDrawer({ drawerOpen, toggleDrawer }: Prop
                 </linearGradient>
             </svg>
             <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
-                <Card style={{ backgroundColor: '#419fd9' }} square>
+                <Card style={{ backgroundColor: '#8963C6' }} square>
                     <CardContent>
                         {user?.image ? (
                             <Avatar alt={user.username} src={user?.image} sx={{ width: 48, height: 48 }} />
