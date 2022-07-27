@@ -82,7 +82,7 @@ export default observer(function HomeSidebar() {
                             style={{ height: '100%' }}
                             scrollableTarget="chatsScroller"
                         >
-                            {loadingChats ? [0, 0].map((_, i) => <ChatSkeleton key={i} />) : chats.map((chat) => <Chat chat={chat} key={chat.id} />)}
+                            <List>{loadingChats ? [0, 0].map((_, i) => <ChatSkeleton key={i} />) : chats.map((chat) => <Chat chat={chat} key={chat.id} />)}</List>
                         </InfiniteScroll>
                     ) : (
                         <List>

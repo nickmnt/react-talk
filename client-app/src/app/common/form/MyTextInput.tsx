@@ -13,10 +13,10 @@ export default function MyTextInput(props: Props) {
     const [field, meta] = useField(props.name);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', color: 'white', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography sx={{ marginRight: '1rem', color: 'white' }}>{props.label}</Typography>
-                <Input {...field} sx={{ color: 'white', width: '100%', borderColor: 'white' }} error={meta.touched && !!meta.error} {...props} />
+                <Typography sx={{ marginRight: '1rem' }}>{props.label}</Typography>
+                <Input {...field} sx={{ width: '100%' }} error={meta.touched && !!meta.error} {...props} />
             </div>
             {meta.touched && meta.error ? <Typography color="red">{meta.error}</Typography> : null}
         </div>

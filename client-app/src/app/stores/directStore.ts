@@ -69,7 +69,7 @@ export default class DirectStore {
     loadingFollowing = false;
     initialMessagesLoaded = false;
     connected: 'connected' | 'reconnecting' = 'reconnecting';
-    mode: 'light' | 'dark' = 'dark';
+    mode: 'light' | 'dark' = 'light';
     theme: Theme | null = null;
     newMsgQueue: Message[] = [];
     file: FileRecord | null = null;

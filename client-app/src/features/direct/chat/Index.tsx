@@ -14,6 +14,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import ListItem from '@mui/material/ListItem/ListItem';
 
 interface Props {
     chat: ChatDto;
@@ -79,58 +80,60 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
     }
 
     return (
-        <ListItemButton
-            className={`chat__container`}
-            selected={!forwarding && !!currentChat && currentChat.id === chat.id}
-            onClick={forwarding ? () => clickedWhenForwarding() : () => getChatDetails(chat)}
-            {...bind}
-        >
-            <ListItemAvatar sx={{ position: 'relative', overflow: 'visible' }}>
-                {chat.type === 3 ? (
-                    <Avatar alt={chat.displayName} sx={{ width: 48, height: 48, backgroundColor: '#007FFF' }}>
-                        <BookmarksIcon />
-                    </Avatar>
-                ) : (
-                    <Avatar alt={chat.displayName} src={chat.image} sx={{ width: 48, height: 48 }} />
-                )}
-                {selected && selected.length > 0 && (
-                    <div className={`chat__selectCircle ${isSelected && 'chat__selectCircle--selected'}`}>
-                        {isSelected && <DoneIcon sx={{ width: '1.75rem', height: '1.75rem', color: 'white' }} />}
-                    </div>
-                )}
-                {!(selected && selected.length > 0) && chat.isOnline && <div className="chat__selectCircle chat__selectCircle--selected" />}
-            </ListItemAvatar>
-            <div className="chat__right">
-                <div className="chat__rightTop">
-                    <div className="chat__name">{chat.type === 3 ? 'Saved Messages' : chat.displayName}</div>
-
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {chat.lastMessage?.username === user!.username && (chat.lastMessageSeen ? <DoubleTick /> : <Tick />)}
-                        <div style={{ marginLeft: '.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                            {chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                        </div>
-                    </div>
-                </div>
-                <div className="chat__rightBottom">
-                    {!isTyping ? (
-                        <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
-                            {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
-                            {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
-                            {chat.lastMessage && chat.lastMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
-                            {lastMsgText.substring(0, 15)}
-                        </div>
+        <ListItem disablePadding>
+            <ListItemButton
+                className={`chat__container`}
+                selected={!forwarding && !!currentChat && currentChat.id === chat.id}
+                onClick={forwarding ? () => clickedWhenForwarding() : () => getChatDetails(chat)}
+                {...bind}
+            >
+                <ListItemAvatar sx={{ position: 'relative', overflow: 'visible' }}>
+                    {chat.type === 3 ? (
+                        <Avatar alt={chat.displayName} sx={{ width: 48, height: 48, backgroundColor: '#007FFF' }}>
+                            <BookmarksIcon />
+                        </Avatar>
                     ) : (
-                        <div className="last-msg" style={{ display: 'flex', alignItems: 'center', color: '#0088CC' }}>
-                            {typingMessage}
+                        <Avatar alt={chat.displayName} src={chat.image} sx={{ width: 48, height: 48 }} />
+                    )}
+                    {selected && selected.length > 0 && (
+                        <div className={`chat__selectCircle ${isSelected && 'chat__selectCircle--selected'}`}>
+                            {isSelected && <DoneIcon sx={{ width: '1.75rem', height: '1.75rem', color: 'white' }} />}
                         </div>
                     )}
-                    {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && (
-                        <Paper sx={{ backgroundColor: '#0088CC', color: 'white' }} square className="chat__badge">
-                            {chat.notSeenCount}
-                        </Paper>
-                    )}
+                    {!(selected && selected.length > 0) && chat.isOnline && <div className="chat__selectCircle chat__selectCircle--selected" />}
+                </ListItemAvatar>
+                <div className="chat__right">
+                    <div className="chat__rightTop">
+                        <div className="chat__name">{chat.type === 3 ? 'Saved Messages' : chat.displayName}</div>
+
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            {chat.lastMessage?.username === user!.username && (chat.lastMessageSeen ? <DoubleTick /> : <Tick />)}
+                            <div style={{ marginLeft: '.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
+                                {chat.lastMessage?.createdAt.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="chat__rightBottom">
+                        {!isTyping ? (
+                            <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
+                                {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
+                                {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
+                                {chat.lastMessage && chat.lastMessage.type === 3 && <KeyboardVoiceIcon sx={{ marginRight: '0.5rem' }} />}
+                                {lastMsgText.substring(0, 15)}
+                            </div>
+                        ) : (
+                            <div className="last-msg" style={{ display: 'flex', alignItems: 'center', color: '#0088CC' }}>
+                                {typingMessage}
+                            </div>
+                        )}
+                        {(!currentChat || currentChat.id !== chat.id) && chat.notSeenCount > 0 && (
+                            <Paper sx={{ backgroundColor: '#0088CC', color: 'white' }} square className="chat__badge">
+                                {chat.notSeenCount}
+                            </Paper>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </ListItemButton>
+            </ListItemButton>
+        </ListItem>
     );
 });
