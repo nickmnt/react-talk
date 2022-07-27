@@ -30,7 +30,7 @@ export default observer(function RegisterForm() {
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form onSubmit={handleSubmit} autoComplete="off">
                     <Paper sx={{ padding: '3rem' }}>
-                        <Typography variant="h3" color="white" textAlign="center" sx={{ marginBottom: '1rem' }}>
+                        <Typography variant="h3" textAlign="center" sx={{ marginBottom: '1rem' }}>
                             Sign up to ReactTalk
                         </Typography>
                         <MyTextInput name="displayName" placeholder="Display Name" />
