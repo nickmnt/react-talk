@@ -19,6 +19,7 @@ import { useStopwatch } from 'react-timer-hook';
 import MicRecorder from 'mic-recorder-to-mp3';
 import ChatTextInput from './ChatTextInput';
 import AttachmentDialog from './AttachmentDialog';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const getFileExtension = (filename: string) => {
     return filename.split('.').pop();
@@ -41,6 +42,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
     const [recording, setRecording] = useState(false);
     const { seconds, minutes, hours, start, pause, reset } = useStopwatch({ autoStart: false });
     const [recorder, setRecorder] = useState<any>();
+    const classes = useStyles();
 
     const onAttachmentClick = () => {
         inputFile.current!.click();
@@ -226,10 +228,7 @@ export default observer(function ChatInput({ selectedCount }: Props) {
                     vertical: 'bottom',
                     horizontal: 'left'
                 }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left'
-                }}
+                classes={{ list: classes.list }}
             >
                 <Picker onEmojiClick={onEmojiClick} />
             </Menu>
@@ -237,3 +236,11 @@ export default observer(function ChatInput({ selectedCount }: Props) {
         </Paper>
     );
 });
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        list: {
+            padding: '0'
+        }
+    })
+);

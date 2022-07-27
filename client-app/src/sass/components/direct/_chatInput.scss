@@ -1,6 +1,6 @@
 .chatInput {
     width: 100%;
-    min-height: 5rem;
+    height: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,6 +60,7 @@
 
     &__input {
         width: 100%;
+        max-height: 5rem;
         border: none;
         background-color: inherit;
         color: inherit;
