@@ -71,7 +71,7 @@ export default class DirectStore {
     connected: 'connected' | 'reconnecting' = 'reconnecting';
     mode: 'light' | 'dark' = 'light';
     theme: Theme | null = null;
-    newMsgQueue: Message[] = [];
+    newMsgQueue: MessageNotifDto[] = [];
     file: FileRecord | null = null;
 
     constructor() {
@@ -482,7 +482,7 @@ export default class DirectStore {
         }
 
         this.chats = chats;
-        this.newMsgQueue = [...this.newMsgQueue, response.message];
+        this.newMsgQueue = [...this.newMsgQueue, response];
 
         if (!this.currentChat || !this.currentChat.messages || this.currentChat.id !== response.chatId) {
             return;
@@ -1448,5 +1448,15 @@ export default class DirectStore {
 
     setFile = (file: FileRecord | null) => {
         this.file = file;
+    };
+
+    openChatWithId = (id: string) => {
+        const foundChat = this.chats.find((x) => x.id === id);
+        if (!foundChat) return;
+        if (this.currentChat && this.currentChat.id === foundChat.id) {
+            toast.warn('The new message is in the current chat!');
+        } else {
+            this.getChatDetails(foundChat);
+        }
     };
 }

@@ -12,7 +12,7 @@ export default observer(function NotificationHandler() {
     useEffect(() => {
         if (newMsgQueue.length === 0) return;
         newMsgQueue.forEach((x) => {
-            toast(<NewMessage displayName={x.displayName} body={x.body} image={x.image} createdAt={x.createdAt} type={x.type} />);
+            toast(<NewMessage displayName={x.message.displayName} body={x.message.body} image={x.message.image} createdAt={x.message.createdAt} type={x.message.type} chatId={x.chatId} />);
         });
         clearNewMsgQueue();
     }, [clearNewMsgQueue, newMsgQueue]);

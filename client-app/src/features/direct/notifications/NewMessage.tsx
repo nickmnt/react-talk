@@ -3,6 +3,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import React from 'react';
+import { useStore } from '../../../app/stores/store';
 
 export interface Props {
     displayName: string;
@@ -10,9 +11,14 @@ export interface Props {
     image: string;
     type: number;
     createdAt: Date;
+    chatId: string;
 }
 
-export default function NewMessage({ displayName, body, image, createdAt, type }: Props) {
+export default function NewMessage({ displayName, body, image, createdAt, type, chatId }: Props) {
+    const {
+        directStore: { openChatWithId }
+    } = useStore();
+
     let lastMsgText = '';
     if (body) {
         lastMsgText = body;
@@ -31,7 +37,7 @@ export default function NewMessage({ displayName, body, image, createdAt, type }
     }
 
     return (
-        <div className="newMessage">
+        <div className="newMessage" onClick={() => openChatWithId(chatId)}>
             <Avatar alt={displayName} src={image} className="newMessage__avatar" />
             <div className="chat__right">
                 <div className="chat__rightTop">
