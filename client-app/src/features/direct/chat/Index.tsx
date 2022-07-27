@@ -114,7 +114,7 @@ export default observer(function Chat({ chat, forwarding, selected, setSelected 
                         </div>
                     </div>
                     <div className="chat__rightBottom">
-                        {!isTyping ? (
+                        {!(isTyping && chat.isOnline) ? (
                             <div className="last-msg" style={{ display: 'flex', alignItems: 'center' }}>
                                 {chat.lastMessage && chat.lastMessage.type === 1 && <ImageIcon sx={{ marginRight: '0.5rem' }} />}
                                 {chat.lastMessage && chat.lastMessage.type === 2 && <VideoLibraryIcon sx={{ marginRight: '0.5rem' }} />}
