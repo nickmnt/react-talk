@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -21,11 +22,13 @@ namespace Application.Search
         
         public class Handler : IRequestHandler<Query, Result<List<SearchResult>>>
         {
+            private readonly IUserAccessor _userAccessor;
             private readonly DataContext _context;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(IUserAccessor userAccessor, DataContext context, IMapper mapper)
             {
+                _userAccessor = userAccessor;
                 _context = context;
                 _mapper = mapper;
             }
@@ -40,7 +43,8 @@ namespace Application.Search
                         Username = x.UserName,
                         Image = x.Photos.SingleOrDefault(p => p.IsMain).Url,
                     })
-                    .Where(x => x.DisplayName.Contains(request.Term) || x.Username.Contains(request.Term))
+                    .Where(x => (x.DisplayName.Contains(request.Term) || x.Username.Contains(request.Term))
+                        && x.Username != _userAccessor.GetUsername())
                     .OrderBy(x => x.DisplayName)
                     .Take(10);
 
