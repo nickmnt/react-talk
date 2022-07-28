@@ -1,4 +1,5 @@
 import Paper from '@mui/material/Paper/Paper';
+import Typography from '@mui/material/Typography/Typography';
 import React from 'react';
 interface Props {
     inverted?: boolean;
@@ -9,7 +10,9 @@ export default function LoadingComponent({ inverted = true, content = 'Loading..
     return (
         <Paper square className="loader">
             <div className="spinner" />
-            <div className="loader__content">{content}</div>
+            <Typography variant="h4" className="loader__content">
+                {content}
+            </Typography>
         </Paper>
     );
 }

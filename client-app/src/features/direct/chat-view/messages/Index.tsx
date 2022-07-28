@@ -116,6 +116,9 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
     };
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (selected.length > 1) {
+            toast.warn('Note that this menu is only for one message.');
+        }
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {

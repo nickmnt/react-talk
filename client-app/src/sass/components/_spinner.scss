@@ -1,13 +1,20 @@
 .spinner {
-    width: 56px;
-    height: 56px;
-    border: 11px #474bff double;
+    width: 8rem;
+    height: 8rem;
+    margin-bottom: 3rem;
+    border: 20px #474bff double;
     border-left-style: solid;
     border-radius: 50%;
-    animation: spinner-5ib1d7 0.75s infinite linear;
+    animation: spinner-5ib1d7 0.75s infinite ease-out;
 }
 
 @keyframes spinner-5ib1d7 {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        opacity: 0.85;
+    }
     to {
         transform: rotate(360deg);
     }

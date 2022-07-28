@@ -94,12 +94,15 @@ export default observer(function ChatInput({ selectedCount }: Props) {
     if (selectedCount > 0) {
         return (
             <Paper square className="chatInput" elevation={3} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button sx={{ color: '#363636', textTransform: 'none' }}>
-                    <Stack direction="row" alignItems="center" sx={{ marginLeft: '1rem' }}>
-                        <ShortcutIcon className="mirror" sx={{ marginRight: '1rem' }} />
-                        <Typography variant="h6">Reply</Typography>
-                    </Stack>
-                </Button>
+                {selectedCount === 1 && (
+                    <Button sx={{ color: '#363636', textTransform: 'none' }}>
+                        <Stack direction="row" alignItems="center" sx={{ marginLeft: '1rem' }}>
+                            <ShortcutIcon className="mirror" sx={{ marginRight: '1rem' }} />
+                            <Typography variant="h6">Reply</Typography>
+                        </Stack>
+                    </Button>
+                )}
+                <div style={{ flex: 1 }} />
                 <Button sx={{ color: '#363636', textTransform: 'none' }} onClick={() => setForwarding(true)}>
                     <Stack direction="row" alignItems="center" sx={{ marginRight: '1rem' }}>
                         <ShortcutIcon sx={{ marginRight: '1rem' }} />
