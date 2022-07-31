@@ -29,6 +29,8 @@ import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
+import LinearProgress from '@mui/material/LinearProgress/LinearProgress';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export interface Props {
     selected: Message[];
@@ -343,6 +345,22 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
             )}
             {currentChat.messages && currentChat.messages.length > 0 ? (
                 <ChatScroller className="messages" onMoreUp={onMoreUp}>
+                    {paginationMessages && paginationMessages.currentPage < paginationMessages.totalPages && (
+                        <div
+                            style={{
+                                margin: '0 auto',
+                                fontWeight: 600,
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '.5rem',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <MoreVertIcon onClick={onMoreUp} color="secondary" />
+                        </div>
+                    )}
                     {user &&
                         currentChat.messages.map((message, i) => (
                             <div className={`messages__message ${message.username === user.username && 'messages__message--me'}`} key={i} ref={(el) => (messagesRef.current[i] = el)}>
@@ -388,6 +406,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                     )}
                 </>
             )}
+            {loadingNext && <LinearProgress color="secondary" />}
             {selected.length === 0 && currentChat.pins.length > 0 && selectedPin >= 0 && selectedPin < currentChat.pins.length && (
                 <Paper
                     square
