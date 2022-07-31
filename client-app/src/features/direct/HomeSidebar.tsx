@@ -13,6 +13,9 @@ import Chat from './chat/Index';
 import { PagingParams } from '../../app/models/pagination';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
+import Grow from '@mui/material/Grow/Grow';
+
+const growInterval = 200;
 
 export default observer(function HomeSidebar() {
     const {
@@ -82,7 +85,23 @@ export default observer(function HomeSidebar() {
                             style={{ height: '100%' }}
                             scrollableTarget="chatsScroller"
                         >
-                            <List>{loadingChats ? [0, 0].map((_, i) => <ChatSkeleton key={i} />) : chats.map((chat) => <Chat chat={chat} key={chat.id} />)}</List>
+                            <List>
+                                {loadingChats
+                                    ? [0, 0].map((_, i) => (
+                                          <Grow in timeout={growInterval * (i + 1)}>
+                                              <div>
+                                                  <ChatSkeleton key={i} />
+                                              </div>
+                                          </Grow>
+                                      ))
+                                    : chats.map((chat, i) => (
+                                          <Grow in timeout={growInterval * (i + 1)}>
+                                              <div>
+                                                  <Chat chat={chat} key={chat.id} />
+                                              </div>
+                                          </Grow>
+                                      ))}
+                            </List>
                         </InfiniteScroll>
                     ) : (
                         <List>

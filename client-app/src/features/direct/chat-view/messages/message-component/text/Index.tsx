@@ -59,7 +59,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
     }
 
     return (
-        <Zoom in={inViewport} timeout={250}>
+        <Zoom in={inViewport} timeout={500}>
             <Paper
                 className={`text${isMe ? '--me' : '--other'}`}
                 sx={{ backgroundColor: isMe ? 'primary.light' : 'background.paper', opacity: message.beingDeleted ? '0.5' : '1', color: 'text.primary' }}
