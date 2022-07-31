@@ -20,6 +20,8 @@ import Input from '@mui/material/Input';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchResult from '../direct/SearchResult';
 import { format } from 'date-fns';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button/Button';
 
 export interface Props {
     open: boolean;
@@ -37,7 +39,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default observer(function ContactsDialog({ open, onClose }: Props) {
     const {
-        directStore: { contactsSearch, searchResultsContacts, searchResultsContactsGlobal },
+        directStore: { contactsSearch, searchResultsContacts, searchResultsContactsGlobal, updateFollowing },
         contactsStore: { followings, loadingFollowings, loadFollowings }
     } = useStore();
 
@@ -114,13 +116,25 @@ export default observer(function ContactsDialog({ open, onClose }: Props) {
                                                 <ListItemAvatar sx={{ position: 'relative', overflow: 'visible' }}>
                                                     <Avatar alt={x.displayName} src={x.image} sx={{ width: 48, height: 48 }}></Avatar>
                                                 </ListItemAvatar>
-                                                <div className="chat__right">
-                                                    <div className="chat__rightTop" style={{ width: '100%' }}>
+                                                <div className="contactsDialog">
+                                                    <div className="contactsDialog__top" style={{ width: '100%' }}>
                                                         <div className="chat__name">{x.displayName}</div>
+                                                        <div style={{ flex: '1' }} />
                                                         <div>@{x.username}</div>
                                                     </div>
-                                                    <div className="chat__rightBottom" style={{ color: x.isOnline ? 'primary.main' : 'inherit' }}>
+                                                    <div className="contactsDialog__top" style={{ color: x.isOnline ? 'primary.main' : 'inherit' }}>
                                                         {x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeen, 'yyyy-MM-dd HH:mm')}
+                                                        <div style={{ flex: '1' }} />
+                                                        <Button
+                                                            variant="contained"
+                                                            color="error"
+                                                            onClick={(e) => {
+                                                                updateFollowing(x);
+                                                                e.preventDefault();
+                                                            }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             </ListItemButton>

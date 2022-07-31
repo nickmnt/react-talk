@@ -1,0 +1,12 @@
+.contactsDialog {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+
+    &__top {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+}
