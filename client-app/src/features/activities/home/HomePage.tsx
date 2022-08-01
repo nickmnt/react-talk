@@ -7,6 +7,7 @@ import Button from '@mui/material/Button/Button';
 import LoginDialog from '../../users/LoginDialog';
 import RegisterDialog from '../../users/RegisterDialog';
 import { GlassCard } from '../../../app/common/components/GlassCard';
+import { GrowList } from '../../../app/common/components/GrowList';
 
 export default observer(function HomePage() {
     const { userStore } = useStore();

@@ -1459,4 +1459,29 @@ export default class DirectStore {
             this.getChatDetails(foundChat);
         }
     };
+
+    updateGroupDetails = async (chatId: string, displayName: string, description: string) => {
+        try {
+            await agent.Chats.updateGroupDetails(chatId, displayName, description);
+
+            const foundChat = this.chats.find((x) => x.id === chatId);
+            runInAction(() => {
+                if (foundChat) {
+                    foundChat.displayName = displayName;
+                    foundChat.groupChat!.description = description;
+                }
+
+                if (this.currentChat && this.currentChat.id === chatId) {
+                    this.currentChat.displayName = displayName;
+                    this.currentChat.groupChat!.description = description;
+                }
+            });
+            toast.success('Updated group details.');
+            return true;
+        } catch (e) {
+            toast.error('Failed to update group details.');
+            console.log(e);
+            return true;
+        }
+    };
 }

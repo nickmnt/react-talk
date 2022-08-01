@@ -43,5 +43,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));;
         }
+        
+        [HttpPut("updateDetails")]
+        public async Task<IActionResult> UpdateDetails(UpdateDetails.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));;
+        }
     }
 }

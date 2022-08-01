@@ -1,3 +1,4 @@
+import Input from '@mui/material/Input/Input';
 import { useField } from 'formik';
 import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
@@ -5,8 +6,9 @@ import { Form, Label } from 'semantic-ui-react';
 interface Props {
     placeholder: string;
     name: string;
-    rows: number;
     label?: string;
+    // Rest
+    [x: string]: any;
 }
 
 export default function MyTextArea(props: Props) {
@@ -15,7 +17,7 @@ export default function MyTextArea(props: Props) {
     return (
         <Form.Field error={meta.touched && !!meta.error}>
             <label>{props.label}</label>
-            <textarea {...field} {...props} />
+            <Input multiline {...field} {...props} />
             {meta.touched && meta.error ? (
                 <Label basic color="red">
                     {meta.error}

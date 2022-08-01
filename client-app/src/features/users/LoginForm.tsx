@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography/Typography';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { GrowList } from '../../app/common/components/GrowList';
 import MyTextInput from '../../app/common/form/MyTextInput';
 import { useStore } from '../../app/stores/store';
 
@@ -13,18 +14,20 @@ export default observer(function LoginForm() {
 
     return (
         <Formik initialValues={{ email: '', password: '', error: null }} onSubmit={(values, { setErrors }) => login(values).catch((error) => setErrors({ error: 'Invalid email or password' }))}>
-            {({ handleSubmit, isSubmitting, errors }) => (
+            {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form onSubmit={handleSubmit} autoComplete="off">
                     <Paper sx={{ padding: '3rem' }}>
-                        <Typography variant="h3" textAlign="center" sx={{ marginBottom: '1rem' }}>
-                            Login to ReactTalk
-                        </Typography>
-                        <MyTextInput name="email" placeholder="Email" />
-                        <MyTextInput name="password" placeholder="Password" type="password" />
-                        <ErrorMessage name="error" render={() => <Typography style={{ margin: '.5rem 0', color: 'red' }}>{errors.error}</Typography>} />
-                        <Button sx={{ width: '100%', marginTop: '1rem', borderColor: 'white' }} variant="outlined" disabled={isSubmitting} type="submit">
-                            Login
-                        </Button>
+                        <GrowList interval={300}>
+                            <Typography variant="h3" textAlign="center" sx={{ marginBottom: '1rem' }}>
+                                Login to ReactTalk
+                            </Typography>
+                            <MyTextInput name="email" placeholder="Email" />
+                            <MyTextInput name="password" placeholder="Password" type="password" />
+                            <ErrorMessage name="error" render={() => <Typography style={{ margin: '.5rem 0', color: 'red' }}>{errors.error}</Typography>} />
+                            <Button sx={{ width: '100%', marginTop: '1rem', borderColor: 'white' }} variant="contained" disabled={!isValid || !dirty || isSubmitting} type="submit">
+                                Login
+                            </Button>
+                        </GrowList>
                     </Paper>
                 </Form>
             )}

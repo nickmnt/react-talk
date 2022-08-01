@@ -7,6 +7,8 @@ interface Props {
     name: string;
     label?: string;
     type?: string;
+    // Rest
+    [x: string]: any;
 }
 
 export default function MyTextInput(props: Props) {

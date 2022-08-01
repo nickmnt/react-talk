@@ -12,24 +12,46 @@ import ListItemText from '@mui/material/ListItemText/ListItemText';
 import { useStore } from '../../../app/stores/store';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack/Stack';
-import Input from '@mui/material/Input/Input';
 import MenuList from '@mui/material/MenuList/MenuList';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
 import LockIcon from '@mui/icons-material/Lock';
 import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { observer } from 'mobx-react-lite';
+import { Form, Formik } from 'formik';
+import Button from '@mui/material/Button/Button';
+import MyTextInput from '../../../app/common/form/MyTextInput';
+import * as Yup from 'yup';
+import { useState } from 'react';
 
 export interface Props {
     chatPage: ChatPage;
 }
 
+const validationSchema = Yup.object({
+    displayName: Yup.string().required('Required')
+});
+
 export default observer(function GroupEdit({ chatPage }: Props) {
     const {
-        directStore: { currentChat },
+        directStore: { currentChat, updateGroupDetails },
         chatStore: { removeFromStack, addPermissionsAllToStack },
         photoStore: { setPhotoOpen }
     } = useStore();
+
+    const [initialValues, setInitialValues] = useState({
+        displayName: chatPage.groupData?.displayName ? chatPage.groupData?.displayName : '',
+        description: chatPage.groupData?.groupChat?.description ? chatPage.groupData.groupChat.description : ''
+    });
+
+    const handleSubmit = async (values: any) => {
+        if (await updateGroupDetails(chatPage.groupData!.id, values.displayName, values.description)) {
+            setInitialValues({
+                displayName: values.displayName,
+                description: values.description
+            });
+        }
+    };
 
     if (!currentChat) return null;
 
@@ -65,33 +87,44 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                 </AppBar>
 
                 <Paper style={{ margin: 'auto 0' }} className="groupEdit" elevation={3} square>
-                    <Paper square sx={{ marginBottom: '1rem' }}>
-                        <Stack
-                            direction="column"
-                            spacing={2}
-                            sx={{
-                                width: '100%',
-                                marginBottom: '2rem',
-                                position: 'relative',
-                                paddingBottom: '2rem'
+                    <Paper square sx={{ marginBottom: '1rem', padding: '1rem' }}>
+                        <Formik
+                            onSubmit={(values) => {
+                                handleSubmit(values);
                             }}
-                            alignItems="center"
-                            justifyContent="center"
+                            validationSchema={validationSchema}
+                            initialValues={initialValues}
+                            enableReinitialize
                         >
-                            <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '1.5rem' }}>
-                                <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={currentChat.image} />
-                                <Input
-                                    defaultValue={currentChat.displayName}
+                            {({ isSubmitting, isValid, dirty, handleSubmit }) => (
+                                <Stack
+                                    direction="column"
+                                    spacing={2}
                                     sx={{
-                                        fontSize: '1.6rem',
-                                        padding: 1.5,
-                                        paddingLeft: 3.5,
-                                        height: '4rem'
+                                        width: '100%',
+                                        marginBottom: '2rem'
                                     }}
-                                />
-                            </Stack>
-                            <Input placeholder="Description (optional)" sx={{ width: '90%' }} />
-                        </Stack>
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <Form onSubmit={handleSubmit} autoComplete="off">
+                                        <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '.5rem' }}>
+                                            <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={currentChat.image} />
+                                            <MyTextInput name="displayName" placeholder="Name" />
+                                        </Stack>
+                                        <MyTextInput multiline name="description" placeholder="Description (optional)" />
+                                        {dirty && (
+                                            <div style={{ display: 'flex', width: '100%', marginTop: '.5rem' }}>
+                                                <div style={{ flex: '1' }} />
+                                                <Button disabled={!isValid || isSubmitting} type="submit">
+                                                    Edit
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </Form>
+                                </Stack>
+                            )}
+                        </Formik>
                     </Paper>
 
                     {/* <Paper
