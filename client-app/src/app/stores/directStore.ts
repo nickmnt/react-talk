@@ -1022,17 +1022,28 @@ export default class DirectStore {
     updateAdminPermissions = async (chatId: string, targetUsername: string, permissions: AdminPermissions, chatPage: ChatPage) => {
         this.loadingAdminPermissions = true;
         try {
-            const response = await agent.Chats.updateAdminPermissions(chatId, targetUsername, permissions);
+            await agent.Chats.updateAdminPermissions(chatId, targetUsername, permissions);
             runInAction(() => {
                 const chat = this.chats.find((x) => x.id === chatId);
                 if (chat && chat.groupChat) {
                     const target = chat.groupChat.members.find((x) => x.username === targetUsername);
                     if (target) {
-                        target.deleteMessages = response.deleteMessages;
-                        target.banUsers = response.banUsers;
-                        target.addNewAdmins = response.addNewAdmins;
-                        target.remainAnonymous = response.remainAnonymous;
-                        target.customTitle = response.customTitle;
+                        target.deleteMessages = permissions.deleteMessages;
+                        target.banUsers = permissions.banUsers;
+                        target.addNewAdmins = permissions.addNewAdmins;
+                        target.remainAnonymous = permissions.remainAnonymous;
+                        target.customTitle = permissions.customTitle;
+                        target.memberType = 1;
+                    }
+                }
+                if (this.currentChat && this.currentChat.id === chatId) {
+                    const target = this.currentChat.groupChat!.members.find((x) => x.username === targetUsername);
+                    if (target) {
+                        target.deleteMessages = permissions.deleteMessages;
+                        target.banUsers = permissions.banUsers;
+                        target.addNewAdmins = permissions.addNewAdmins;
+                        target.remainAnonymous = permissions.remainAnonymous;
+                        target.customTitle = permissions.customTitle;
                         target.memberType = 1;
                     }
                 }

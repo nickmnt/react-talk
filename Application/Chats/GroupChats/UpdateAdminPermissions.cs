@@ -96,11 +96,11 @@ namespace Application.Chats.GroupChats
                 {
                     var dto = new AdminPermissionsDto
                     {
-                        DeleteMessages = userChat.DeleteMessages,
-                        BanUsers = userChat.BanUsers,
-                        AddNewAdmins = userChat.AddNewAdmins,
-                        RemainAnonymous = userChat.RemainAnonymous,
-                        CustomTitle = userChat.CustomTitle
+                        DeleteMessages = request.DeleteMessages,
+                        BanUsers = request.BanUsers,
+                        AddNewAdmins = request.AddNewAdmins,
+                        RemainAnonymous = request.RemainAnonymous,
+                        CustomTitle = request.CustomTitle
                     };
                     return Result<AdminPermissionsDto>.Success(dto);
                 }
