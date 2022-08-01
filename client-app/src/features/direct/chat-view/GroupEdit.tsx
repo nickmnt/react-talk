@@ -34,7 +34,7 @@ const validationSchema = Yup.object({
 
 export default observer(function GroupEdit({ chatPage }: Props) {
     const {
-        directStore: { currentChat, updateGroupDetails },
+        directStore: { currentChat, updateGroupDetails, setGroupPicsOpen },
         chatStore: { removeFromStack, addPermissionsAllToStack },
         photoStore: { setPhotoOpen }
     } = useStore();
@@ -109,7 +109,16 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                                 >
                                     <Form onSubmit={handleSubmit} autoComplete="off">
                                         <Stack direction="row" spacing={2} alignItems="center" sx={{ padding: '.5rem' }}>
-                                            <Avatar sx={{ width: 80, height: 80 }} alt="Okay" src={currentChat.image} />
+                                            <Avatar
+                                                sx={{ width: 80, height: 80, cursor: 'pointer' }}
+                                                alt="Profile"
+                                                src={currentChat.image}
+                                                onClick={() => {
+                                                    if (currentChat.groupChat!.photos!.length > 0) {
+                                                        setGroupPicsOpen(currentChat);
+                                                    }
+                                                }}
+                                            />
                                             <MyTextInput name="displayName" placeholder="Name" />
                                         </Stack>
                                         <MyTextInput multiline name="description" placeholder="Description (optional)" />
