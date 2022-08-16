@@ -344,7 +344,7 @@ export default observer(function Messages({ selected, toggleSelected, openPinOpt
                 </Paper>
             )}
             {currentChat.messages && currentChat.messages.length > 0 ? (
-                <ChatScroller className="messages" onMoreUp={onMoreUp}>
+                <ChatScroller className="messages beautifulScroll" onMoreUp={onMoreUp}>
                     {paginationMessages && paginationMessages.currentPage < paginationMessages.totalPages && (
                         <div
                             style={{

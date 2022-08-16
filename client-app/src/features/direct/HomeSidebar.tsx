@@ -75,7 +75,7 @@ export default observer(function HomeSidebar() {
         <Paper square className="homeSidebar" elevation={0}>
             <Actions searchVal={searchVal} setSearchVal={setSearchVal} />
             <div ref={container} style={{ flex: 1, overflow: 'hidden', width: '100%' }}>
-                <div className="homeSidebar__chats" id="chatsScroller">
+                <div className="homeSidebar__chats beautifulScroll" id="chatsScroller">
                     {!searchVal ? (
                         <InfiniteScroll
                             next={handleGetNext}

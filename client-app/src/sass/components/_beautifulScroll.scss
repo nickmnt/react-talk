@@ -1,6 +1,8 @@
 .beautifulScroll {
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-color: #603F83FF #C7D3D4FF;
+    scrollbar-width: thin;
 
     &::-webkit-scrollbar,
     &::-webkit-scrollbar-thumb {
