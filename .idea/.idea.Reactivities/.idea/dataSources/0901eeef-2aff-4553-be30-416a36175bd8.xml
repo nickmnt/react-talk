@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="Microsoft SQL Server LocalDB (JetBrains)">
+  <database-model serializer="dbm" dbms="MSSQL_LOCALDB" family-id="MSSQL_LOCALDB" format-version="4.41">
+    <root id="1">
+      <Dbms>MSSQL_LOCALDB</Dbms>
+      <ServerVersion>15.0.2000</ServerVersion>
+    </root>
+    <database id="2" parent="1" name="AdventureWorks2019"/>
+    <database id="3" parent="1" name="C:\USERS\NIMA\APPDATA\ROAMING\LINQPAD\NUTSHELL.MDF"/>
+    <database id="4" parent="1" name="EfCoreInActionDb.Chapter02"/>
+    <database id="5" parent="1" name="EfCoreInActionDb2-Part1"/>
+    <database id="6" parent="1" name="EfCoreInActionDb2-Test_Ch02_StringSearch"/>
+    <database id="7" parent="1" name="EfCoreInActionDb2-Test_Ch03_OneToOneUpdate"/>
+    <database id="8" parent="1" name="EfCoreInActionDb2-Test_Ch03_Update"/>
+    <database id="9" parent="1" name="EfCoreInActionDb2-Test_Ch04_CascadeDelete"/>
+    <database id="10" parent="1" name="EfCoreInActionDb2-Test_Ch06_AddEntityWithRelationships"/>
+    <database id="11" parent="1" name="EfCoreInActionDb2-Test_TestDatabaseSetupHelpers"/>
+    <database id="12" parent="1" name="MyFirstEfCoreDb"/>
+    <database id="13" parent="1" name="Reactivities"/>
+    <database id="14" parent="1" name="Shop"/>
+    <database id="15" parent="1" name="Taste"/>
+    <database id="16" parent="1" name="master">
+      <Current>1</Current>
+    </database>
+    <database id="17" parent="1" name="model"/>
+    <database id="18" parent="1" name="msdb"/>
+    <database id="19" parent="1" name="telegram"/>
+    <database id="20" parent="1" name="tempdb"/>
+    <database id="21" parent="1" name="test"/>
+    <schema id="22" parent="16" name="INFORMATION_SCHEMA"/>
+    <schema id="23" parent="16" name="db_accessadmin"/>
+    <schema id="24" parent="16" name="db_backupoperator"/>
+    <schema id="25" parent="16" name="db_datareader"/>
+    <schema id="26" parent="16" name="db_datawriter"/>
+    <schema id="27" parent="16" name="db_ddladmin"/>
+    <schema id="28" parent="16" name="db_denydatareader"/>
+    <schema id="29" parent="16" name="db_denydatawriter"/>
+    <schema id="30" parent="16" name="db_owner"/>
+    <schema id="31" parent="16" name="db_securityadmin"/>
+    <schema id="32" parent="16" name="dbo">
+      <Current>1</Current>
+    </schema>
+    <schema id="33" parent="16" name="guest"/>
+    <schema id="34" parent="16" name="sys"/>
+  </database-model>
+</dataSource>
