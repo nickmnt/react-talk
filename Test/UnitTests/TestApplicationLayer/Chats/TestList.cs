@@ -35,7 +35,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new List.Query(); 
+                var request = new List.Query{Params = new PagingParams()}; 
                 var handler = new List.Handler(context, mapper, MockUserAccessor.Create().Object);
                 
                 //Act
@@ -76,7 +76,7 @@ namespace Test.UnitTests.TestApplicationLayer.Chats
                 });
                 var mapper = config.CreateMapper();
 
-                var request = new List.Query(); 
+                var request = new List.Query{Params = new PagingParams()}; 
                 var handler = new List.Handler(context, mapper, MockUserAccessor.Create().Object);
                 
                 //Act

@@ -36,9 +36,10 @@ namespace Test.UnitTests.TestApplicationLayer.Search
                     cfg.AddProfile(new MappingProfiles());
                 });
                 var mapper = config.CreateMapper();
-
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new List.Query {Term = "t"}; 
-                var handler = new List.Handler(context, mapper);
+                var handler = new List.Handler(userAccessor, context, mapper);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());
@@ -68,9 +69,10 @@ namespace Test.UnitTests.TestApplicationLayer.Search
                     cfg.AddProfile(new MappingProfiles());
                 });
                 var mapper = config.CreateMapper();
-
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new List.Query {Term = "t"}; 
-                var handler = new List.Handler(context, mapper);
+                var handler = new List.Handler(userAccessor, context, mapper);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());
@@ -100,9 +102,10 @@ namespace Test.UnitTests.TestApplicationLayer.Search
                     cfg.AddProfile(new MappingProfiles());
                 });
                 var mapper = config.CreateMapper();
-
+                var userAccessor = MockUserAccessor.Create().Object;
+                
                 var request = new List.Query {Term = "m"}; 
-                var handler = new List.Handler(context, mapper);
+                var handler = new List.Handler(userAccessor,context, mapper);
                 
                 //Act
                 var result = await handler.Handle(request, new CancellationToken());
