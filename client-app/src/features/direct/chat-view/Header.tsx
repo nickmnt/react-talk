@@ -1,6 +1,5 @@
 import IconButton from '@mui/material/IconButton/IconButton';
 import { observer } from 'mobx-react-lite';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { format } from 'date-fns';

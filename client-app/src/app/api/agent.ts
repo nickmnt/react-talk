@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { history } from '../..';
 import { toast } from 'react-toastify';
 import { Activity, ActivityFormValues } from '../models/activity';
 import { User, UserFormValues } from '../models/user';
@@ -44,7 +43,7 @@ axios.interceptors.response.use(
                     toast.error(data);
                 }
                 if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
-                    history.push('/not-found');
+                    if (store.directStore.navigate) store.directStore.navigate('/not-found', { replace: true });
                 }
                 if (data.errors) {
                     const modalStateErrors = [];
@@ -60,11 +59,11 @@ axios.interceptors.response.use(
                 toast.error('unauthorized');
                 break;
             case 404:
-                history.push('not-found');
+                if (store.directStore.navigate) store.directStore.navigate('not-found', { replace: true });
                 break;
             case 500:
                 store.commonStore.setServerError(data);
-                history.push('/server-error');
+                if (store.directStore.navigate) store.directStore.navigate('/server-error', { replace: true });
                 break;
         }
         return Promise.reject(error);

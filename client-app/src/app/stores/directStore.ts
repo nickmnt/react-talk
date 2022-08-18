@@ -1,6 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Theme } from '@mui/material/styles/createTheme';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { NavigateFunction } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FileRecord } from '../../features/direct/chat-view/ChatInput';
 import agent from '../api/agent';
@@ -73,6 +74,7 @@ export default class DirectStore {
     theme: Theme | null = null;
     newMsgQueue: MessageNotifDto[] = [];
     file: FileRecord | null = null;
+    navigate: NavigateFunction | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -1494,5 +1496,9 @@ export default class DirectStore {
             console.log(e);
             return true;
         }
+    };
+
+    setNavigate = (navigate: NavigateFunction) => {
+        this.navigate = navigate;
     };
 }

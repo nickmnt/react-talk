@@ -1,5 +1,6 @@
+import Stack from '@mui/material/Stack/Stack';
+import Typography from '@mui/material/Typography/Typography';
 import React from 'react';
-import { Message } from 'semantic-ui-react';
 
 interface Props {
     errors: any;
@@ -7,14 +8,16 @@ interface Props {
 
 export default function ValidationErrors({ errors }: Props) {
     return (
-        <Message error>
+        <>
             {errors && (
-                <Message.List>
+                <Stack>
                     {errors.map((err: any, i: any) => (
-                        <Message.Item key={i}>{err}</Message.Item>
+                        <Typography color="error" key={i}>
+                            {err}
+                        </Typography>
                     ))}
-                </Message.List>
+                </Stack>
             )}
-        </Message>
+        </>
     );
 }

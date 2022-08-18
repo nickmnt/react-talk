@@ -1,13 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useStore } from '../../../app/stores/store';
+import { useStore } from '../../app/stores/store';
 import ForumIcon from '@mui/icons-material/Forum';
 import Button from '@mui/material/Button/Button';
-import LoginDialog from '../../users/LoginDialog';
-import RegisterDialog from '../../users/RegisterDialog';
-import { GlassCard } from '../../../app/common/components/GlassCard';
-import { GrowList } from '../../../app/common/components/GrowList';
+import LoginDialog from '../users/LoginDialog';
+import RegisterDialog from '../users/RegisterDialog';
+import { GlassCard } from '../../app/common/components/GlassCard';
 
 export default observer(function HomePage() {
     const { userStore } = useStore();

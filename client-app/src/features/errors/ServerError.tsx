@@ -1,24 +1,23 @@
 import React from 'react';
-import { Container, Header, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../../app/stores/store';
+import Typography from '@mui/material/Typography/Typography';
+import Stack from '@mui/material/Stack/Stack';
+import { ErrorOutline } from '@mui/icons-material';
+import Button from '@mui/material/Button/Button';
+import { Link } from 'react-router-dom';
 
 export default observer(function ServerError() {
-    const { commonStore } = useStore();
-
     return (
-        <Container>
-            <Header as="h1" content="Server Error" />
-            {/*<Header sub as='h5' color='red' content={commonStore.error?.message}/>*/}
-            {
-                /*commonStore.error?.details &&*/
-                <Segment>
-                    <Header as="h4" content="Stack trace" color="teal" />
-                    <code style={{ marginTop: '10px' }}>
-                        {/*{commonStore.error.details}*/} {commonStore.error}
-                    </code>
-                </Segment>
-            }
-        </Container>
+        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Stack>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <ErrorOutline color="error" />
+                    <Typography sx={{ marginLeft: '1rem' }}>Oops - Something has gone wrong!</Typography>
+                </div>
+                <Link to="/direct/inbox">
+                    <Button>Back to inbox</Button>
+                </Link>
+            </Stack>
+        </div>
     );
 });
