@@ -88,7 +88,7 @@ namespace Application.Chats
                         var copiedMsg = new Message
                         {
                             Body = msg.Body,
-                            Sender = msg.Sender,
+                            Sender = user,
                             Type = msg.Type
                         };
 
@@ -107,7 +107,7 @@ namespace Application.Chats
                 {
                     return Result<bool>.Success(true);
                 }
-                return Result<bool>.Failure("Failed saving the forwarded messages to database.");
+                return Result<bool>.Failure("Failed to save the forwarded messages to database.");
             }
         }
     }
