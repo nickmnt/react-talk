@@ -1,12 +1,17 @@
 import { observer } from 'mobx-react-lite';
 import Paper from '@mui/material/Paper/Paper';
 import Skeleton from '@mui/material/Skeleton/Skeleton';
+import { useStore } from '../../../app/stores/store';
 
 export interface Props {
     isMe: boolean;
 }
 
 export default observer(function TextSkeleton({ isMe }: Props) {
+    const {
+        directStore: { mode }
+    } = useStore();
+
     const randomGen = (min: number, max: number) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
@@ -18,7 +23,7 @@ export default observer(function TextSkeleton({ isMe }: Props) {
     }
 
     return (
-        <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? 'primary.main' : 'background.paper' }} square elevation={6}>
+        <Paper className={`text${isMe ? '--me' : '--other'}`} sx={{ backgroundColor: isMe ? (mode === 'light' ? 'primary.light' : 'primary.dark') : 'background.paper' }} square elevation={6}>
             <div className="text__container">
                 {!isMe && (
                     <div className="text__name">

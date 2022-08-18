@@ -13,7 +13,7 @@ export default observer(function MessagesSkeleton() {
                 flexDirection: 'column-reverse'
             }}
         >
-            <ScrollableFeed className="messages">
+            <ScrollableFeed className="messages beautifulScroll">
                 {[false, false, true, false, false, true, true, false, false, false].map((isMe, i) => (
                     <div className={`messages__message ${isMe && 'messages__message--me'}`} key={i}>
                         <MessageSkeleton isMe={isMe} />

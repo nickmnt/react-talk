@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack/Stack';
 import Typography from '@mui/material/Typography/Typography';
 import { truncate } from '../../../../../../app/common/utility';
 import Zoom from '@mui/material/Zoom/Zoom';
+import { Image } from 'mui-image';
 
 interface Props {
     isMe: boolean;
@@ -30,7 +31,7 @@ interface Props {
 
 export default observer(function Text({ isMe, name, text, date, isDoubleTick, showImg, type, attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage, inViewport }: Props) {
     const {
-        directStore: { currentChat, getMessageById, openLightbox },
+        directStore: { currentChat, getMessageById, openLightbox, mode },
         chatStore: { addProfileDetailsToStack }
     } = useStore();
     const replyTo = getMessageById(message.replyToId);
@@ -62,7 +63,7 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
         <Zoom in={inViewport} timeout={500}>
             <Paper
                 className={`text${isMe ? '--me' : '--other'}`}
-                sx={{ backgroundColor: isMe ? 'primary.light' : 'background.paper', opacity: message.beingDeleted ? '0.5' : '1', color: 'text.primary' }}
+                sx={{ backgroundColor: isMe ? (mode === 'light' ? 'primary.light' : 'primary.dark') : 'background.paper', opacity: message.beingDeleted ? '0.5' : '1', color: 'text.primary' }}
                 square
                 elevation={6}
             >
@@ -103,8 +104,8 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                     </div>
                 )}
                 {type === 1 && (
-                    <Paper sx={{ overflow: 'hidden' }}>
-                        <img onClick={() => openLightbox(message.id)} src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" />
+                    <Paper sx={{ overflow: 'hidden' }} onClick={() => openLightbox(message.id)}>
+                        <Image src={isLocal ? URL.createObjectURL(localBlob!) : attachedImg} alt="Attachment" className="text__attachedImg" showLoading />
                     </Paper>
                 )}
                 {type === 2 && (
