@@ -34,7 +34,9 @@ namespace Application.Chats
                 var userChat = await _context.UserChats
                     .Include(x => x.Chat)
                     .ThenInclude(x => x.Pins)
-                    .Where(x => x.ChatId == request.ChatId)
+                    .Include(x => x.AppUser)
+                    .Where(x => x.ChatId == request.ChatId && x.AppUser.UserName == _accessor.GetUsername())
+                    .AsSplitQuery()
                     .SingleOrDefaultAsync(cancellationToken);
 
                 if (userChat == null)
