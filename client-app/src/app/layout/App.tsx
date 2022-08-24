@@ -97,7 +97,8 @@ function App() {
                     <Routes>
                         <Route path="/">
                             <Route index element={<HomePage />} />
-                            <Route path="/direct/inbox" element={<Inbox />} />
+                            <Route path="/direct/inbox/" element={<Inbox />} />
+                            <Route path="/direct/inbox/:chatId" element={<Inbox />} />
                             <Route path="/server-error" element={<ServerError />} />
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="*" element={<NotFound />} />

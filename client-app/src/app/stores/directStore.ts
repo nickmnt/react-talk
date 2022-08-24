@@ -347,6 +347,9 @@ export default class DirectStore {
         this.initialMessagesLoaded = false;
         this.pagingParamsMessages = new PagingParams();
         this.file = null;
+
+        if (chat.type < 2 && this.navigate) this.navigate(`direct/inbox/${chat.id}`, { replace: true });
+
         switch (chat.type) {
             case 0:
                 await this.getPrivateChatDetails(chat);
@@ -1500,5 +1503,12 @@ export default class DirectStore {
 
     setNavigate = (navigate: NavigateFunction) => {
         this.navigate = navigate;
+    };
+
+    getChat = async (chatId: string) => {
+        if (this.currentChat && this.currentChat.id === chatId) return;
+        const chat = await agent.Chats.get(chatId);
+        this.currentChat = chat;
+        this.getChatDetails(chat);
     };
 }

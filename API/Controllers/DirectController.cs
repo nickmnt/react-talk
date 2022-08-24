@@ -246,5 +246,13 @@ namespace API.Controllers
             
             return HandleResult(Result<Unit>.Success(Unit.Value));
         }
+        
+        [HttpGet("chat/{chatId}")]
+        public async Task<IActionResult> GetChat(Guid chatId)
+        {
+            var result = await Mediator.Send(new Get.Query {ChatId = chatId});
+            
+            return HandleResult(result);
+        }
     }
 }

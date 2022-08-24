@@ -17,6 +17,28 @@ namespace Application.Chats
 {
     public class List
     {
+        public static ChatDto MapUserChatToDto(UserChat userChat, IMapper mapper)
+        {
+            var chat = userChat.Chat;
+            ChatDto mapped = null;
+            switch (chat.Type)
+            {
+                case ChatType.Channel:
+                    mapped = ChatMapping.MapChannel(userChat, mapper);
+                    break;
+                case ChatType.Group:
+                    mapped = ChatMapping.MapGroup(userChat, mapper);
+                    break;
+                case ChatType.PrivateChat:
+                    mapped = mapper.Map<ChatDto>(userChat);
+                    break;
+                case ChatType.Saved:
+                    mapped = mapper.Map<ChatDto>(userChat);
+                    break;
+            }
+
+            return mapped;
+        }
         public class Query : IRequest<Result<PagedList<ChatDto>>>
         {
             public PagingParams Params { get; set; }
@@ -67,22 +89,7 @@ namespace Application.Chats
                 {
                     var chat = userChat.Chat;
 
-                    ChatDto mapped = null;
-                    switch (chat.Type)
-                    {
-                        case ChatType.Channel:
-                            mapped = ChatMapping.MapChannel(userChat, _mapper);
-                            break;
-                        case ChatType.Group:
-                            mapped = ChatMapping.MapGroup(userChat, _mapper);
-                            break;
-                        case ChatType.PrivateChat:
-                            mapped = _mapper.Map<ChatDto>(userChat);
-                            break;
-                        case ChatType.Saved:
-                            mapped = _mapper.Map<ChatDto>(userChat);
-                            break;
-                    }
+                    ChatDto mapped = MapUserChatToDto(userChat, _mapper);
 
                     Message lastMessage = userChat.Chat.Messages.OrderByDescending
                         (x => x.CreatedAt).FirstOrDefault();;

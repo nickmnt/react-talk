@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper/Paper';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import CopyDialog from '../../app/common/dialog/CopyDialog';
 import { useStore } from '../../app/stores/store';
 import ContactsDialog from '../contacts/ContactsDialog';
@@ -31,11 +32,14 @@ export default observer(function Inbox() {
             setCopyOpen,
             copyFunc,
             contactsOpen,
-            setContactsOpen
+            setContactsOpen,
+            getChat
         },
         photoStore: { photoOpen, setPhotoOpen },
         contactsStore: { loadFollowings }
     } = useStore();
+
+    let { chatId } = useParams();
 
     useEffect(() => {
         loadFollowings();
@@ -48,6 +52,10 @@ export default observer(function Inbox() {
             clearChats();
         };
     }, [createHubConnection, clearChats]);
+
+    useEffect(() => {
+        if (chatId) getChat(chatId);
+    }, [chatId, getChat]);
 
     return (
         <div className="home">

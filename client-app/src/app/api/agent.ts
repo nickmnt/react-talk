@@ -188,7 +188,8 @@ const Chats = {
     startTyping: (chatId: string) => requests.put<void>('direct/typing', { chatId }),
     stopTyping: (chatId: string) => requests.put<void>('direct/stopTyping', { chatId }),
     createSavedChat: () => requests.post<ChatDto>('direct/savedMessagesChat', {}),
-    updateGroupDetails: (chatId: string, displayName: string, description: string) => requests.put<void>('/group/updateDetails', { chatId, displayName, description })
+    updateGroupDetails: (chatId: string, displayName: string, description: string) => requests.put<void>('/group/updateDetails', { chatId, displayName, description }),
+    get: (chatId: string) => requests.get<ChatDto>(`/direct/chat/${chatId}`)
 };
 
 const agent = {
