@@ -116,7 +116,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     return (
         <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <AppBar position="relative" elevation={3} sx={{ bgcolor: mode === 'light' ? 'black' : 'white', color: mode === 'dark' ? 'black' : 'white' }}>
+                <AppBar position="relative" elevation={3} sx={{ bgcolor: mode === 'light' ? '#343434' : 'white', color: mode === 'dark' ? '#343434' : 'white' }}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
