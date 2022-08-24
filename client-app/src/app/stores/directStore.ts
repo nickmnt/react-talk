@@ -83,7 +83,7 @@ export default class DirectStore {
     createHubConnection = () => {
         if (store.userStore.user?.token) {
             this.hubConnection = new HubConnectionBuilder()
-                .withUrl('http://localhost:5000/direct', {
+                .withUrl(process.env.REACT_APP_DIRECT_URL!, {
                     accessTokenFactory: () => store.userStore.user?.token!
                 })
                 .withAutomaticReconnect()
