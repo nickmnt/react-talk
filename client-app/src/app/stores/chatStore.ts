@@ -1,6 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { toast } from 'react-toastify';
-import { validate } from 'uuid';
 import agent from '../api/agent';
 import { ChatDto, ChatPage, GroupMember } from '../models/chat';
 import { store } from './store';

@@ -100,12 +100,16 @@ export default class DirectStore {
                 .catch((error) => console.log('Error establishing the connection'));
 
             this.hubConnection.onreconnected(() => {
-                this.connected = 'connected';
+                runInAction(() => {
+                    this.connected = 'connected';
+                });
                 toast.success('Reconnected.');
             });
 
             this.hubConnection.onreconnecting(() => {
-                this.connected = 'reconnecting';
+                runInAction(() => {
+                    this.connected = 'reconnecting';
+                });
                 toast.error('Disconnected. Reconnecting...');
             });
 
@@ -1508,7 +1512,11 @@ export default class DirectStore {
     getChat = async (chatId: string) => {
         if (this.currentChat && this.currentChat.id === chatId) return;
         const chat = await agent.Chats.get(chatId);
-        this.currentChat = chat;
+        runInAction(() => {
+            if (chat.lastMessage) chat.lastMessage.createdAt = new Date(chat.lastMessage?.createdAt + 'Z');
+            chat.lastSeen = new Date(chat.lastSeen + 'Z');
+            this.currentChat = chat;
+        });
         this.getChatDetails(chat);
     };
 }
