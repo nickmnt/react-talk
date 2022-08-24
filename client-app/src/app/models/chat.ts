@@ -129,6 +129,7 @@ export interface PrivateChatResultDto {
 }
 
 export interface ChatPage {
+    chatId?: string;
     type: number;
     accountData?: Profile;
     groupData?: ChatDto;

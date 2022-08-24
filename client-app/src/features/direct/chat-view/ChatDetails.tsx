@@ -41,7 +41,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox, mode },
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox, mode, currentChat },
         contactsStore: { isFollowing }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
@@ -70,15 +70,27 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const goToChat = () => {
         switch (chatPage.type) {
             case 0:
+                if (chatPage.accountData!.username === currentChat?.participantUsername) {
+                    removeFromStack(chatPage);
+                    return;
+                }
                 //Personal account
                 const searchResult = chats.find((x) => x.participantUsername === chatPage.accountData!.username);
                 searchResult ? getChatDetails(searchResult) : setLocalChat(chatPage.accountData!.username, chatPage.accountData!.displayName, chatPage.accountData!.image);
                 break;
             case 1:
+                if (currentChat?.id === chatPage.chatId!) {
+                    removeFromStack(chatPage);
+                    return;
+                }
                 //Group
                 getChatDetails(chatPage.groupData!);
                 break;
             case 2:
+                if (currentChat?.id === chatPage.chatId!) {
+                    removeFromStack(chatPage);
+                    return;
+                }
                 //Channel
                 getChatDetails(chatPage.channelData!);
                 break;

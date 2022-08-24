@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { toast } from 'react-toastify';
+import { validate } from 'uuid';
 import agent from '../api/agent';
 import { ChatDto, ChatPage, GroupMember } from '../models/chat';
 import { store } from './store';
@@ -16,10 +17,10 @@ export default class ChatStore {
         if (val.type === 0) {
             this.addProfileDetailsToStack(val.privateChat!.otherUsername);
         } else if (val.type === 1) {
-            this.stack = [...this.stack, { type: val.type, groupData: val, index: this.i }];
+            this.stack = [...this.stack, { type: val.type, groupData: val, index: this.i, chatId: val.id }];
             this.i += 1;
         } else if (val.type === 2) {
-            this.stack = [...this.stack, { type: val.type, channelData: val, index: this.i }];
+            this.stack = [...this.stack, { type: val.type, channelData: val, index: this.i, chatId: val.id }];
             this.i += 1;
         } else if (val.type === -20 || val.type === 3) {
             toast('The saved messages chat does not have details.');
