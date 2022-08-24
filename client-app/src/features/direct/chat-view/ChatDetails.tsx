@@ -41,7 +41,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     const [value, setValue] = useState(0);
     const {
         chatStore: { removeFromStack, addProfileDetailsToStack, addAddMembersToStack, addPermissionsToStack, addEditGroupToStack, addAdminPermissionsToStack },
-        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox, theme },
+        directStore: { removeMember, getChatDetails, chats, setLocalChat, images, setProfilePicsOpen, setGroupPicsOpen, updateFollowing, loadingFollowing, openLightbox, mode },
         contactsStore: { isFollowing }
     } = useStore();
     const { accountData, groupData, channelData } = chatPage;
@@ -104,7 +104,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
     return (
         <div style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute' }}>
             <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <AppBar position="relative" elevation={1}>
+                <AppBar position="relative" elevation={3} sx={{ bgcolor: mode === 'light' ? 'black' : 'white', color: mode === 'dark' ? 'black' : 'white' }}>
                     <Toolbar variant="dense">
                         <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => removeFromStack(chatPage)}>
                             <ArrowBackIcon fontSize="large" />
@@ -153,14 +153,15 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                 }}
                             />
                         )}
-                        <Typography variant="h4" sx={{ color: 'text.primary', fontWeight: '500' }}>
+                        <Typography variant="h4" sx={{ color: 'inherit', fontWeight: '500' }}>
                             {accountData && accountData.displayName}
                             {groupData && groupData.displayName}
                             {channelData && channelData.displayName}
                         </Typography>
                         <Button
                             variant="contained"
-                            sx={{ borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40, border: `1px solid ${theme?.palette.divider}` }}
+                            className="chatBtn"
+                            sx={{ borderRadius: '100%', width: '8rem', height: '8rem', position: 'absolute', bottom: '-6rem', right: 40, border: `1px solid ${mode === 'light' ? 'white' : 'black'}` }}
                             onClick={goToChat}
                         >
                             <ChatIcon sx={{ height: 40, width: 40 }}></ChatIcon>
@@ -245,16 +246,16 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                                                     <Avatar alt={`${x.displayName}`} src={x.image} sx={{ width: 48, height: 48 }} />
                                                 </ListItemAvatar>
                                                 <Stack>
-                                                    <ListItemText primaryTypographyProps={{ fontSize: '1.6rem', fontWeight: 500 }} primary={x.displayName} />
+                                                    <ListItemText primaryTypographyProps={{ fontSize: '1.6rem', fontWeight: 500, ml: '1rem' }} primary={x.displayName} />
                                                     <ListItemText
                                                         primaryTypographyProps={{ fontSize: '1.6rem' }}
                                                         primary={x.isOnline ? 'online' : 'Last seen at ' + format(x.lastSeenOnline, 'yyyy-MM-dd HH:mm')}
-                                                        sx={{ color: x.isOnline ? 'primary.main' : 'inherit' }}
+                                                        sx={{ color: x.isOnline ? 'primary.main' : 'inherit', ml: '1rem' }}
                                                     />
                                                 </Stack>
                                                 <div style={{ flex: 1 }} />
-                                                {x.memberType === 1 && <Typography style={{ color: 'primary.main' }}>Admin</Typography>}
-                                                {x.memberType === 2 && <Typography style={{ color: 'primary.main' }}>Owner</Typography>}
+                                                {x.memberType === 1 && <Typography sx={{ color: 'primary.main' }}>Admin</Typography>}
+                                                {x.memberType === 2 && <Typography sx={{ color: 'primary.main' }}>Owner</Typography>}
                                             </ListItemButton>
                                         </ListItem>
                                     ))}

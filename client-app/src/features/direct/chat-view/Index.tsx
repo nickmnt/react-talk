@@ -97,9 +97,7 @@ export default observer(function ChatView() {
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <ArrowBackIcon sx={{ width: 100, height: 100 }} />
                             <ArrowBackIcon sx={{ width: 100, height: 100 }} />
-                            <ArrowBackIcon sx={{ width: 100, height: 100 }} />
                         </div>
-                        Search for that users you know
                     </Paper>
                 </div>
             )}

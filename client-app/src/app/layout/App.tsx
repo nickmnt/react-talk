@@ -100,7 +100,7 @@ function App() {
                             <Route path="/direct/inbox" element={<Inbox />} />
                             <Route path="/server-error" element={<ServerError />} />
                             <Route path="/login" element={<LoginForm />} />
-                            <Route element={<NotFound />} />
+                            <Route path="*" element={<NotFound />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
