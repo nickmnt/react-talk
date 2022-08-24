@@ -88,14 +88,14 @@ export default observer(function HomeSidebar() {
                             <List>
                                 {loadingChats
                                     ? [0, 0].map((_, i) => (
-                                          <Grow in timeout={growInterval * (i + 1)}>
+                                          <Grow in timeout={growInterval * (i + 1)} key={i}>
                                               <div>
                                                   <ChatSkeleton key={i} />
                                               </div>
                                           </Grow>
                                       ))
                                     : chats.map((chat, i) => (
-                                          <Grow in timeout={growInterval * (i + 1)}>
+                                          <Grow in timeout={growInterval * (i + 1)} key={i}>
                                               <div>
                                                   <Chat chat={chat} key={chat.id} />
                                               </div>
