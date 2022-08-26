@@ -7,7 +7,6 @@ using Application.Interfaces;
 using Domain.Direct;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
 using Persistence;
 
 namespace Application.Chats
