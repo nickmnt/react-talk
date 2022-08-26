@@ -93,7 +93,7 @@ export default observer(function ChatView() {
                 <div className="chatView__welcome">
                     <Paper className="chatView__welcomeContainer" elevation={5}>
                         <ChatIcon sx={{ width: 100, height: 100, marginBottom: '2.5rem' }} />
-                        Select a chat to start messaging
+                        Select a chat to start messaging!
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <ArrowBackIcon sx={{ width: 100, height: 100 }} />
                             <ArrowBackIcon sx={{ width: 100, height: 100 }} />
