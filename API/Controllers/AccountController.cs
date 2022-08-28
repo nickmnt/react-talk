@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using API.DTOs;
 using API.Services;
 using Domain;
+using Domain.Direct;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace API.Controllers
 {
@@ -20,14 +22,17 @@ namespace API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly TokenService _tokenService;
+        private readonly DataContext _context;
 
         public AccountController(UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager,
-            TokenService tokenService)
+            TokenService tokenService,
+            DataContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -74,6 +79,11 @@ namespace API.Controllers
 
             var results = await _userManager.CreateAsync(user, registerDto.Password);
 
+            var tutorialChat = await _context.Chats.SingleOrDefaultAsync(x => x.Id == new Guid("15b5eeb5-5368-4022-a358-bd299ef61b0f"));
+            var userChat = new UserChat { AppUser = user, Chat = tutorialChat, MembershipType = MemberType.Normal };
+            _context.UserChats.Add(userChat);
+            await _context.SaveChangesAsync();
+            
             if (results.Succeeded)
             {
                 return CreateUserObject(user);

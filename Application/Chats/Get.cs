@@ -49,6 +49,9 @@ namespace Application.Chats
                     .AsSplitQuery()
                     .SingleOrDefaultAsync(x => x.ChatId == request.ChatId
                         && x.AppUser.UserName == _accessor.GetUsername(), cancellationToken);
+
+                if (userChat == null)
+                    return null;
                 
                 var chat = userChat.Chat;
 
