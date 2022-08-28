@@ -1515,7 +1515,6 @@ export default class DirectStore {
         runInAction(() => {
             if (chat.lastMessage) chat.lastMessage.createdAt = new Date(chat.lastMessage?.createdAt + 'Z');
             chat.lastSeen = new Date(chat.lastSeen + 'Z');
-            this.currentChat = chat;
         });
         this.getChatDetails(chat);
     };
