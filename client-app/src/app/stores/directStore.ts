@@ -75,6 +75,7 @@ export default class DirectStore {
     newMsgQueue: MessageNotifDto[] = [];
     file: FileRecord | null = null;
     navigate: NavigateFunction | null = null;
+    creatingChat = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -530,7 +531,7 @@ export default class DirectStore {
 
     createMessage = async (body: string) => {
         if (!this.currentChat) return;
-        if (this.currentChat.type === -10) {
+        if (this.currentChat.type === -10 && !this.creatingChat) {
             await this.createPrivateChat(this.currentChat.privateChat!.otherUsername);
         } else if (this.currentChat.type === -20) {
             await this.createSavedMessagesChat();
@@ -625,6 +626,7 @@ export default class DirectStore {
     };
 
     createPrivateChat = async (username: string) => {
+        this.creatingChat = true;
         try {
             if (!this.currentChat) return;
 
@@ -633,8 +635,14 @@ export default class DirectStore {
             this.setChat(response);
             await this.getChatDetails(response);
         } catch (error) {
+            runInAction(() => {
+                this.creatingChat = false;
+            });
             console.log(error);
         }
+        runInAction(() => {
+            this.creatingChat = false;
+        });
     };
 
     createSavedMessagesChat = async () => {

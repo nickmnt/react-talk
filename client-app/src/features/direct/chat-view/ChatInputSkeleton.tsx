@@ -27,6 +27,7 @@ export default observer(function ChatInputSkeleton() {
                             {(props: FieldProps) => (
                                 <TextareaAutosize
                                     maxRows={2}
+                                    disabled
                                     className="chatInput__input"
                                     placeholder="Message"
                                     {...props.field}

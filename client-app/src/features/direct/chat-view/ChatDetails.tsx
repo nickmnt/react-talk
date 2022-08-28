@@ -124,7 +124,7 @@ export default observer(function ChatDetails({ chatPage }: Props) {
                         <div style={{ flexGrow: 1 }}></div>
                         {canEdit && (
                             <IconButton onClick={() => addEditGroupToStack(chatPage.groupData!)}>
-                                <EditIcon sx={{ width: 24, height: 24 }} />
+                                <EditIcon sx={{ width: 24, height: 24, color: mode === 'light' ? 'white' : 'black' }} />
                             </IconButton>
                         )}
                         {accountData && (

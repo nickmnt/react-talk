@@ -36,7 +36,7 @@ export interface Props {
 
 export default observer(function ChatInput({ selectedCount }: Props) {
     const {
-        directStore: { currentChat, createMessage, setForwarding, forwardingSingle, forwardSingle, createVoice, file, setFile }
+        directStore: { currentChat, createMessage, setForwarding, forwardingSingle, forwardSingle, createVoice, file, setFile, creatingChat }
     } = useStore();
     const inputFile = useRef<null | HTMLInputElement>(null);
     const [recording, setRecording] = useState(false);
@@ -205,7 +205,11 @@ export default observer(function ChatInput({ selectedCount }: Props) {
             >
                 {({ isValid, handleSubmit }) => (
                     <Form className="chatInput__form">
-                        <Field name="body">{(props: FieldProps) => <ChatTextInput props={props} isValid={isValid} handleSubmit={handleSubmit} />}</Field>
+                        {!creatingChat ? (
+                            <Field name="body">{(props: FieldProps) => <ChatTextInput props={props} isValid={isValid} handleSubmit={handleSubmit} />}</Field>
+                        ) : (
+                            <Typography>Creating the chat...</Typography>
+                        )}
                     </Form>
                 )}
             </Formik>
