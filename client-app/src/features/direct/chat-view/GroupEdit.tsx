@@ -34,7 +34,7 @@ const validationSchema = Yup.object({
 
 export default observer(function GroupEdit({ chatPage }: Props) {
     const {
-        directStore: { currentChat, updateGroupDetails, setGroupPicsOpen },
+        directStore: { currentChat, updateGroupDetails, setGroupPicsOpen, leaveGroup },
         chatStore: { removeFromStack, addPermissionsAllToStack },
         photoStore: { setPhotoOpen }
     } = useStore();
@@ -203,7 +203,9 @@ export default observer(function GroupEdit({ chatPage }: Props) {
                         }}
                     >
                         <List sx={{ width: '100%' }}>
-                            <ListItemButton sx={{ color: 'error.main', fontSize: '1.8rem', fontWeight: 600 }}>Delete and Leave Group</ListItemButton>
+                            <ListItemButton sx={{ color: 'error.main', fontSize: '1.8rem', fontWeight: 600 }} onClick={() => leaveGroup(currentChat.id)}>
+                                {currentChat.membershipType === 2 ? 'Delete and Leave Group' : 'Leave Group'}
+                            </ListItemButton>
                         </List>
                     </Paper>
                 </Paper>

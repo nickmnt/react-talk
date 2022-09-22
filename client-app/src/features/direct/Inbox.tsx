@@ -33,7 +33,8 @@ export default observer(function Inbox() {
             copyFunc,
             contactsOpen,
             setContactsOpen,
-            getChat
+            getChat,
+            clearCurrentChat
         },
         photoStore: { photoOpen, setPhotoOpen },
         contactsStore: { loadFollowings }
@@ -54,8 +55,9 @@ export default observer(function Inbox() {
     }, [createHubConnection, clearChats]);
 
     useEffect(() => {
+        clearCurrentChat(!!chatId);
         if (chatId) getChat(chatId);
-    }, [chatId, getChat]);
+    }, [chatId, clearCurrentChat, getChat]);
 
     return (
         <div className="home">

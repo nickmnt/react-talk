@@ -1512,7 +1512,19 @@ export default class DirectStore {
 
     leaveGroup = async (chatId: string) => {
         try {
-            // await agent.Chats.Lea
-        } catch (e) {}
+            await agent.Chats.leaveGroup(chatId);
+            runInAction(() => {
+                this.chats = this.chats.filter((x) => x.id !== chatId);
+                if (this.navigate) this.navigate(`direct/inbox/`, { replace: true });
+            });
+        } catch (e) {
+            toast.error('Failed to leave group.');
+            console.log(e);
+        }
+    };
+
+    clearCurrentChat = (chatExists: boolean) => {
+        store.chatStore.clearStack();
+        if (!chatExists) this.currentChat = null;
     };
 }

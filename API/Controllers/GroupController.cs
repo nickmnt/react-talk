@@ -49,5 +49,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));;
         }
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> LeaveGroup(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Leave.Command { ChatId = id }));
+        }
     }
 }
