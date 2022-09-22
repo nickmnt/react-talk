@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography/Typography';
 import { truncate } from '../../../../../../app/common/utility';
 import Zoom from '@mui/material/Zoom/Zoom';
 import { Image } from 'mui-image';
+import { useEffect, useState } from 'react';
+import { LinearProgress } from '@mui/material';
 
 interface Props {
     isMe: boolean;
@@ -31,10 +33,24 @@ interface Props {
 
 export default observer(function Text({ isMe, name, text, date, isDoubleTick, showImg, type, attachedImg, attachedVideo, isLocal, localBlob, message, goToMessage, inViewport }: Props) {
     const {
-        directStore: { currentChat, getMessageById, openLightbox, mode },
+        directStore: { currentChat, getMessageById, openLightbox, mode, uploadMediaMessage },
         chatStore: { addProfileDetailsToStack }
     } = useStore();
     const replyTo = getMessageById(message.replyToId);
+
+    const [uploadStarted, setUploadStarted] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    useEffect(() => {
+        if (isLocal && !uploadStarted) {
+            if (type === 1 || type === 2 || type === 3) {
+                uploadMediaMessage(type, message.id, localBlob!, text, (progress: number) => {
+                    setUploadProgress(progress);
+                });
+                setUploadStarted(true);
+            }
+        }
+    }, [isLocal, localBlob, message.id, text, type, setUploadStarted, uploadStarted, uploadMediaMessage]);
 
     if (!currentChat) {
         return null;
@@ -114,6 +130,8 @@ export default observer(function Text({ isMe, name, text, date, isDoubleTick, sh
                     </Paper>
                 )}
                 {type === 3 && <audio src={isLocal ? URL.createObjectURL(localBlob!) : message.url} controls />}
+                {isLocal && <LinearProgress variant="determinate" value={uploadProgress} sx={{ marginTop: '0.5rem' }} color="primary" />}
+                {isLocal && <div style={{ margin: '0.5rem 0' }}>Uploading... {uploadProgress}%</div>}
                 <div className="text__container">
                     {!isMe && showImg && <div className="text__name">{name}</div>}
                     <Typography className="text__content">

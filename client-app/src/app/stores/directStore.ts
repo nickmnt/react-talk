@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Theme } from '@mui/material/styles/createTheme';
+import { AxiosResponse } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { NavigateFunction } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -554,22 +555,35 @@ export default class DirectStore {
         } else if (this.currentChat.type === -20) {
             await this.createSavedMessagesChat();
         }
-        const { id } = this.createLocalImage(file, body);
-        if (id === -1) return;
-        // let config = {
-        //   onDownloadProgress: (progressEvent: any) => {
-        // let percentCompleted = Math.floor(
-        //   (progressEvent.loaded * 100) / progressEvent.total
-        // );
-        // console.log(percentCompleted);
-        //   },
-        // };
-        let config = {};
-        const response = await agent.Chats.createPhoto(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
+        this.createLocalImage(file, body);
+    };
+
+    uploadMediaMessage = async (type: number, id: number, file: Blob, body: string, onProgressUpdated: (progress: number) => void) => {
+        if (!this.currentChat) return;
+
+        let config = {
+            onUploadProgress: (progressEvent: any) => {
+                let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+                onProgressUpdated(percentCompleted);
+            }
+        };
+
+        let response: AxiosResponse<Message> | null = null;
+        if (type === 1) {
+            response = await agent.Chats.createPhoto(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
+        } else if (type === 2) {
+            response = await agent.Chats.createVideo(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
+        } else if (type === 3) {
+            response = await agent.Chats.createVoice(file, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
+        } else {
+            return;
+        }
+
         runInAction(() => {
-            this.updateLocalMessage(response.data, id);
+            this.updateLocalMessage(response!.data, id);
             this.replyMessage = null;
         });
+
         this.updateMessages();
         this.handleDateMessages();
     };
@@ -581,22 +595,7 @@ export default class DirectStore {
         } else if (this.currentChat.type === -20) {
             await this.createSavedMessagesChat();
         }
-        const { id } = this.createLocalVideo(file, body);
-        if (id === -1) return;
-        // let config = {
-        //   onUploadProgress: (progressEvent: any) => {
-        // let percentCompleted = Math.floor(
-        //   (progressEvent.loaded * 100) / progressEvent.total
-        // );
-        // msg!.localProgress = percentCompleted;
-        //   },
-        // };
-        let config = {};
-        const response = await agent.Chats.createVideo(file, body, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
-        this.updateLocalMessage(response.data, id);
-        this.replyMessage = null;
-        this.updateMessages();
-        this.handleDateMessages();
+        this.createLocalVideo(file, body);
     };
 
     createVoice = async (file: Blob) => {
@@ -606,23 +605,7 @@ export default class DirectStore {
         } else if (this.currentChat.type === -20) {
             await this.createSavedMessagesChat();
         }
-        const { id } = this.createLocalVoice(file);
-        if (id === -1) return;
-        // let config = {
-        //   onUploadProgress: (progressEvent: any) => {
-        // let percentCompleted = Math.floor(
-        //   (progressEvent.loaded * 100) / progressEvent.total
-        // );
-        // msg!.localProgress = percentCompleted;
-        //   },
-        // };
-        let config = {};
-        const response = await agent.Chats.createVoice(file, this.currentChat.id, config, this.replyMessage ? this.replyMessage.id : -1);
-        runInAction(() => {
-            this.updateLocalMessage(response.data, id);
-            this.replyMessage = null;
-            this.handleDateMessages();
-        });
+        this.createLocalVoice(file);
     };
 
     createPrivateChat = async (username: string) => {
@@ -1525,5 +1508,11 @@ export default class DirectStore {
             chat.lastSeen = new Date(chat.lastSeen + 'Z');
         });
         this.getChatDetails(chat);
+    };
+
+    leaveGroup = async (chatId: string) => {
+        try {
+            // await agent.Chats.Lea
+        } catch (e) {}
     };
 }
