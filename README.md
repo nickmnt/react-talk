@@ -1,21 +1,7 @@
-# Reactivities-1
-Would rather add a video introduction later on...
+# React-talk (Telegram Clone)
 
-# Tasks
+Telegram clone implemented as a self-study project. Made using React.js, .Net Core, typescript.
+Libraries include: MobX, SignalR, Material-UI
 
-## Low-Priority
-
--Finish the challenges of the course
--Finsih the final touches (deployment) chapter.
-
-## High-Priority
-
--Add automated testing (Server) 
-
-## Long term support
-
--Change from MobX to Redux
--Change to Material UI or Ant Design
-
-## New Ideas!
-https://gbksoft.com/blog/idea-of-social-media-website/
+Implemented from scratch for the mastery of the specified technologies.
+Not based on any course.
