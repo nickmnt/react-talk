@@ -90,11 +90,6 @@ namespace API.Extensions
             //load ip rules from appsettings.json
             services.Configure<IpRateLimitPolicies>(config.GetSection("IpRateLimitPolicies"));
 
-            // inject counter and rules stores
-            services.AddInMemoryRateLimiting();
-            //services.AddDistributedRateLimiting<AsyncKeyLockProcessingStrategy>();
-            //services.AddDistributedRateLimiting<RedisProcessingStrategy>();
-            //services.AddRedisRateLimiting();
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
             return services;
