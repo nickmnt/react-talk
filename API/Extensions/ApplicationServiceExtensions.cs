@@ -68,7 +68,8 @@ namespace API.Extensions
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000","https://localhost:3000");
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000","https://localhost:3000",
+                        "http://127.0.0.1:5173","https://127.0.0.1:5173");
                 });
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
@@ -78,20 +79,6 @@ namespace API.Extensions
             services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
             services.AddSignalR();
             
-            // needed to load configuration from appsettings.json
-            services.AddOptions();
-
-            // needed to store rate limit counters and ip rules
-            services.AddMemoryCache();
-
-            //load general configuration from appsettings.json
-            services.Configure<IpRateLimitOptions>(config.GetSection("IpRateLimiting"));
-
-            //load ip rules from appsettings.json
-            services.Configure<IpRateLimitPolicies>(config.GetSection("IpRateLimitPolicies"));
-
-            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-
             return services;
         }
     }
