@@ -7,7 +7,7 @@
             <v-text-field density="compact" label="Password" type="password" name="password"></v-text-field>
             <div class="flex justify-between w-full">
                 <router-link to="/login">
-                    <v-btn>Login</v-btn>
+                    <v-btn @click="login">Login</v-btn>
                 </router-link>
                 <router-link to="/register">
                     <v-btn>No Account?</v-btn>
@@ -17,10 +17,11 @@
     </div>
 </template>
 
-<script lang="ts">
-export default {
+<script setup lang="ts">
+import { useUserStore } from '../stores/userStore';
 
-}
+const userStore = useUserStore();
+const login = () => userStore.login({ email: 'bob@test.com', password: 'Pa$$w0rd' });
 </script>
 
 <style scoped></style>
