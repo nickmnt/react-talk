@@ -21,7 +21,7 @@ export const useUserStore = defineStore("user", {
         this.token = user.token;
         window.localStorage.setItem("jwt", this.token);
         this.user = user;
-        this.router.push("/direct/inbox");
+        this.router.push("/inbox/");
       } catch (error) {
         throw error;
       }
@@ -32,7 +32,7 @@ export const useUserStore = defineStore("user", {
         this.token = user.token;
         window.localStorage.setItem("jwt", this.token);
         this.user = user;
-        this.router.push("/direct/inbox");
+        this.router.push("/inbox/");
       } catch (error) {
         throw error;
       }
@@ -41,7 +41,7 @@ export const useUserStore = defineStore("user", {
       try {
         const user = await agent.Account.current();
         this.user = user;
-        this.router.push("/direct/inbox");
+        this.router.push("/inbox/");
       } catch (error) {
         console.log(error);
       }

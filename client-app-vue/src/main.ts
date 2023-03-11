@@ -4,6 +4,7 @@ import App from "./App.vue";
 import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
+import Inbox from "./components/Inbox.vue";
 import "uno.css";
 import { createRouter, createWebHashHistory } from "vue-router";
 
@@ -19,6 +20,7 @@ const routes = [
   { path: "/", component: Home },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
+  { path: "/inbox", component: Inbox },
 ];
 
 // 3. Create the router instance and pass the `routes` option
