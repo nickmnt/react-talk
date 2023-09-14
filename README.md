@@ -22,7 +22,7 @@ React-Talk is a modern chat application that aims to replicate the popular Teleg
 - Group chats and private messaging
 - User profiles and avatars
 - Contacts and Following
-https://react-talk.onrender.com/
+
 ## Demo
 Live demo available at **[Hosted Demo](https://react-talk.onrender.com/)**.  
 
