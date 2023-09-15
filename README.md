@@ -33,7 +33,7 @@ To run React-Talk locally on your machine, follow these steps:
 
 1. Clone the repository:
    ```shell
-   git clone https://github.com/your-username/React-Talk.git
+   git clone https://github.com/nimamt/React-Talk.git
    ```
 
 2. Navigate to the project directory:
