@@ -1,5 +1,10 @@
 # React-Talk (Telegram Clone)
 
+<h2 align="center">
+  <a href="https://photos.app.goo.gl/hEbjM1DVjAzEQ66q8">📷 𝙲𝚕𝚒𝚌𝚔 𝚝𝚘 𝚜𝚎𝚎 𝚜𝚌𝚛𝚎𝚎𝚗𝚜𝚑𝚘𝚝𝚜</a>
+</h2>
+
+
 Welcome to **React-Talk**, a cutting-edge Telegram clone project built with React.js, .Net 6, and TypeScript. This project leverages powerful libraries such as MobX, SignalR, and Material-UI to provide a seamless and stylish real-time messaging experience.
 
 ## Table of Contents
