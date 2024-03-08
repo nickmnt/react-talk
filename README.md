@@ -1,9 +1,23 @@
 # React-Talk (Telegram Clone)
 
-<h2 align="center">
-  <a href="https://photos.app.goo.gl/hEbjM1DVjAzEQ66q8">📷 𝙲𝚕𝚒𝚌𝚔 𝚝𝚘 𝚜𝚎𝚎 𝚜𝚌𝚛𝚎𝚎𝚗𝚜𝚑𝚘𝚝𝚜</a>
-</h2>
+## 📷 Screenshots
 
+<details>
+  <summary>Screenshots (Hidden) - Click to open!</summary>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/SampleChat.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/Drawer.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/GroupInfo.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/MakeAdmin.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/EditGroup.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/CreateGroup.png?raw=true" alt="Screenshot"></img>
+   <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/First.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/ProfileSettings.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/SavedMessages.png?raw=true" alt="Screenshot"></img>
+  <img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/Contacts.png?raw=true" alt="Screenshot"></img>
+ 
+</details>
+
+## Summary
 
 Welcome to **React-Talk**, a cutting-edge Telegram clone project built with React.js, .Net 6, and TypeScript. This project leverages powerful libraries such as MobX, SignalR, and Material-UI to provide a seamless and stylish real-time messaging experience.
 
